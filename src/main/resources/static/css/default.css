@@ -1,0 +1,101 @@
+:root{
+    --darkBlue: #1f3140;
+    --dark: #0d0d0d;
+    --green: #667306;
+    --cyan: #6BCCF2; 
+    --gray: #BBC9D4;
+
+}
+
+@font-face{
+    font-family: fuente_1;
+    font-style: normal;
+    font-weight: normal;
+    src: url(Arial.ttf);
+}
+
+.imgen{
+    text-align: center;
+}
+
+.usuario{
+    position: absolute;
+    background-color:#343c44;
+    margin-top: 7px;
+    color:#fff;
+    display:inline-block;
+    text-align:center;
+    width:400px;
+    border: 1px solid #11DBDB;
+}
+
+#wrapper {
+    padding: 130px;
+}
+
+#container{
+    padding: 50px;
+    background-color: #fcfcfc;
+}
+
+#titulo{
+    align-content: center;
+    margin: 30px;
+}
+
+.icon-img{
+    position: relative;
+    top: 0px;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    border: 1px solid #ced4da;
+    padding: 9px 10px;
+    margin: 0;
+    cursor: pointer;
+}
+.icon-img:hover{
+    background: #ced4da;
+}
+
+.alert-min{
+    position: absolute !important;
+    width: 400px !important;
+    top:60px !important;
+    right: 0;
+}
+
+.dblock{
+    display: block !important;
+}
+
+.required{
+    color:red;
+    font-weight: bold;
+}
+
+.c-true{
+    border: solid 2px blue!important;
+}
+.c-false{
+     border: solid 2px red !important;
+}
+#expedientesTras, #oficiosRes {
+      width: 300px;
+      padding: 10px;
+      text-align: center;
+}
+
+.alert{
+    text-align: left !important;
+}
+.alert strong, .alert p{
+    font-size: 10pt !important;
+}
+#pageMessages {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  width: 30%;
+}

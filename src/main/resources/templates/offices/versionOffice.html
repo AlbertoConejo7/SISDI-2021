@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>SISDI-Versiones de Oficio</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/css/default.css}" rel="stylesheet"/>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet"/>
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <script th:src="@{/bootstrap/js/jquery.js}"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+        <script th:src="@{/js/calendar.js}"></script>
+        <script th:src="@{/js/notificacionesResponse.js}"></script>
+        <script th:src="@{/js/notificacionesExpediente.js}"></script>
+    </head>
+    <body>
+        <header th:insert="menu/Head :: menu"></header>
+        <div class="mt-2 col-md-1">
+            <br> <br> <br>
+        </div>
+        <main>
+            <div class="container">
+                <div th:insert="menu/HeadOffice :: menuOffice"></div>
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table id="tableAcc" class="table table-striped table-bordered border-info" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center">Versión</th>
+                                            <th style="text-align: center">Número de versión</th>
+                                            <th style="text-align: center">Fecha de versión</th>
+                                            <th style="text-align: center">Motivo de versión</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr th:if="${versions == null or versions.empty}">
+                                            <td colspan="6" style="text-align: center;">No existen versiones del oficio</td>
+                                        </tr>
+                                        <tr th:each="Version : ${versions}" th:if="${versions != null and !versions.empty}">
+                                            <td th:text="${Version.version_id}"></td>
+                                            <td  th:text="${Version.version_number}"></td>
+                                            <td  th:text="${#dates.format(Version.version_date, 'dd/MM/yyyy')}"></td>
+                                            <td  th:text="${Version.version_description}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#newVersionModal">Agregar Versión</button>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="modal fade" id="newVersionModal" tabindex="-1" role="dialog" aria-labelledby="newVersionTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="newVersionTitle">Nueva versión</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form class="form was-validated" method="POST" th:action="@{/versions/saveVersion}" th:object="${officeActual}">
+                                                    <div class="form-group">
+                                                        <label for="officeName">Oficio</label>
+                                                        <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{offnumber}" readonly="readonly"/>
+                                                    </div>
+                                                    <input type="hidden"  th:field="*{id}"/>
+                                                    <input type="hidden"  th:field="*{type_id}"/>
+                                                    <div class="form-group">
+                                                        <label for="officeEmisor">Emisor</label>
+                                                        <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{emisor}" readonly ="readonly"/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="officeEmisor">Departameno Emisor</label>
+                                                        <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{emisorDep}" readonly ="readonly"/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="officeReceptor">Receptor</label>
+                                                        <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{receptor}" readonly = "readonly"/>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="officeReceptor">Departamento Receptor</label>
+                                                        <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{receptorDep}" readonly = "readonly"/>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="dateVersion">Fecha de Actualización</label>
+                                                        <div class='input-group date'>
+                                                            <input type='text' class="form-control" th:field="*{dateCreate}" readonly="readonly"/>
+                                                            <span class="input-group-addon ">
+                                                                <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                                            </span>
+                                                        </div>
+                                                        <input type='hidden' class="form-control" th:field="*{dateLimit}" readonly="readonly"/>
+                                                    </div>
+                                                    <!--<div class="form-group">
+                                                        <label for="dateVersion">Fecha Limite</label>
+                                                        <div class='input-group date'>
+                                                            <input type='hidden' class="form-control" th:field="*{dateLimit}" readonly="readonly"/>
+                                                            <span class="input-group-addon ">
+                                                                <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                                            </span>
+                                                        </div>
+                                                    </div>-->
+                                                    <div class="form-group">
+                                                        <label for="motive">Motivo</label>
+                                                        <textarea class="form-control" required id="motive" rows="3" th:field="*{reason}"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="observations">Observaciones</label>
+                                                        <textarea class="form-control" id="observations" rows="3" th:field="*{observations}"></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-danger">Agregar versión</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

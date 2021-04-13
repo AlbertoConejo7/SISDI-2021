@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>SISDI-Agregar Expediente</title>
+
+        <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/css/default.css}" rel="stylesheet"/>
+        <link th:href="@{/css/errors.css}" rel="stylesheet"/>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet"/>
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script th:src="@{/bootstrap/js/jquery.js}"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+        <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
+        <script th:src="@{/js/calendar.js}"></script>
+         <script th:src="@{/js/notificacionesResponse.js}"></script>
+        <script th:src="@{/js/notificacionesExpediente.js}"></script>
+
+    </head>
+
+    <body>
+        <header th:insert="menu/Head :: menu"></header>
+        <div class="mt-2 col-md-1">
+            <br> <br>
+        </div>
+
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        <main>
+            <div class="container mx-auto">
+                <div id="titulo">
+                    <h3 class='font-italic text-center' id='titleh3'>Crear Expediente</h3>
+                </div>
+                <div class="mx-auto w-75">
+                    <form class="form was-validated" method="POST" th:action="@{/offices/saveFile}" th:object="${fileAdd}" id="add-office">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td>
+                                    <span>Título</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <input placeholder="Expediente" class="form-control" name="fileName" id="fileName" required/>
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Fecha de Ingreso</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <input th:value="${#dates.format(date, 'dd/MM/yyyy')}"  class="form-control" th:field="*{dateCreateFile}" readonly="readonly"/>
+                                        <span class="input-group-addon ">
+                                            <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Propietario</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <input th:value="${session.usuarioCompleto.tempUser.name}"  class="form-control" th:field="*{owner}" readonly="readonly"/>
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Departamento</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <input th:value="${session.usuarioCompleto.department.name}" class="form-control" th:field="*{department}" readonly="readonly"/>
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Receptor</span><span class="required"> *</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <select name="usuarios" class="custom-select" th:field="*{receiver}" required>
+                                            <option value="">Seleccione Receptor</option>
+                                            <option th:each="usuario:${usuarios}" th:value="${usuario.tempUser.name}" th:text="${usuario.tempUser.name + ' / ' + usuario.department.name}"></option>
+                                        </select>
+                                        <div class="invalid-feedback">Debe seleccionar un Receptor</div>
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Cantidad de oficios</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <input placeholder="Cantidad" class="form-control" name="officeAmount" id="officeAmount" required/>
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Observaciones</span>
+                                    <a tabindex="0" role="button" data-html = "true" data-toggle="popover"
+                                       data-trigger="focus" title="Observaciones (Opcional)"
+                                       data-content="Información extra para el receptor">
+                                        <img th:src="@{/images/info.png}" width=20>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <textarea rows="4" class="w-100" name="observations" id="observations" placeholder="Escriba aquí sus observaciones" 
+                                                  style="resize: none;" th:field="*{observations}"></textarea>                             
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+
+                            <tr>
+                                <td colspan="2" class="text-lg-right">
+                                    <button type="submit" class="btn btn-primary mt-2">Agregar Expediente</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+        <script th:src="@{/js/addOffice.js}"></script>
+        <script th:src="@{/js/calendar.js}"></script>
+        <script>
+            $(document).ready(function () {
+                $('[data-toggle="popover"]').popover();
+            });
+        </script>
+    </body>
+
+</html>

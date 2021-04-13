@@ -1,0 +1,13 @@
+.error-message{
+    color:red;
+    font-size: 9pt;
+}
+.hide-message{
+    display: none;
+}
+.show-message{
+    display: block;
+}
+.error-input{
+    border-bottom: 2px solid red !important;
+}
