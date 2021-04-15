@@ -75,7 +75,19 @@ RECEIVER_ID  varchar(45), -- Receptor del expediente que pertenece a algun depar
  constraint FK_RECEIVER_DEPARTMENT foreign key (RECEIVER_DEPARTMENT) references T_DEPARTMENT(NAME)
  
  );
-
+create table T_TRANSFER(
+	INDX int auto_increment,
+    INDX_FILE int,
+    OWNER_ID varchar(45),
+    RECEIVER_ID varchar(45),
+    DATE_TRANSFER date,
+    STATE int,
+    OFFICE_AMOUNT int,
+    OBSERVATIONS longtext, 
+    constraint PK_TRANSFER primary key(INDX),
+	constraint FK_OWNER_ID foreign key (OWNER_ID) references T_USER(TEMPUSER),
+	constraint FK_RECEIVER_ID foreign key (RECEIVER_ID) references T_USER(TEMPUSER)
+);
 create table T_OFFICE(
 INDX int auto_increment,
 OFFNUMBER varchar(45),
