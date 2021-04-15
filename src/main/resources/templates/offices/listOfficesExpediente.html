@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-         
-        
+
+
         <title>SISDI-Lista de Oficios </title>
-        
-        
+
+
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
         <link th:href="@{/css/default.css}" rel="stylesheet"/>
         <link th:href="@{/css/errors.css}" rel="stylesheet"/>
@@ -22,18 +22,23 @@
         <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
+                <script th:src="@{/js/notificacionesResponse.js}"></script>
+        <script th:src="@{/js/notificacionesExpediente.js}"></script>
     </head>
     <body>
         <header th:insert="menu/Head :: menu"></header>
-          
+
         <div class="mt-2 col-md-1">
             <br> <br> <br>
         </div>
         <main>
-            
-           
+
+
 
             <div class="container">
+                <div id="titulo">
+                    <h3 class='font-italic text-center' id='titleh3' th:text="${titleExp}"></h3>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="table-responsive">
@@ -42,12 +47,11 @@
                                     <tr>
                                         <th style="text-align: center">Número de Oficio</th>
                                         <th style="text-align: center">Descripción</th>
-                                       
+
                                         <th style="text-align: center">Tipo</th>
                                         <th style="text-align: center">Estado</th>
                                         <th style="text-align: center">Editar Oficio </th>
                                         <th style="text-align: center">Ver Oficio </th>
-                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,7 +62,7 @@
                                     <tr th:each="office : ${offices}" th:if="${offices != null and !offices.empty}">
                                         <td th:text="${office.OFFNUMBER}"></td>
                                         <td  th:text="${office.REASON}"></td>
-                                      
+
 
                                         <td th:if="${office.TYPE_ID == 1}" th:text="Comunicar"></td>
                                         <td th:if="${office.TYPE_ID == 2}" th:text="Solicitar"></td>
@@ -77,7 +81,7 @@
                                         <td >
                                             <a th:href="@{/offices/viewOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
                                         </td>
-                                       
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -85,8 +89,8 @@
                     </div>
                 </div>
             </div>
-            
-    </main>
-        
-</body>
+
+        </main>
+
+    </body>
 </html>
