@@ -28,6 +28,8 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" th:href="@{/offices/pendingExpediente}">Expedientes</a>                            
                             <a class="dropdown-item" th:href="@{/offices/sendFile}">Trasladar expediente</a> 
+                            <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/transfersFiles}">Expedientes trasladados</a> 
+                            <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/borrowedFiles}">Expedientes Prestados</a> 
                              
                         </div>
                     </li>
