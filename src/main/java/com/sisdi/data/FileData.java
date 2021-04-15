@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -54,41 +55,30 @@ public class FileData {
         JSONObject o = new JSONObject();
         o.put("Tipo", "Trasladar");
         expedientesV.put(o);
-        for (Expediente e : expedientes) {
-            LocalDate fHoy = LocalDate.now();
+        
+         List<Expediente> exp = this.listExpVencidos(expedientes);
+        for (Expediente e : exp) {
             LocalDate localDate = this.convertToLocalDate(e.getDATE_CREATE());
-            long years = ChronoUnit.YEARS.between(localDate, fHoy);
-            if (years >= 5.0) {
                 JSONObject obj = new JSONObject();
                 obj.put("Filename", e.getFILENAME());
                 obj.put("Create", localDate);
                 obj.put("Receptor", e.getRECEIVER_ID());
                 expedientesV.put(obj);
-            }
         }
         return expedientesV;
     }
 
-    public JSONArray expedientesTrasladados(List<Expediente> expedientes) {
-        String f=this.dateToString(fecha);
-        JSONArray expedientesV = new JSONArray();
-        JSONObject o = new JSONObject();
-        o.put("Tipo", "Central");
-        expedientesV.put(o);
+    public List<Expediente> listExpVencidos(List<Expediente> expedientes) {
+        List<Expediente> exp = new ArrayList();
         for (Expediente e : expedientes) {
-            String eD=this.dateToString(e.getDATE_RETURN());
-            if (f.equals(eD)) {
-                JSONObject obj = new JSONObject();
-                obj.put("Filename", e.getFILENAME());
-                obj.put("Create", e.getDATE_CREATE());
-                obj.put("Receptor", e.getRECEIVER_ID());
-                expedientesV.put(obj);
-
+            LocalDate fHoy = LocalDate.now();
+            LocalDate localDate = this.convertToLocalDate(e.getDATE_CREATE());
+            long years = ChronoUnit.YEARS.between(localDate, fHoy);
+            if (years >= 5.0) {
+               exp.add(e);
             }
-            log.info("Fecha de return: " + e.getDATE_RETURN().toString());
         }
-        log.info(fecha.toString());
-        return expedientesV;
+        return exp;
     }
 
     public LocalDate convertToLocalDate(Date dateToConvert) {
