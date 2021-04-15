@@ -19,10 +19,14 @@ public interface ExpedienteService {
     List<Expediente> listExpedienteByReceptor(String receptor);
 
     Expediente getExpediente(String filename);
+    
+    Expediente getExpediente(int id);
 
     List<Expediente> listExpedienteBySameDepartment(String receiver, String sender);
 
     Expediente searchFile(String receiver, String sender, String year);
 
     Expediente createFile(String receiver, String sender);
+    
+    String getFileName(int indx);
 }
