@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>SISDI-Expedientes Pendientes</title>
+        <title>SISDI-Expedientes</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
@@ -31,7 +31,7 @@
         <main>
             <div class="container">
                 <div id="titulo">
-                    <h3 class='font-italic text-center' id='titleh3'>Expedientes Pendientes</h3>
+                    <h3 class='font-italic text-center' id='titleh3'>Expedientes</h3>
                 </div>
                 <div class="container">
                     <div class="row">
@@ -56,7 +56,7 @@
 
                                         <tr th:each="expediente : ${expedientesPending}" th:if="${expedientesPending != null and !expedientesPending.empty}">
                                             <td th:text="${expediente.FILENAME}"></td>
-                                            <td th:text="${expediente.DATE_CREATE}"></td>
+                                            <td th:text="${#dates.format(expediente.DATE_CREATE, 'dd/MM/yyyy')}"></td>
                                             <td >
                                                   
                                                   <a th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${expediente.INDX})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
