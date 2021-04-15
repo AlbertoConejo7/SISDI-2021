@@ -2,16 +2,20 @@ package com.sisdi.controller;
 
 import com.sisdi.data.FileData;
 import com.sisdi.data.OfficeData;
+import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.FileSimple;
 import com.sisdi.model.Office;
 import com.sisdi.model.OfficeSimple;
+import com.sisdi.model.Transfer;
+import com.sisdi.model.TransferSimple;
 import com.sisdi.service.OfficeServiceImp;
 import com.sisdi.model.Usuario;
 import com.sisdi.model.searchOffice;
 import com.sisdi.service.ExpedienteServiceImp;
 import com.sisdi.service.TimeOutsServiceImp;
+import com.sisdi.service.TransferServiceImp;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,9 +55,16 @@ public class OfficeController {
 
     @Autowired
     private FileData fileData;
+    
+     @Autowired
+    private TransferData transferData;
+
 
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
+    
+     @Autowired
+    private TransferServiceImp transferServiceImp;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -80,19 +91,16 @@ public class OfficeController {
         return exp;
 
     }
-     @GetMapping("/listExpedient/{expedienteId}")
-    public String listExpediente(@PathVariable int expedienteId,Model model, @AuthenticationPrincipal User user) {
-       
-         
+
+    @GetMapping("/listExpedient/{expedienteId}")
+    public String listExpediente(@PathVariable int expedienteId, Model model, @AuthenticationPrincipal User user) {
         List<Office> offices = officeServiceImp.listarOficiosExp(expedienteId);
-       
-       // List<Office> offices = officeServiceImp.listOfficeByEmisor(user.getUsername());
+        Expediente e = expedienteServiceImp.getExpediente(expedienteId);
         log.info("ejecutando el controlador Oficios");
+        model.addAttribute("titleExp", e.getFILENAME());
         model.addAttribute("offices", offices);
-       
+
         return "offices/listOfficesExpediente";
-        //
-          //      
     }
 
     @GetMapping("/addOffice")
@@ -106,10 +114,10 @@ public class OfficeController {
         Office of = offices.get(offices.size() - 1);
         int INDX = of.getINDX();
 
-        String offNumber= "OFICIO"+"-"+"MSPH"+"-" +u.getDepartment().getCod()+"-"+
-                 userData.getUser(of.getRECEIVER_ID()).getDepartment().getCod()
-                +"-"+(INDX+1)+"-"+year;
-        
+        String offNumber = "OFICIO" + "-" + "MSPH" + "-" + u.getDepartment().getCod() + "-"
+                + userData.getUser(of.getRECEIVER_ID()).getDepartment().getCod()
+                + "-" + (INDX + 1) + "-" + year;
+
         officeAdd.setOffnumber(offNumber);
         officeAdd.setEmisor(u.getTempUser().getName());
         officeAdd.setEmisorDep(u.getDepartment().getName());
@@ -125,7 +133,8 @@ public class OfficeController {
     public String sendFile(Model model, FileSimple fileSend, @AuthenticationPrincipal User user) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
         model.addAttribute("date", fecha);
-        List<Expediente> expedientes = expedienteServiceImp.listExpedienteByEmisor(user.getUsername());
+        List<Expediente> expedientes = fileData.listExpVencidos(expedienteServiceImp.listExpedienteByEmisor(user.getUsername()));
+
         List<Usuario> usuarios = userData.listUsers();
         Usuario u = userData.getUser(user.getUsername());
         fileSend.setOwner(u.getTempUser().getName());
@@ -142,19 +151,28 @@ public class OfficeController {
     @PostMapping("/saveFile")
     public String saveFile(Model model, @ModelAttribute("fileSend") FileSimple fileSend, RedirectAttributes redirectAttrs, @AuthenticationPrincipal User user) throws ParseException {
         try {
+            String send=userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
             fileSend.setOwner("archivocentral@sanpablo.go.cr");
             fileSend.setReceiver("archivocentral@sanpablo.go.cr");
             Expediente exp = fileData.getFile(fileSend);
+            exp.setOWNER_DEPARTMENT("Servicios Públicos");
+            exp.setRECEIVER_DEPARTMENT("Servicios Públicos");
             log.info("El expediente" + exp.toString());
-            redirectAttrs
+            Transfer t= transferData.getTransfer(fileSend, send);
+           redirectAttrs
                     .addFlashAttribute("mensaje", "Expediente trasladado correctamente")
                     .addFlashAttribute("clase", "success");
             expedienteServiceImp.addExpediente(exp);
+            transferServiceImp.addTransfer(t);
         } catch (Exception e) {
+             String send=userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
+             Transfer t= transferData.getTransfer(fileSend, send);
             redirectAttrs
                     .addFlashAttribute("mensaje", "Error al trasladar oficio")
                     .addFlashAttribute("clase", "alert alert-danger");
             log.info(e.toString());
+            log.info(send);
+            log.info(t.toString());
         }
         return "redirect:/offices/sendFile";
     }
@@ -164,7 +182,7 @@ public class OfficeController {
         try {
             String year = new SimpleDateFormat("yyyy").format(this.fecha);
             Office o = officeData.getOffice(office, 0);
-            
+
             String receptorDep = userData.getUser(o.getRECEIVER_ID()).getDepartment().getName();
             String emisorDep = userData.getUser(o.getUSER_ID()).getDepartment().getName();
             String ownerEmail = o.getUSER_ID();
@@ -222,16 +240,16 @@ public class OfficeController {
         OfficeSimple office_aux = new OfficeSimple();
         String fecha_ = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
         OfficeSimple office = officeData.getOfficeSimple(officeAct);
-        
+
         String year = new SimpleDateFormat("yyyy").format(this.fecha);
         List<Office> offices = officeServiceImp.listarOficios();
         Office of = offices.get(offices.size() - 1);
         int INDX = of.getINDX();
-         Usuario u = userData.getUser(user.getUsername());
-       String offNumber= "OFICIO"+"-"+"MSPH"+"-" +u.getDepartment().getCod()+"-"+
-                 userData.getUser(of.getRECEIVER_ID()).getDepartment().getCod()
-                +"-"+(INDX+1)+"-"+year;
-        
+        Usuario u = userData.getUser(user.getUsername());
+        String offNumber = "OFICIO" + "-" + "MSPH" + "-" + u.getDepartment().getCod() + "-"
+                + userData.getUser(of.getRECEIVER_ID()).getDepartment().getCod()
+                + "-" + (INDX + 1) + "-" + year;
+
         office_aux.setOffnumber(offNumber);
         office_aux.setEmisor(office.getReceptor());
         office_aux.setEmisorDep(office.getReceptorDep());
@@ -376,5 +394,29 @@ public class OfficeController {
     public String authSignature(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
         return "offices/authSignature";
     }
-
+    @GetMapping("/transfersFiles")
+    public String transfersFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
+        List<TransferSimple> list= transferData.listTransfers();
+        log.info(list.toString());
+        model.addAttribute("transfers", list);
+        return "offices/transfersFiles";
+    }
+    
+    @GetMapping("/acceptTransfer/{transferId}")
+    public String acceptTransfer(@PathVariable int transferId, Model model, @AuthenticationPrincipal User user) {
+        Transfer tr = transferServiceImp.searchTransfer(transferId);
+        tr.setSTATE(1); 
+        transferServiceImp.addTransfer(tr);
+        List<TransferSimple> transfers = transferData.listTransfers();
+        model.addAttribute("transfers", transfers);
+        return "offices/transfersFiles";
+    }
+    
+     @GetMapping("/borrowedFiles")
+    public String borrowedFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
+        //List<TransferSimple> list= transferData.listTransfers();
+        //log.info(list.toString());
+        //model.addAttribute("transfers", list);
+        return "offices/borrowedFiles";
+    }
 }
