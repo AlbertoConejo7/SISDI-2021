@@ -78,10 +78,13 @@ function createAlertCent(obj, dir) {
     $("<strong />", {
         html: "Se realizo el traslado de este Oficio, por que el plazo de almacenaje venció <br/>"
     }).appendTo(msg);
+    $("<p />", {
+        html: "Enviado por: "+obj.Emisor
+    }).appendTo(msg);
 
     $("<a />", {
         name: "link",
-        href: "/offices/pendingExpediente",
+        href: "/offices/transfersFiles",
         text: "Expedientes"
     }).appendTo(msg);
 
