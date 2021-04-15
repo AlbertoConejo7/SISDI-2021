@@ -1,6 +1,7 @@
 package com.sisdi.controller;
 
 import com.sisdi.data.FileData;
+import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.Office;
@@ -54,6 +55,9 @@ public class IndexController {
     
      @Autowired
     private FileData fileData;
+     
+      @Autowired
+    private TransferData transferData;
     
     @Autowired
     private OfficeServiceImp officeServiceImp;
@@ -140,7 +144,7 @@ public class IndexController {
        if(!user.getUsername().equals("archivocentral@sanpablo.go.cr") ){
             expedientesV=fileData.expedientesVencidos(expedientes);
        }else{
-            expedientesV=fileData.expedientesTrasladados(expedientes);
+            expedientesV=transferData.listTransfersState();
        }
         return new ResponseEntity(expedientesV.toString(), new HttpHeaders(), HttpStatus.OK);
     }
