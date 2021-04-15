@@ -43,6 +43,8 @@ public class ExpedienteServiceImp implements ExpedienteService {
         }
         return aux;
     }
+    
+   
     @Override
     public List<Expediente> listExpedienteByEmisor(String emisor) {
         List<Expediente> list = this.listarExpedientes();
@@ -89,6 +91,18 @@ public class ExpedienteServiceImp implements ExpedienteService {
         return aux;
     }
     
+     @Override
+    public Expediente getExpediente(int id) {
+        List<Expediente> list = this.listarExpedientes();
+        Expediente aux = null;
+        for (Expediente o : list) {
+            if (o.getINDX() == id) {
+                aux = o;
+            }
+        }
+        return aux;
+    }
+    
      //lista los expedientes que tengan mismos departamentos en receptor o emisor
     @Override
     public List<Expediente> listExpedienteBySameDepartment(String receiver, String sender) {
@@ -130,5 +144,11 @@ public class ExpedienteServiceImp implements ExpedienteService {
         int cantidad =e.getOFFICE_AMOUNT()+1;
         e.setOFFICE_AMOUNT(cantidad);
         return e;
+    }
+    
+    @Override
+    public String getFileName(int indx){
+        Expediente e=this.getExpediente(indx);
+        return e.getFILENAME();
     }
 }
