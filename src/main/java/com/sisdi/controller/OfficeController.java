@@ -1,10 +1,12 @@
 package com.sisdi.controller;
 
+import com.sisdi.data.DepartmentData;
 import com.sisdi.data.FileData;
 import com.sisdi.data.OfficeData;
 import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
 import com.sisdi.model.Expediente;
+import com.sisdi.model.Department;
 import com.sisdi.model.FileSimple;
 import com.sisdi.model.Office;
 import com.sisdi.model.OfficeSimple;
@@ -50,6 +52,9 @@ public class OfficeController {
     @Autowired
     private UserData userData;
 
+    @Autowired
+    private DepartmentData departmentData;
+    
     @Autowired
     private OfficeData officeData;
 
@@ -146,6 +151,27 @@ public class OfficeController {
         model.addAttribute("fileSend", fileSend);
 
         return "offices/sendFile";
+    }
+    
+         @GetMapping("/requestFile")
+    public String requestFile(Model model, FileSimple requestFile, @AuthenticationPrincipal User user) {
+        String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
+        model.addAttribute("date", fecha);
+        List<Expediente> expedientes = expedienteServiceImp.listExpedienteByEmisor(user.getUsername());
+        List<Usuario> usuarios = userData.listUsers();
+        Usuario u = userData.getUser(user.getUsername());
+        List<Department> departments = departmentData.listDepartments();
+        
+        requestFile.setOwner(u.getTempUser().getName());
+        requestFile.setDepartment(u.getDepartment().getName());
+        requestFile.setDateReturn(fechaS);
+
+        model.addAttribute("expedientesPending", expedientes);
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("departments", departments);
+        model.addAttribute("requestFile", requestFile);
+
+        return "offices/requestFile";
     }
 
     @PostMapping("/saveFile")
