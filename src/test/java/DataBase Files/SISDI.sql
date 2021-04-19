@@ -191,3 +191,19 @@ TOKEN varchar(6),
 DATE_TIME datetime,
 constraint FK_T_FORGOT foreign key (USER_ID) references T_USER(TEMPUSER)
 );
+
+create table T_FILELOAN(
+	ID int auto_increment,
+	FILE_ID INT,
+	FILENAME varchar(100),
+	OBSERVATIONS longtext, 
+	NAME_REQUEST varchar(45),
+	DEPARTMENT_REQUEST varchar(45),
+	DATE_CREATE date,
+	DATE_RETURN date, 
+	constraint PK_FILELOAN primary key(ID),
+	constraint UK_FILENAME unique key (FILENAME),
+	constraint FK_NAME_REQUEST foreign key (NAME_REQUEST) references T_USER(TEMPUSER),
+	constraint FK_DEPARTMENT_REQUEST foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME),
+	constraint FK_FILE_ID foreign key (FILE_ID) references T_EXPEDIENTE(INDX)
+);
