@@ -398,5 +398,8 @@ UPDATE `sisdi`.`t_department` SET `COD` = 'HM' WHERE (`ID` = '5');
 UPDATE `sisdi`.`t_department` SET `COD` = 'SP' WHERE (`ID` = '6');
 UPDATE `sisdi`.`t_department` SET `COD` = 'PV' WHERE (`ID` = '7');
 UPDATE `sisdi`.`t_department` SET `COD` = 'RH' WHERE (`ID` = '8');
-
-/*INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES ('2016 Hacienda Municipal-Desarrollo Urbano', 'No Existen', 'gestiondecobros@sanpablo.go.cr', 'infraestructurapublica@sanpablo.go.cr', '0', '2016-01-01', 'Hacienda Municipal', 'Desarrollo Urbano');*/
+/*
+INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES ('2016 Hacienda Municipal-Desarrollo Urbano', 'No Existen', 'gestiondecobros@sanpablo.go.cr', 'infraestructurapublica@sanpablo.go.cr', '0', '2016-01-01', 'Hacienda Municipal', 'Desarrollo Urbano');
+insert into `sisdi`.`t_fileloan`(`FILE_ID`, `FILENAME`, `OBSERVATIONS`, `NAME_REQUEST`, `DEPARTMENT_REQUEST`, `DATE_CREATE`, `DATE_RETURN`) 
+VALUES (1, '2016 Hacienda Municipal-Desarrollo Urbano', 'Solicito para revision', 'gestiondecobros@sanpablo.go.cr', 'Hacienda Municipal', '2021-04-19', '2021-04-26');
+*/
