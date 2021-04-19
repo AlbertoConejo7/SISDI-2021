@@ -2,11 +2,14 @@ package com.sisdi.controller;
 
 import com.sisdi.data.DepartmentData;
 import com.sisdi.data.FileData;
+import com.sisdi.data.FileLoanData;
 import com.sisdi.data.OfficeData;
 import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.Department;
+import com.sisdi.model.FileLoan;
+import com.sisdi.model.FileLoanSimple;
 import com.sisdi.model.FileSimple;
 import com.sisdi.model.Office;
 import com.sisdi.model.OfficeSimple;
@@ -16,6 +19,7 @@ import com.sisdi.service.OfficeServiceImp;
 import com.sisdi.model.Usuario;
 import com.sisdi.model.searchOffice;
 import com.sisdi.service.ExpedienteServiceImp;
+import com.sisdi.service.FileLoanServiceImp;
 import com.sisdi.service.TimeOutsServiceImp;
 import com.sisdi.service.TransferServiceImp;
 import java.util.Date;
@@ -61,15 +65,20 @@ public class OfficeController {
     @Autowired
     private FileData fileData;
     
-     @Autowired
+    @Autowired
     private TransferData transferData;
-
-
+    
+    @Autowired
+    private FileLoanData fileLoanData;
+    
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
     
-     @Autowired
+    @Autowired
     private TransferServiceImp transferServiceImp;
+     
+    @Autowired
+    private FileLoanServiceImp fileLoanServiceImp;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -440,9 +449,9 @@ public class OfficeController {
     
      @GetMapping("/borrowedFiles")
     public String borrowedFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
-        //List<TransferSimple> list= transferData.listTransfers();
+        List<FileLoanSimple> list=fileLoanData.listFileLoanSimples();
         //log.info(list.toString());
-        //model.addAttribute("transfers", list);
+        model.addAttribute("fileLoans", list);
         return "offices/borrowedFiles";
     }
 }
