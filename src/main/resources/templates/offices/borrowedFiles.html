@@ -44,7 +44,6 @@
                                 <tr>
                                     <th style="text-align: center">Expediente</th>
                                     <th style="text-align: center">Fecha de Prestamo</th>
-                                    <th style="text-align: center">Fecha de Retorno</th>
                                     <th style="text-align: center">Prestado a</th>
                                     <th style="text-align: center">Cantidad Oficios</th>
                                     <th style="text-align: center">Ver Oficios</th>
@@ -53,27 +52,19 @@
                             </thead>
                             <tbody>
 
-                                <tr th:if="${borrowed == null or borrowed.empty}">
+                                <tr th:if="${fileLoans == null or fileLoans.empty}">
                                     <td colspan="6" style="text-align: center;">No hay expedientes prestados</td>
                                 </tr>
 
-                               <!-- <tr th:each="transfer : ${transfers}" th:if="${transfers != null and !transfers.empty}">
-                                    <td th:text="${transfer.nombreExpediente}"></td>
-                                    <td  th:text="${#dates.format(transfer.fechaTraslado, 'dd/MM/yyyy')}"></td>
-                                    <td  th:text="${transfer.emisor}"></td>
-                                    <td  th:text="${transfer.oficios}"></td>
-                                    <td th:if="${transfer.estado == 0}">No visto</td>
-                                    <td th:if="${transfer.estado == 1}">Visto</td>
+                                <tr th:each="fileLoan : ${fileLoans}" th:if="${fileLoans != null and !fileLoans.empty}">
+                                    <td th:text="${fileLoan.fileName}"></td>
+                                    <td  th:text="${#dates.format(fileLoan.dateCreate, 'dd/MM/yyyy')}"></td>
+                                    <td  th:text="${fileLoan.nameRequest}"></td>
+                                    <td  th:text="${fileLoan.ofiicesAmount}"></td>
                                     <td>
-                                        <div class='input-group'>
-                                            <a th:if="${transfer.estado == 0}" th:href="@{/offices/acceptTransfer/{id} (id=${transfer.id})}"><img th:src="@{/images/recibido.svg}"></a>
-                                            <a th:if="${transfer.estado == 1}"><img th:src="@{/images/check.svg}" width="25" height="25"></a>                                        
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a th:if="${transfer.estado == 1}" th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${transfer.numeroExpediente})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
-                                    </td>                                                          
-                                </tr>-->
+                                        <a th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${fileLoan.fileId})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
+                                    </td>                                                       
+                                </tr>
 
                             </tbody>
                         </table>
