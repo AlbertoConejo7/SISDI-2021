@@ -207,3 +207,8 @@ create table T_FILELOAN(
 	constraint FK_DEPARTMENT_REQUEST foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME),
 	constraint FK_FILE_ID foreign key (FILE_ID) references T_EXPEDIENTE(INDX)
 );
+create table T_SIGNATURE(
+	ID int auto_increment,
+    CERTIFICATE_ID longtext,
+    constraint PK_SIGNATURE primary key(ID)
+);
