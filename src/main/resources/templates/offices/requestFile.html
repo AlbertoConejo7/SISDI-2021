@@ -16,6 +16,9 @@
         <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+        <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="lib/year-select.js"></script>
+
 
         <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -42,7 +45,7 @@
                     <h3 class='font-italic text-center' id='titleh3'>Solicitud de préstamo de expediente</h3>
                 </div>
                 <div class="mx-auto w-75">
-                    <form class="form was-validated" method="POST" th:action="@{/offices/requestFile}" th:object="${requestFile}" id="add-office">
+                    <form class="form was-validated" method="POST" th:action="@{/offices/sendRequestFile}" th:object="${requestFile}" id="add-office">
                         <table class="table table-borderless">
                             <tr>
                                 <td>
@@ -50,7 +53,7 @@
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <input th:value="${session.usuarioCompleto.tempUser.name}"  class="form-control" th:field="*{owner}" readonly="readonly"/>
+                                        <input th:value="${session.usuarioCompleto.tempUser.name}"  class="form-control" th:field="*{nameRequest}" readonly="readonly"/>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -61,9 +64,8 @@
                                     <span>Departamento solicitante</span>
                                 </td>
                                 <td>
-                                    <div class='input-group'>
-                                       <!-- th:value="${session.usuarioCompleto.department.name}" th:field="*{department}"-->
-                                        <input class="form-control"  th:value="${session.usuarioCompleto.department.name}" th:field="*{department}" readonly="readonly"/>
+                                    <div class='input-group'>                                     
+                                        <input class="form-control"  th:value="${session.usuarioCompleto.department.name}" th:field="*{departmentRequest}" readonly="readonly"/>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -75,60 +77,54 @@
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <input th:value="${#dates.format(date, 'dd/MM/yyyy')}"  class="form-control" th:field="*{dateCreateFile}" readonly="readonly"/>
+                                        <input th:value="${#dates.format(date, 'dd/MM/yyyy')}"  class="form-control" th:field="*{dateCreate}" readonly="readonly"/>
                                         <span class="input-group-addon ">
                                             <img class="icon-img" th:src="@{/images/calendar.svg}">
                                         </span>
                                     </div>
                                 </td>
                             </tr>
-                            <!--<tr>
+                            <tr>
                                 <td>
                                     <span>Departamento a buscar</span><span class="required"> *</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <select name="departments" class="custom-select" th:field="*{departmentRequest}" required>
+                                        <select name="departments" class="custom-select" th:field="*{departmentOther}" required>
                                             <option value="">Seleccione el departamento</option>
-                                            <option th:each="departament:${departments}" th:value="${department.name}" th:text="${department.name}"></option>
+                                            <option th:each="dept:${departments}" th:value="${dept.name}" th:text="${dept.name}"></option>
                                         </select>
-                                        <div class="invalid-feedback">Debe seleccionar un Receptor</div>
+                                        <div class="invalid-feedback">Debe seleccionar un departamento</div>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
                                 </td>
-                            </tr>-->
-                            <!--<tr>
+                            </tr>
+                            <tr>
                                 <td>
                                     <span>Año a buscar</span><span class="required"> *</span>
                                 </td>
                                 <td>
-                                    <div class='input-group'>
-                                        <input placeholder="Año del expediente"  name="año" id="año" class="form-control" th:field="*{year}" required/>
+                                    <div class='input-group'>                                        
+                                        <select name="año" id="año" class="custom-select"   th:field="*{year}"required>
+                                            <script>
+                                                var myDate = new Date();
+                                                var year = myDate.getFullYear();
+                                                document.write('<option value = "">Seleccione el año </option>')
+                                                for (var i = year -5; i < year + 1; i++) {
+                                                    document.write('<option value="'+i+'" >' + i + '</option>');
+                                                }
+                                            </script>
+                                        </select>
+
                                         <span class="input-group-addon ">
                                         </span>
 
                                         <div class="invalid-feedback">Indique el año a buscar</div>
                                     </div>
                                 </td>
-                            </tr>-->
-
-                            <tr>
-                                <td>
-                                    <span>Expediente</span><span class="required"> *</span>
-                                </td> 
-                                <td>
-                                    <div class='input-group'>
-                                        <select name="expedientes" class="custom-select" th:field="*{fileName}" onchange="amountOfiices(this)" required>
-                                            <option value="">Seleccione Expediente</option>
-                                            <option th:each="expediente:${expedientesPending}" th:value="${expediente.FILENAME}" th:text="${expediente.FILENAME}"></option>
-                                        </select>
-                                        <div class="invalid-feedback">Debe seleccionar un Expediente</div>
-                                        <span class="input-group-addon ">
-                                        </span>
-                                    </div>
-                                </td>
                             </tr>
+                            
                             <tr>
                                 <td>
                                     <span>Observaciones</span>
