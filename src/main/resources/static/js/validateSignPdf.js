@@ -32,15 +32,28 @@ function doAjax() {
 }
 function printInfo(res) {
     var inputFile = $("#inputFile");
-    var pSigned = $("#isSigned");
     inputFile.val(res.name);
     if (res.signed) {
         inputFile.removeClass("c-false");
         inputFile.addClass("c-true");
-        pSigned.text("El Oficio " + res.name + " se encuentra firmado");
+        createContent("El Oficio " + res.name + " se encuentra firmado", "../../static/images/signature.png}");
     } else {
         inputFile.removeClass("c-true");
         inputFile.addClass("c-false");
-        pSigned.text("El Oficio " + res.name + " no se encuentra firmado");
+        createContent("El Oficio " + res.name + " no se encuentra firmado", "/images/signature.png");
     }
+}
+
+function createContent(message, icono) {
+    var src = document.getElementById("isSigned");
+    var img = document.createElement("img");
+    img.src = icono;
+    img.width ="10px";
+        
+    var span = document.createElement('small');
+    span.innerHTML = message;
+    src.appendChild(img);
+    src.appendChild(span);
+
+
 }
