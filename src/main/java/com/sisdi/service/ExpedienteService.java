@@ -25,6 +25,8 @@ public interface ExpedienteService {
     List<Expediente> listExpedienteBySameDepartment(String receiver, String sender);
 
     Expediente searchFile(String receiver, String sender, String year);
+    
+    Expediente searchFileRequest(String receiver, String sender, String year);
 
     Expediente createFile(String receiver, String sender);
     
