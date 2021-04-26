@@ -19,7 +19,8 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
         <script th:src="@{/js/notificacionesResponse.js}"></script>
-        <script th:src="@{/js/notificacionesExpediente.js}"></script>
+        <script th:src="@{/js/notificacionesExpediente.js}"></script>  
+        <script th:src="@{/js/script.js}"></script>
     </head>
     <body>
         <header th:insert="menu/Head :: menu"></header>
@@ -32,9 +33,9 @@
                     <h3 class='font-italic text-center' id='titleh3'>Lista Oficios</h3>
                 </div>
                 <div>                             
-                    
+
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchOffice"><img th:src="@{/images/search.png}" width=25> </button>
-                   
+
                 </div>
             </div>
 
@@ -52,7 +53,7 @@
                                         <th style="text-align: center">Estado</th>
                                         <th style="text-align: center">Editar Oficio </th>
                                         <th style="text-align: center">Ver Oficio </th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,7 +75,8 @@
                                         <td th:if="${office.STATE == 2}" th:text="Respondido"></td>
                                         <td th:if="${office.STATE == 3}" th:text="Anulado"></td>
                                         <td th:if="${office.STATE != 3}">
-                                            <a th:href="@{/offices/editOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/edit.svg}"></a>
+                                            <a th:if="${session.Signature!='' && session.Signature!=null}" th:href="@{/offices/editOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/edit.svg}"></a>
+                                            <a th:if="${session.Signature=='' || session.Signature==null}" style="cursor:pointer;" role="button" onclick="doAjaxAuthSign('/offices/listOffices')"><img th:src="@{/images/edit.svg}"></a>
                                         </td>
                                         <td th:if="${office.STATE == 3}">
                                             <a></a>
@@ -82,7 +84,7 @@
                                         <td >
                                             <a th:href="@{/offices/viewOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
                                         </td>
-                                       
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -150,7 +152,7 @@
                     </div>
                 </div>
             </div>
-    </main>
+        </main>
         <script th:src="@{/js/calendar.js}"></script>
-</body>
+    </body>
 </html>
