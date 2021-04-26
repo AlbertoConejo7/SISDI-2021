@@ -12,6 +12,6 @@ public class FileLoanSimple {
     private String departmentRequest;
     private String departmentOther;
     private String year;  
-    private Date dateCreate;
+    private String dateCreate;
     private int ofiicesAmount;
 }
