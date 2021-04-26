@@ -1,6 +1,7 @@
 package com.sisdi.controller;
 
 import com.sisdi.data.FileData;
+import com.sisdi.data.SignatureData;
 import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
 import com.sisdi.model.Expediente;
@@ -15,10 +16,6 @@ import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +50,9 @@ public class IndexController {
     @Autowired
     private UserData userData;
     
+    @Autowired
+    private SignatureData signatureData;
+    
      @Autowired
     private FileData fileData;
      
@@ -64,6 +64,8 @@ public class IndexController {
     
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
+    
+    private Date fecha = new Date();
 
     @GetMapping("/login")
     public String login() {
@@ -76,13 +78,7 @@ public class IndexController {
         log.info("ejecutando el controlador Oficios");
         session.setAttribute("user", user);
         session.setAttribute("usuarioCompleto", userData.getUser(user.getUsername()));
-         
-        model.addAttribute("user", user);
-    
-        
-       
-         
-        
+        model.addAttribute("user", user);   
         return "/index";
     }
 
@@ -159,6 +155,27 @@ public class IndexController {
         obj.put("Indx", e.getINDX());
         obj.put("Create", strDate);
         log.info(strDate);
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    @PostMapping("/authSignature")
+    public ResponseEntity<?> authSignature(Model model, @AuthenticationPrincipal User user, @RequestParam("direccion") String dir, HttpSession session) {
+        session.setAttribute("direccion", dir);
+        log.info(dir);
+        JSONObject obj = new JSONObject();
+        obj.put("dir", "/offices/authSignature");
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    
+     @PostMapping("/signatureVerification")
+    public ResponseEntity<?> signatureVerification(Model model, @AuthenticationPrincipal User user, HttpSession session, @RequestParam("name") String name) {
+        JSONObject obj = signatureData.verificarCertificado(name);
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    @PostMapping("/saveSignatureAuth")
+    public ResponseEntity<?> saveSignatureAuth(Model model, @AuthenticationPrincipal User user, @RequestParam("name") String name, HttpSession session) {
+        session.setAttribute("Signature", name);
+        JSONObject obj = new JSONObject();
+        obj.put("dir", session.getAttribute("direccion"));
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 
