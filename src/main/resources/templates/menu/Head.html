@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html  xmlns:th="http://www.thymeleaf.org">
     <head>
+        
     </head>
     <body>
         <nav th:fragment="menu" class="navbar navbar-expand-md navbar-light bg-dark fixed-top">
@@ -18,17 +19,21 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"> OFICIOS </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" th:href="@{/offices/authSignature}">Agregar Oficio</a> 
+                            <a class="dropdown-item" th:if="${session.Signature!='' && session.Signature!=null}" th:href="@{/offices/addOffice}">Agregar Oficio</a>
+                            <a class="dropdown-item" style="cursor:pointer;" role="button" th:if="${session.Signature=='' || session.Signature==null}" onclick="doAjaxAuthSign('/offices/addOffice')">Agregar Oficio</a>
                             <a class="dropdown-item"th:href="@{/offices/listOffices}">Lista de Oficios</a>
-                            <a class="dropdown-item"th:href="@{/offices/pendingOffice}">Oficios Pendientes</a>
+                            <a class="dropdown-item" th:if="${session.Signature!='' && session.Signature!=null}" th:href="@{/offices/pendingOffice}">Oficios Pendientes</a>
+                            <a class="dropdown-item" style="cursor:pointer;" role="button" th:if="${session.Signature=='' || session.Signature==null}" onclick="doAjaxAuthSign('/offices/pendingOffice')">Oficios Pendientes</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"> EXPEDIENTES </a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" th:href="@{/offices/pendingExpediente}">Expedientes</a>                            
-                            <a class="dropdown-item" th:href="@{/offices/sendFile}">Trasladar expediente</a> 
-                            <a class="dropdown-item" th:href="@{/offices/requestFile}">Solicitar expediente</a>
+                            <a class="dropdown-item"  role="button" th:if="${session.Signature!='' && session.Signature!=null}" th:href="@{/offices/sendFile}">Trasladar expediente</a> 
+                             <a class="dropdown-item" style="cursor:pointer;" role="button" th:if="${session.Signature=='' || session.Signature==null}" onclick="doAjaxAuthSign('/offices/sendFile')">Trasladar expediente</a>
+                            <a class="dropdown-item" th:if="${session.Signature!='' && session.Signature!=null}"  th:href="@{/offices/requestFile}">Solicitar expediente</a>
+                             <a class="dropdown-item"  style="cursor:pointer;" role="button"  th:if="${session.Signature=='' || session.Signature==null}"  onclick="doAjaxAuthSign('/offices/requestFile')">Solicitar expediente</a>
                             <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/transfersFiles}">Expedientes trasladados</a> 
                             <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/borrowedFiles}">Expedientes Prestados</a> 
 
@@ -43,13 +48,19 @@
                             <a class="nav-link text-light font-weight-bold px-3" href="#" onclick="this.parentNode.submit();">LOGOUT</a>
                         </form>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" >
                         <p>
                             <input th:value="${session.user.username}" class="usuario" readonly="readonly"/>
                         </p>
                     </li>
+                    
                 </ul>
                 <ul class="nav pull-right">
+                    <li class="nav-item" th:if="${session.Signature!='' && session.Signature!=null}">
+                        <a role="button" class='btn' data-container="body" data-toggle="popover" data-placement="left" data-content="Signature en sesión">
+                            <img th:src="@{/images/signature.png}" alt="" width="40px"/>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"> <img th:src="@{/images/bell.png}" alt="" width="30px"/> </a>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -67,6 +78,6 @@
                 </ul>
             </div>
         </nav>
-
+        
     </body>
 </html>
