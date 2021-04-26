@@ -7,123 +7,37 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+        <!-- Components -->
+        <script defer type="module" src="https://fortifyapp.com/external/webcomponent/build/peculiar.esm.js"></script>
+        <script defer nomodule src="https://fortifyapp.com/external/webcomponent/build/peculiar.js"></script>
+        <link rel="stylesheet" href="https://fortifyapp.com/external/webcomponent/build/peculiar.css">
+
+        <!-- Crypto -->
+        <script src="https://fortifyapp.com/external/pvtsutils/pvtsutils.js"></script>
+        <script src="https://fortifyapp.com/external/asn1js/asn1.min.js"></script>
+        <script src="https://fortifyapp.com/external/pkijs/pki.min.js"></script>
+        
         <link th:href="@{/css/signature.css}" rel="stylesheet" type="text/css"/>
         <link th:href="@{/css/default.css}" rel="stylesheet"/>
+
 
     </head>
 
     <body>
         <div class="container">
-            <div class="stepwizard">
-                <div class="stepwizard-row setup-panel">
-                    <div class="stepwizard-step">
-                        <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
-                        <p>Abrir Fortify App</p>
-                    </div>
-                    <div class="stepwizard-step">
-                        <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
-                        <p>Seleccionar certificado</p>
-                    </div>
-                    <div class="stepwizard-step">
-                        <a href="#step-3" type="button" class="btn btn-default btn-circle" disabled="disabled">3</a>
-                        <p>Verificar información</p>
-                    </div>
-                    <div class="stepwizard-step">
-                        <a href="#step-4" type="button" class="btn btn-default btn-circle" disabled="disabled">4</a>
-                        <p>Ingresar</p>
-                    </div>
-                </div>
-            </div>
-            <form role="form" class="content-w">
-                <div class="row setup-content" id="step-1">
-                    <div class="col-md-12">
-                        <h3 class="font-italic text-center"> Abrir Fortify App </h3>
-                        <p>El sistema validará que tenga acceso a la aplicación de escritorio Fortify App, para acceder a los certificados.</p>
-                    </div>
-                    <div class="footer align-self-end">
-                        <button class="btn btn-primary nextBtn pull-right" type="button" >Continuar</button>
-                    </div>
-                </div>
-                <div class="row setup-content" id="step-2">
-                    <div class="col-md-12">
-                        <h3 class="font-italic text-center">Seleccionar certificado </h3>
-                        <p>Seleccione el certificado que utilizará: <p>
-                        <p>Asegúrese de que corresponda con su firma digital actual.</p>
-                        <div class='input-group'>
-                            <input type="text" placeholder="Certificado"  name="certificado" id="certificado" class="form-control" readonly="readonly"/>
-                        </div>
-                    </div>
-                    <div class="footer align-self-end">
-                        <button class="btn btn-primary nextBtn pull-right" type="button" >Continuar</button>
-                    </div>
-                </div>
-                <div class="row setup-content" id="step-3">
-                    <div class="col-md-12">
-                        <h3 class="font-italic text-center"> Verificar información </h3>
-                        <p>Asegúrese de que el certificado que desea utilizar sea el correcto</p>
-                        <table>
-                            <h6  class="font-italic text-center">Datos del certificado.</h6>
-                            <tr>
-                                <td>
-                                    <span>Cédula</span>
-                                </td>
-                                <td>
-                                    <div class='input-group'>
-                                        <input type="text" placeholder="Cédula"  name="cedula" id="cedula" class="form-control" readonly="readonly"/>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span>Nombre</span>
-                                </td>
-                                <td>
-                                    <div class='input-group'>
-                                        <input type="text" placeholder="Nombre"  name="nombre" id="nombre" class="form-control" readonly="readonly"/>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span> Rango Válido</span>
-                                </td>
-                                <td>
-                                    <div class='input-group'>
-                                        <input type="text" placeholder="Rango Válido"  name="rango" id="rango" class="form-control" readonly="readonly"/>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span> Número de serie </span>
-                                </td>
-                                <td>
-                                    <div class='input-group'>
-                                        <input type="text" placeholder="Número de Serie"  name="serie" id="serie" class="form-control" readonly="readonly"/>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <p class="mt-2" style="font-size: 10pt;">
-                            Si está seguro de utilizar este certificado,de click en Firmar.
-                            Y se le solicitará su clave del certificado.
-                        </p>
-                    </div>
-                    <div class="footer align-self-end">
-                        <button class="btn btn-primary nextBtn pull-right" type="button" >Firmar</button>
-                    </div>
-                </div>
-                <div class="row setup-content" id="step-4">
-                    <div class="col-md-12">
-                        <h3 class="font-italic text-center"> Ingresar </h3>
-                        <p>La firma fue generada: <strong>Correctamente</strong></p>
-
-                    </div>
-                    <div class="footer align-self-end">
-                        <a class="btn btn-primary pull-right" th:href="@{/offices/addOffice}">Ingresar</a>
-                    </div>
-                </div>
-            </form>
+            <section>
+                <br>
+                <pre><code id="output"></code></pre>
+            </section>
+        </div>
+        <div class="notice" id="signNotice">
+            
         </div>
         <script th:src="@{/js/signature.js}"></script>
     </body>
