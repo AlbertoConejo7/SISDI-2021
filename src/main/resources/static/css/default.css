@@ -89,11 +89,19 @@
 
 .alert{
     text-align: left !important;
+    position: relative;
 }
 .alert strong, .alert p{
     font-size: 10pt !important;
 }
-#pageMessages {
+.alert .close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1em;
+}
+
+.notice {
   position: fixed;
   bottom: 15px;
   right: 15px;
