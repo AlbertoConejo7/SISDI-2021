@@ -58,25 +58,28 @@ public class OfficeController {
 
     @Autowired
     private DepartmentData departmentData;
-    
+
     @Autowired
     private OfficeData officeData;
 
     @Autowired
+    private FileLoanData FileLoanData;
+
+    @Autowired
     private FileData fileData;
-    
+
     @Autowired
     private TransferData transferData;
-    
+
     @Autowired
     private FileLoanData fileLoanData;
-    
+
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
-    
+
     @Autowired
     private TransferServiceImp transferServiceImp;
-     
+
     @Autowired
     private FileLoanServiceImp fileLoanServiceImp;
 
@@ -161,21 +164,19 @@ public class OfficeController {
 
         return "offices/sendFile";
     }
-    
-         @GetMapping("/requestFile")
-    public String requestFile(Model model, FileSimple requestFile, @AuthenticationPrincipal User user) {
+
+    @GetMapping("/requestFile")
+    public String requestFile(Model model, FileLoanSimple requestFile, @AuthenticationPrincipal User user) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
         model.addAttribute("date", fecha);
-        List<Expediente> expedientes = expedienteServiceImp.listExpedienteByEmisor(user.getUsername());
         List<Usuario> usuarios = userData.listUsers();
         Usuario u = userData.getUser(user.getUsername());
         List<Department> departments = departmentData.listDepartments();
-        
-        requestFile.setOwner(u.getTempUser().getName());
-        requestFile.setDepartment(u.getDepartment().getName());
-        requestFile.setDateReturn(fechaS);
 
-        model.addAttribute("expedientesPending", expedientes);
+        requestFile.setNameRequest(u.getTempUser().getName());
+        requestFile.setDepartmentRequest(u.getDepartment().getName());
+        requestFile.setDateCreate(fechaS);
+
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("departments", departments);
         model.addAttribute("requestFile", requestFile);
@@ -183,25 +184,64 @@ public class OfficeController {
         return "offices/requestFile";
     }
 
+    @PostMapping("/sendRequestFile")
+    public String sendRequestFile(Model model, @ModelAttribute("requestFile") FileLoanSimple fileLoan,
+            RedirectAttributes redirectAttrs, @AuthenticationPrincipal User user) throws ParseException {
+        try {
+            fileLoan.setFileName(fileLoan.getYear() + " " + fileLoan.getDepartmentRequest() + "-" + fileLoan.getDepartmentOther());
+            FileLoan file = FileLoanData.fileLoanSimpleToFileLoan(fileLoan);
+
+            Expediente e = expedienteServiceImp.searchFileRequest(fileLoan.getDepartmentRequest(),
+                    fileLoan.getDepartmentOther(), fileLoan.getYear());
+
+            Usuario u = userData.getUserByName(fileLoan.getNameRequest());
+            file.setFILE_ID(e.getINDX());
+            file.setDATE_RETURN(fecha);
+            file.setNAME_REQUEST(u.getTempUser().getEmail());
+
+            if (e.getFILENAME() != null) {
+                fileLoanServiceImp.addFileLoan(file);
+
+                redirectAttrs
+                        .addFlashAttribute("mensaje", "Expediente encontrado, solicitud enviada")
+                        .addFlashAttribute("clase", "success");
+            } else {
+                log.info("NO HAY EXPEDIENTE");
+                redirectAttrs
+                        .addFlashAttribute("mensaje", "Error, expediente no encontrado")
+                        .addFlashAttribute("clase", "alert alert-danger");
+            }
+
+        } catch (Exception e) {
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error la solicitud no fue enviada")
+                    .addFlashAttribute("clase", "alert alert-danger");
+            log.info(e.toString());
+
+        }
+        return "redirect:/offices/requestFile";
+    }
+
     @PostMapping("/saveFile")
     public String saveFile(Model model, @ModelAttribute("fileSend") FileSimple fileSend, RedirectAttributes redirectAttrs, @AuthenticationPrincipal User user) throws ParseException {
         try {
-            String send=userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
+            String send = userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
             fileSend.setOwner("archivocentral@sanpablo.go.cr");
             fileSend.setReceiver("archivocentral@sanpablo.go.cr");
             Expediente exp = fileData.getFile(fileSend);
             exp.setOWNER_DEPARTMENT("Servicios Públicos");
             exp.setRECEIVER_DEPARTMENT("Servicios Públicos");
             log.info("El expediente" + exp.toString());
-            Transfer t= transferData.getTransfer(fileSend, send);
-           redirectAttrs
+            Transfer t = transferData.getTransfer(fileSend, send);
+            redirectAttrs
                     .addFlashAttribute("mensaje", "Expediente trasladado correctamente")
                     .addFlashAttribute("clase", "success");
             expedienteServiceImp.addExpediente(exp);
             transferServiceImp.addTransfer(t);
         } catch (Exception e) {
-             String send=userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
-             Transfer t= transferData.getTransfer(fileSend, send);
+            String send = userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
+            Transfer t = transferData.getTransfer(fileSend, send);
             redirectAttrs
                     .addFlashAttribute("mensaje", "Error al trasladar oficio")
                     .addFlashAttribute("clase", "alert alert-danger");
@@ -429,27 +469,28 @@ public class OfficeController {
     public String authSignature(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
         return "offices/authSignature";
     }
+
     @GetMapping("/transfersFiles")
     public String transfersFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
-        List<TransferSimple> list= transferData.listTransfers();
+        List<TransferSimple> list = transferData.listTransfers();
         log.info(list.toString());
         model.addAttribute("transfers", list);
         return "offices/transfersFiles";
     }
-    
+
     @GetMapping("/acceptTransfer/{transferId}")
     public String acceptTransfer(@PathVariable int transferId, Model model, @AuthenticationPrincipal User user) {
         Transfer tr = transferServiceImp.searchTransfer(transferId);
-        tr.setSTATE(1); 
+        tr.setSTATE(1);
         transferServiceImp.addTransfer(tr);
         List<TransferSimple> transfers = transferData.listTransfers();
         model.addAttribute("transfers", transfers);
         return "offices/transfersFiles";
     }
-    
-     @GetMapping("/borrowedFiles")
+
+    @GetMapping("/borrowedFiles")
     public String borrowedFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
-        List<FileLoanSimple> list=fileLoanData.listFileLoanSimples();
+        List<FileLoanSimple> list = fileLoanData.listFileLoanSimples();
         //log.info(list.toString());
         model.addAttribute("fileLoans", list);
         return "offices/borrowedFiles";
