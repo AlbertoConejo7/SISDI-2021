@@ -20,19 +20,17 @@ public class ExpedienteServiceImp implements ExpedienteService {
     @Autowired
     private ExpedienteDao expedienteDao;
 
-
-
- @Override
+    @Override
     public List<Expediente> listarExpedientes() {
         return (List<Expediente>) expedienteDao.findAll();
     }
-    
+
     @Override
     public Expediente addExpediente(Expediente expediente) {
         return expedienteDao.save(expediente);
     }
 
-@Override
+    @Override
     public Expediente searchExpediente(String expnumber) {
         List<Expediente> list = this.listarExpedientes();
         Expediente aux = null;
@@ -43,8 +41,7 @@ public class ExpedienteServiceImp implements ExpedienteService {
         }
         return aux;
     }
-    
-   
+
     @Override
     public List<Expediente> listExpedienteByEmisor(String emisor) {
         List<Expediente> list = this.listarExpedientes();
@@ -57,6 +54,7 @@ public class ExpedienteServiceImp implements ExpedienteService {
 
         return aux;
     }
+
     @Override
     public List<Expediente> listExpedienteByReceptor(String receptor) {
         List<Expediente> list = this.listarExpedientes();
@@ -69,6 +67,7 @@ public class ExpedienteServiceImp implements ExpedienteService {
 
         return aux;
     }
+
     @Override
     public List<Expediente> listExpedienteByUser(String user) {
         List<Expediente> aux = new ArrayList();
@@ -85,13 +84,13 @@ public class ExpedienteServiceImp implements ExpedienteService {
         Expediente aux = null;
         for (Expediente o : list) {
             if (o.getFILENAME().equals(filename)) {
-                aux=o;
+                aux = o;
             }
         }
         return aux;
     }
-    
-     @Override
+
+    @Override
     public Expediente getExpediente(int id) {
         List<Expediente> list = this.listarExpedientes();
         Expediente aux = null;
@@ -102,8 +101,8 @@ public class ExpedienteServiceImp implements ExpedienteService {
         }
         return aux;
     }
-    
-     //lista los expedientes que tengan mismos departamentos en receptor o emisor
+
+    //lista los expedientes que tengan mismos departamentos en receptor o emisor
     @Override
     public List<Expediente> listExpedienteBySameDepartment(String receiver, String sender) {
         List<Expediente> list = this.listarExpedientes();
@@ -120,7 +119,7 @@ public class ExpedienteServiceImp implements ExpedienteService {
 
     @Override
     public Expediente searchFile(String receiver, String sender, String year) {
-        
+
         List<Expediente> list = this.listExpedienteBySameDepartment(receiver, sender);
         Expediente sameYearFile = new Expediente();
         if (!list.isEmpty()) {
@@ -137,18 +136,34 @@ public class ExpedienteServiceImp implements ExpedienteService {
     }
 
     @Override
+    public Expediente searchFileRequest(String receiver, String sender, String year) {
+
+        List<Expediente> list = this.listExpedienteBySameDepartment(receiver, sender);
+        Expediente sameYearFile = new Expediente();
+        if (!list.isEmpty()) {
+            for (Expediente f : list) {
+                String a = new SimpleDateFormat("yyyy").format(f.getDATE_CREATE());
+                if ((a.contains(year))) {
+                    sameYearFile = f;
+                }
+            }
+        } 
+        return sameYearFile;
+    }
+
+    @Override
     public Expediente createFile(String receiver, String sender) {
         Expediente e = new Expediente();
         e.setOWNER_DEPARTMENT(sender);
         e.setRECEIVER_DEPARTMENT(receiver);
-        int cantidad =e.getOFFICE_AMOUNT()+1;
+        int cantidad = e.getOFFICE_AMOUNT() + 1;
         e.setOFFICE_AMOUNT(cantidad);
         return e;
     }
-    
+
     @Override
-    public String getFileName(int indx){
-        Expediente e=this.getExpediente(indx);
+    public String getFileName(int indx) {
+        Expediente e = this.getExpediente(indx);
         return e.getFILENAME();
     }
 }
