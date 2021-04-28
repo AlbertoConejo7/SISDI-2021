@@ -212,3 +212,18 @@ create table T_SIGNATURE(
     CERTIFICATE_ID longtext,
     constraint PK_SIGNATURE primary key(ID)
 );
+
+CREATE TABLE T_FILEACT(
+ID int auto_increment,
+FILE_ID INT,
+FILENAME varchar(100),
+OBSERVATIONS longtext, 
+NAME_REQUEST varchar(45),
+DEPARTMENT_REQUEST varchar(45),
+DATE_CREATE date,
+DATE_FILE date,
+constraint PK_FILEACT primary key(ID),
+constraint FK_NAME_REQUEST_ACT foreign key (NAME_REQUEST) references T_USER(TEMPUSER),
+constraint FK_DEPARTMENT_REQUEST_ACT foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME)
+
+);

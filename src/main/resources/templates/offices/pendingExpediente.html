@@ -15,9 +15,14 @@
         <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+        
         <script th:src="@{/js/notificacionesResponse.js}"></script>
         <script th:src="@{/js/notificacionesExpediente.js}"></script>
-        <script th:src="@{/js/script.js}"></script>
+        
+       
+
+       
     </head>
     <body>
         <header th:insert="menu/Head :: menu"></header>
@@ -44,7 +49,7 @@
                                             <th style="text-align: center">Nombre del Expediente</th>
                                             <th style="text-align: center">Fecha de Creacion</th>
                                             <th style="text-align: center">Ver Oficios</th>
-                                            
+                                              <th style="text-align: center">Eliminar</th>
                                              
 
                                         </tr>
@@ -63,7 +68,12 @@
                                                   <a th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${expediente.INDX})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
                                                
                                             </td>
-                                             
+                                              <td >
+                                                  
+                                                 <!-- <button type="button" id="a-del" class="btn btn-danger" onclick="swal()" th:href="@{/offices/deleteFile/{deleteId} (deleteId=${expediente.FILENAME})}">Eliminar</button>-->
+                                                    <a type="button"  class="btn btn-danger"  th:href="@{/offices/addAct/{deleteId} (deleteId=${expediente.FILENAME})}"><img th:src="@{/images/delete.svg}" width="25" height="25"></a>  
+                                               
+                                            </td>
                                           
                                            
 
@@ -78,6 +88,9 @@
             </div>
             <script th:src="@{/js/calendar.js}"></script>
 
+            <script>
+        
+    </script>
 
         </main>
     </body>

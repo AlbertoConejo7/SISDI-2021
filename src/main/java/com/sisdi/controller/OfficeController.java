@@ -39,6 +39,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.sisdi.data.FileActData;
+import com.sisdi.model.FileAct;
+import com.sisdi.model.FileActSimple;
+import com.sisdi.service.FileActServiceImp;
 
 @Controller
 @Slf4j
@@ -82,6 +86,10 @@ public class OfficeController {
 
     @Autowired
     private FileLoanServiceImp fileLoanServiceImp;
+     @Autowired
+    private FileActData fileActData;
+       @Autowired
+    private FileActServiceImp fileActServiceImp;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -494,5 +502,76 @@ public class OfficeController {
         //log.info(list.toString());
         model.addAttribute("fileLoans", list);
         return "offices/borrowedFiles";
+    }
+    
+     @GetMapping("/listActs")
+    public String listActs(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
+        List<FileActSimple> list=fileActData.listFileActSimples();
+        model.addAttribute("fileActs", list);
+        return "offices/listActs";
+    }
+    
+    @GetMapping("/deleteFile/{deleteId}")
+    public String deleteFile(@PathVariable String deleteId, Model model, @AuthenticationPrincipal User user) {
+  
+         model.addAttribute("deleteId", deleteId);
+          
+        try{
+     
+       Expediente deleteFile =expedienteServiceImp.getExpediente(deleteId);
+        FileActSimple newActSimple=fileActData.SaveAct(deleteFile);
+         model.addAttribute("deleteId", deleteId);
+        FileAct newAct =fileActData.fileActSimpleToFileAct(newActSimple);
+        fileActServiceImp.addFileAct(newAct);
+        }
+          catch(Exception excepcion){
+	    
+             excepcion.printStackTrace();
+         }
+     
+        return "redirect:/offices/addAct";
+    }
+    
+    @GetMapping("/addAct/{deleteId}")
+    public String addAct( Model model, @AuthenticationPrincipal User user,@PathVariable String deleteId) {
+        String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
+        String year = new SimpleDateFormat("yyyy").format(this.fecha);
+        model.addAttribute("date", fecha);
+        List<Usuario> usuarios = userData.listUsers();
+        Usuario u = userData.getUser(user.getUsername());
+        List<FileAct> actas = fileActServiceImp.listarFileActs();
+       // FileAct ac = actas.get(actas.size() - 1);
+       // int INDX = ac.getId();
+        Expediente deleteFile =expedienteServiceImp.getExpediente(deleteId);
+        FileActSimple actAdd=fileActData.SaveAct(deleteFile);
+       // String actNumber = "Acta" + "-" + "MSPH" + "-"+ (INDX + 1) + "-" + year;
+       // actAdd.setFileName(actNumber);
+        actAdd.setDateCreate(fechaS);
+        actAdd.setDateFile(fechaS);
+     
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("actAdd", actAdd);
+
+        return "offices/addAct";
+    }
+        @PostMapping("/saveAct/{expedienteId}")
+    public String saveAct(Model model, @ModelAttribute("actAdd") FileActSimple actAdd, @ModelAttribute("expedienteId") String id, RedirectAttributes redirectAttrs) throws ParseException {
+
+        try
+        {
+            Expediente deleteFile =expedienteServiceImp.getExpediente(id);
+            FileAct newAct =fileActData.fileActSimpleToFileAct(actAdd);
+            int deleteIndx= deleteFile.getINDX();
+            fileActServiceImp.addFileAct(newAct);
+            officeServiceImp.deleteOfficesExp(deleteIndx);
+            expedienteServiceImp.deleteExpediente(deleteIndx);
+        }
+        catch(Exception excepcion)
+        {
+            excepcion.printStackTrace();
+        }
+        
+        return "offices/pendingExpediente";
+
     }
 }

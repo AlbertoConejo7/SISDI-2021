@@ -166,4 +166,11 @@ public class ExpedienteServiceImp implements ExpedienteService {
         Expediente e = this.getExpediente(indx);
         return e.getFILENAME();
     }
+    
+      @Override
+    public void deleteExpediente(int id){
+         
+     expedienteDao.deleteById(id);
+     
+     }
 }

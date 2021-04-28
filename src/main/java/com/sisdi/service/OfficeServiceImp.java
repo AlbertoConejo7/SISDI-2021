@@ -123,6 +123,22 @@ public class OfficeServiceImp implements OfficeService {
         }
         return aux;
     }
+    @Override
+   public void deleteOfficesExp(int indx){
+    List<Office> list = this.listarOficios();
+     List<Office> aux = new ArrayList();
+        for (Office o : list) {
+         //  o.getEXPEDIENTE().toLowerCase();
+         if(indx != 0)
+         {
+           if (o.getEXPEDIENTE()==indx) {
+                officeDao.delete(o);
+            }
+        }
+        }
+  
+   
+   }
 
 
 }

@@ -31,4 +31,7 @@ public interface ExpedienteService {
     Expediente createFile(String receiver, String sender);
     
     String getFileName(int indx);
+    
+    void deleteExpediente(int id);
+    
 }

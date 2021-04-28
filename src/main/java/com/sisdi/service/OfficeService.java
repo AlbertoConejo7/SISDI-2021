@@ -15,4 +15,5 @@ public interface OfficeService {
     List<Office> listByName(List <Office> list, String name);
     List<Office> listByDate(List<Office> list, Date date);
     List<Office> listByReason(List<Office> list, String reason);
+    void deleteOfficesExp(int INDX);
 }
