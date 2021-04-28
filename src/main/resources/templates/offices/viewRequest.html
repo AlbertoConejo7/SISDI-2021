@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>SISDI-Editar Oficio</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/css/default.css}" rel="stylesheet"/>
+        <link th:href="@{/css/errors.css}" rel="stylesheet"/>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet"/>
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <script th:src="@{/bootstrap/js/jquery.js}"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+        <style>
+            p{
+                margin-bottom: 0 !important;
+            }
+        </style>
+        <script th:src="@{/js/notificacionesResponse.js}"></script>
+        <script th:src="@{/js/notificacionesExpediente.js}"></script>   
+        <script th:src="@{/js/script.js}"></script>
+    </head>
+    <body>
+        <header th:insert="menu/Head :: menu"></header>
+        <div class="mt-2 col-md-1">
+            <br> <br> <br>
+        </div>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>       
+        <main>
+            <div class="container">
+                <div class="row mt-4">
+                    <div class="col">
+                        <table class="table"> 
+                            <tr class="m-0">
+                                <th>
+                                    <p>Expediente solicitado</p>
+                                </th>
+                                <td colspan="2">
+                                    <p th:text="${requestActual.fileName}"></p>
+                                </td>
+                            </tr>
+                            <tr class="m-0">
+                                <th>
+                                    <p>Observaciones</p>
+                                </th>
+                                <td colspan="2">
+                                    <p th:text="${requestActual.observations}"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <p>Nombre del solicitante</p>
+                                </th>
+                                <td colspan="2">
+                                    <p th:text="${requestActual.nameRequest}"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <p>Departamento solicitante</p>
+                                </th>
+                                <td colspan="2">
+
+                                    <p th:text="${requestActual.departmentRequest}"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <p>Fecha de solicitud</p>
+                                </th>
+                                <td colspan="2">
+                                    <p th:text="${requestActual.dateCreate}"></p>
+                                </td>
+                            </tr>
+
+                            <td colspan="3" >
+                                <button type="button" class="btn btn-success">Aceptar</button>
+                                <button type="button" class="btn btn-danger">Rechazar</button>
+                            </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+        </main>
+    </body>
+</html>
