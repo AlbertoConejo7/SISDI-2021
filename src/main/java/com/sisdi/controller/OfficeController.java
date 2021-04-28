@@ -204,8 +204,8 @@ public class OfficeController {
 
             Usuario u = userData.getUserByName(fileLoan.getNameRequest());
             file.setFILE_ID(e.getINDX());
-            file.setDATE_RETURN(fecha);
             file.setNAME_REQUEST(u.getTempUser().getEmail());
+            file.setSTATE(0);
 
             if (e.getFILENAME() != null) {
                 fileLoanServiceImp.addFileLoan(file);
@@ -367,6 +367,14 @@ public class OfficeController {
         model.addAttribute("search", search);
         return "offices/listOffices";
     }
+    
+    @GetMapping("/listRequests")
+    public String listRequest(Model model, @AuthenticationPrincipal User user) {
+        List<FileLoan> request = fileLoanServiceImp.listarFileRequests() ;
+        log.info("entrando bien");
+        model.addAttribute("requests", request);
+        return "offices/listRequests";
+    }
 
     @GetMapping("/searchedOffices")
     public String searchedOffices(Model model, @AuthenticationPrincipal User user) {
@@ -449,6 +457,15 @@ public class OfficeController {
         // expedienteAct = expedienteServiceImp.addExpediente(expedienteAct); arreglar guardar date
         // model.addAttribute("timeOuts", time);
         return "offices/pendingExpediente";
+    }
+    
+    @GetMapping("/viewRequest/{requestId}")
+    public String viewRequest(@PathVariable int requestId, Model model) {
+        FileLoan fl = fileLoanServiceImp.searchFileLoan(requestId);
+        FileLoanSimple fls = fileLoanData.fileLoanToFileLoanSimple(fl);
+        model.addAttribute("date", fecha);
+        model.addAttribute("requestActual", fls);
+        return "offices/viewRequest";
     }
 
     @GetMapping("/viewOffice/{officeId}")

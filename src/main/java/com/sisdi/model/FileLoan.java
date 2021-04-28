@@ -30,6 +30,7 @@ public class FileLoan implements Serializable {
     private String DEPARTMENT_REQUEST;
     private Date DATE_CREATE;
     private Date DATE_RETURN;
+    private int STATE;
     
     public FileLoan(){}
 

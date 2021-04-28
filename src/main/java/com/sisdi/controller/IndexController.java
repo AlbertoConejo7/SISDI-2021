@@ -90,12 +90,14 @@ public class IndexController {
     @PostMapping("/singleFileUpload")
     public ResponseEntity<?> singleFileUpload(Model model, @RequestParam("adjunto") MultipartFile file, HttpServletResponse response) {
         JSONObject obj = new JSONObject();
+        byte[] bytes = new byte[0];
         boolean signed = false;
         if (file.isEmpty()) {
             return new ResponseEntity("please select a file!", HttpStatus.OK);
         }
         try {
-            byte[] bytes = file.getBytes();
+            bytes = file.getBytes();
+            model.addAttribute("bytes", bytes);
             List<PDFSignatureInfo> info = PDFSignatureInfoParser.getPDFSignatureInfo(bytes);
             if (info.size() > 0) {
                 signed = true;
@@ -106,9 +108,8 @@ public class IndexController {
             model.addAttribute("message", "Cannot open file: " + e.getMessage());
             e.printStackTrace();
         }
+        obj.put("bytes", bytes);
         obj.put("name", file.getOriginalFilename());
-        obj.put("size", file.getSize());
-        obj.put("resource", file.getResource());
         obj.put("signed", signed);
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }

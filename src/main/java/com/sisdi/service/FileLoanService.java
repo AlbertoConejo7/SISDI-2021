@@ -8,5 +8,5 @@ public interface FileLoanService {
      List<FileLoan> listarFileLoans();
 
     FileLoan addFileLoan(FileLoan file);
-    
+    List<FileLoan> listarFileRequests();
 }
