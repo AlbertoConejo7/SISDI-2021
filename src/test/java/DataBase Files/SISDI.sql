@@ -139,8 +139,7 @@ create table T_OFFPDF(
 ID int auto_increment,
 OFFICE varchar(45),
 URL mediumblob,
-constraint PK_OFFPDF primary key(ID),
-constraint FK_ACCORD foreign key (OFFICE) references T_OFFICE(OFFNUMBER)
+constraint PK_OFFPDF primary key(ID)
 );
 
 
