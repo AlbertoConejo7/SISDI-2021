@@ -42,7 +42,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sisdi.data.FileActData;
 import com.sisdi.model.FileAct;
 import com.sisdi.model.FileActSimple;
+import com.sisdi.model.Pdf;
 import com.sisdi.service.FileActServiceImp;
+import com.sisdi.service.PdfServiceImp;
+import java.io.IOException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @Controller
 @Slf4j
@@ -86,10 +93,15 @@ public class OfficeController {
 
     @Autowired
     private FileLoanServiceImp fileLoanServiceImp;
-     @Autowired
+
+    @Autowired
     private FileActData fileActData;
-       @Autowired
+
+    @Autowired
     private FileActServiceImp fileActServiceImp;
+
+    @Autowired
+    private PdfServiceImp pdfServiceImp;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -261,11 +273,14 @@ public class OfficeController {
     }
 
     @PostMapping("/saveOffice")
-    public String saveOffice(Model model, @ModelAttribute("officeAdd") OfficeSimple office, RedirectAttributes redirectAttrs) throws ParseException {
+    public String saveOffice(Model model, @ModelAttribute("officeAdd") OfficeSimple office, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
         try {
+            byte[] bytes = (byte[]) session.getAttribute("bytes");
+            Pdf pdf = new Pdf();
+            pdf.setOFFICE(office.getOffnumber());
+            pdf.setURL(bytes);
             String year = new SimpleDateFormat("yyyy").format(this.fecha);
             Office o = officeData.getOffice(office, 0);
-
             String receptorDep = userData.getUser(o.getRECEIVER_ID()).getDepartment().getName();
             String emisorDep = userData.getUser(o.getUSER_ID()).getDepartment().getName();
             String ownerEmail = o.getUSER_ID();
@@ -281,6 +296,7 @@ public class OfficeController {
 
             log.info(o.toString());
             officeServiceImp.addOffice(o);
+            pdfServiceImp.addPdf(pdf);
             redirectAttrs
                     .addFlashAttribute("mensaje", "Oficio agregado correctamente")
                     .addFlashAttribute("clase", "success");
@@ -298,7 +314,12 @@ public class OfficeController {
     public String saveResponseOffice(Model model, @ModelAttribute("officeActual") OfficeSimple office, HttpSession session, RedirectAttributes redirectAttrs) throws ParseException {
         Office o = officeData.getOffice(office, 1);
         log.info(o.toString());
+         byte[] bytes = (byte[]) session.getAttribute("bytes");
+            Pdf pdf = new Pdf();
+            pdf.setOFFICE(office.getOffnumber());
+            pdf.setURL(bytes);
         try {
+           
             officeServiceImp.addOffice(o);
             String officeId = (String) session.getAttribute("officeResponse");
             log.info(officeId);
@@ -306,6 +327,7 @@ public class OfficeController {
             of.setSTATE(2);
             log.info(of.toString());
             officeServiceImp.addOffice(of);
+            pdfServiceImp.addPdf(pdf);
             redirectAttrs
                     .addFlashAttribute("mensaje", "Respuesta enviada correctamente")
                     .addFlashAttribute("clase", "success");
@@ -348,14 +370,26 @@ public class OfficeController {
     }
 
     @GetMapping("/editOffice/{officeId}")
-    public String editOffice(@PathVariable String officeId, Model model) {
+    public String editOffice(@PathVariable String officeId, Model model) throws IOException {
         Office officeAct = officeServiceImp.searchOffice(officeId);
         OfficeSimple os = officeData.getOfficeSimple(officeAct);
         model.addAttribute("date", fecha);
         model.addAttribute("officeActual", os);
         model.addAttribute("title", "Ver Oficio");
-        model.addAttribute("url", "https://ucu.edu.uy/sites/default/files/facultad/dcsp/Concurso_2015/038_Tecno2015_tecnologia_un_beneficio_o_una_adicci%C3%B3n.pdf");
         return "offices/editOffice";
+    }
+
+    @GetMapping(value = "/showPdf/{officeId}", produces = "application/pdf")
+    public ResponseEntity<byte[]> showPdf(@PathVariable String officeId, Model model) {
+        Pdf pdf = pdfServiceImp.getPdf(officeId);
+        byte[] pdfContents = pdfContents = pdf.getURL();
+        String filename = pdf.getOFFICE() + ".pdf";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "attachment; filename=" + filename);
+        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
+                pdfContents, headers, HttpStatus.OK);
+
+        return response;
     }
 
     @GetMapping("/listOffices")
@@ -367,10 +401,10 @@ public class OfficeController {
         model.addAttribute("search", search);
         return "offices/listOffices";
     }
-    
+
     @GetMapping("/listRequests")
     public String listRequest(Model model, @AuthenticationPrincipal User user) {
-        List<FileLoan> request = fileLoanServiceImp.listarFileRequests() ;
+        List<FileLoan> request = fileLoanServiceImp.listarFileRequests();
         log.info("entrando bien");
         model.addAttribute("requests", request);
         return "offices/listRequests";
@@ -458,7 +492,7 @@ public class OfficeController {
         // model.addAttribute("timeOuts", time);
         return "offices/pendingExpediente";
     }
-    
+
     @GetMapping("/viewRequest/{requestId}")
     public String viewRequest(@PathVariable int requestId, Model model) {
         FileLoan fl = fileLoanServiceImp.searchFileLoan(requestId);
@@ -520,74 +554,71 @@ public class OfficeController {
         model.addAttribute("fileLoans", list);
         return "offices/borrowedFiles";
     }
-    
-     @GetMapping("/listActs")
+
+    @GetMapping("/listActs")
     public String listActs(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
-        List<FileActSimple> list=fileActData.listFileActSimples();
+        List<FileActSimple> list = fileActData.listFileActSimples();
         model.addAttribute("fileActs", list);
         return "offices/listActs";
     }
-    
+
     @GetMapping("/deleteFile/{deleteId}")
     public String deleteFile(@PathVariable String deleteId, Model model, @AuthenticationPrincipal User user) {
-  
-         model.addAttribute("deleteId", deleteId);
-          
-        try{
-     
-       Expediente deleteFile =expedienteServiceImp.getExpediente(deleteId);
-        FileActSimple newActSimple=fileActData.SaveAct(deleteFile);
-         model.addAttribute("deleteId", deleteId);
-        FileAct newAct =fileActData.fileActSimpleToFileAct(newActSimple);
-        fileActServiceImp.addFileAct(newAct);
+
+        model.addAttribute("deleteId", deleteId);
+
+        try {
+
+            Expediente deleteFile = expedienteServiceImp.getExpediente(deleteId);
+            FileActSimple newActSimple = fileActData.SaveAct(deleteFile);
+            model.addAttribute("deleteId", deleteId);
+            FileAct newAct = fileActData.fileActSimpleToFileAct(newActSimple);
+            fileActServiceImp.addFileAct(newAct);
+        } catch (Exception excepcion) {
+
+            excepcion.printStackTrace();
         }
-          catch(Exception excepcion){
-	    
-             excepcion.printStackTrace();
-         }
-     
+
         return "redirect:/offices/addAct";
     }
-    
+
     @GetMapping("/addAct/{deleteId}")
-    public String addAct( Model model, @AuthenticationPrincipal User user,@PathVariable String deleteId) {
+    public String addAct(Model model, @AuthenticationPrincipal User user, @PathVariable String deleteId) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
         String year = new SimpleDateFormat("yyyy").format(this.fecha);
         model.addAttribute("date", fecha);
         List<Usuario> usuarios = userData.listUsers();
         Usuario u = userData.getUser(user.getUsername());
         List<FileAct> actas = fileActServiceImp.listarFileActs();
-       // FileAct ac = actas.get(actas.size() - 1);
-       // int INDX = ac.getId();
-        Expediente deleteFile =expedienteServiceImp.getExpediente(deleteId);
-        FileActSimple actAdd=fileActData.SaveAct(deleteFile);
-       // String actNumber = "Acta" + "-" + "MSPH" + "-"+ (INDX + 1) + "-" + year;
-       // actAdd.setFileName(actNumber);
+        // FileAct ac = actas.get(actas.size() - 1);
+        // int INDX = ac.getId();
+        Expediente deleteFile = expedienteServiceImp.getExpediente(deleteId);
+        FileActSimple actAdd = fileActData.SaveAct(deleteFile);
+        // String actNumber = "Acta" + "-" + "MSPH" + "-"+ (INDX + 1) + "-" + year;
+        // actAdd.setFileName(actNumber);
         actAdd.setDateCreate(fechaS);
         actAdd.setDateFile(fechaS);
-     
+
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("actAdd", actAdd);
 
         return "offices/addAct";
     }
-        @PostMapping("/saveAct/{expedienteId}")
+
+    @PostMapping("/saveAct/{expedienteId}")
     public String saveAct(Model model, @ModelAttribute("actAdd") FileActSimple actAdd, @ModelAttribute("expedienteId") String id, RedirectAttributes redirectAttrs) throws ParseException {
 
-        try
-        {
-            Expediente deleteFile =expedienteServiceImp.getExpediente(id);
-            FileAct newAct =fileActData.fileActSimpleToFileAct(actAdd);
-            int deleteIndx= deleteFile.getINDX();
+        try {
+            Expediente deleteFile = expedienteServiceImp.getExpediente(id);
+            FileAct newAct = fileActData.fileActSimpleToFileAct(actAdd);
+            int deleteIndx = deleteFile.getINDX();
             fileActServiceImp.addFileAct(newAct);
             officeServiceImp.deleteOfficesExp(deleteIndx);
             expedienteServiceImp.deleteExpediente(deleteIndx);
-        }
-        catch(Exception excepcion)
-        {
+        } catch (Exception excepcion) {
             excepcion.printStackTrace();
         }
-        
+
         return "offices/pendingExpediente";
 
     }
