@@ -136,11 +136,10 @@ constraint PK_VERSION primary key (ID)
 
 
 create table T_OFFPDF(
+ID int auto_increment,
 OFFICE varchar(45),
-URL varchar(100),
-FINALRESPONSE boolean,
-ISAPPROVED int,
-CAN_DELETE boolean,
+URL mediumblob,
+constraint PK_OFFPDF primary key(ID),
 constraint FK_ACCORD foreign key (OFFICE) references T_OFFICE(OFFNUMBER)
 );
 
@@ -201,6 +200,7 @@ create table T_FILELOAN(
 	DEPARTMENT_REQUEST varchar(45),
 	DATE_CREATE date,
 	DATE_RETURN date, 
+    STATE tinyint,
 	constraint PK_FILELOAN primary key(ID),
 	constraint UK_FILENAME unique key (FILENAME),
 	constraint FK_NAME_REQUEST foreign key (NAME_REQUEST) references T_USER(TEMPUSER),
