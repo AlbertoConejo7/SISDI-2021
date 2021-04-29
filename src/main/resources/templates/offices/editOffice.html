@@ -142,8 +142,31 @@
                         </table>
                     </div>
                     <div class="col">
-                       <embed th:src="${url}"
-               type="application/pdf" width=100% height=100% />
+                         <table class="table"> 
+                            <tr class="m-0">
+                                <th>
+                                    <p>Documento Oficio Adjuntado</p>
+                                </th>
+                                <td colspan="2">
+                                    <a th:href="@{/offices/showPdf/{id} (id=${officeActual.offnumber})}"><img th:src="@{/images/pdf.png}" width="40" height="40"></a>
+                                </td>
+                            </tr>
+                            <tr class="m-0">
+                                <th colspan="2" style="text-align:center;">
+                                    <p>Otros documentos</p>
+                                </th>
+       
+                            </tr>
+                            <tr class="m-0">
+                                <td colspan="2" style="text-align:center;">
+                                    <p>No hay otros documentos</p>
+                                </td>
+       
+                            </tr>
+                            
+                        </table>
+                        
+                      
                     </div>
                 </div>
             </div>
