@@ -32,7 +32,6 @@ function doAjax() {
 }
 function printInfo(res) {
     var inputFile = $("#inputFile");
-    console.log(res.bytes);
     inputFile.val(res.name);
     if (res.signed) {
         inputFile.removeClass("c-false");
