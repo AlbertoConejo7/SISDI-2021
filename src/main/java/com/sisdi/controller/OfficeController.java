@@ -1,6 +1,7 @@
 package com.sisdi.controller;
 
 import com.sisdi.data.DepartmentData;
+import com.sisdi.data.DocsData;
 import com.sisdi.data.FileData;
 import com.sisdi.data.FileLoanData;
 import com.sisdi.data.OfficeData;
@@ -42,14 +43,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sisdi.data.FileActData;
 import com.sisdi.model.FileAct;
 import com.sisdi.model.FileActSimple;
+import com.sisdi.model.OtherDocs;
 import com.sisdi.model.Pdf;
 import com.sisdi.service.FileActServiceImp;
+import com.sisdi.service.OtherDocsServiceImp;
 import com.sisdi.service.PdfServiceImp;
 import java.io.IOException;
+import java.util.ArrayList;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @Slf4j
@@ -86,6 +92,9 @@ public class OfficeController {
     private FileLoanData fileLoanData;
 
     @Autowired
+    private DocsData docsData;
+
+    @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
 
     @Autowired
@@ -102,6 +111,9 @@ public class OfficeController {
 
     @Autowired
     private PdfServiceImp pdfServiceImp;
+
+    @Autowired
+    private OtherDocsServiceImp otherDocsServiceImp;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -141,27 +153,18 @@ public class OfficeController {
     }
 
     @GetMapping("/addOffice")
-    public String addOffice(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
+    public String addOffice(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user, HttpSession session) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
-        String year = new SimpleDateFormat("yyyy").format(this.fecha);
+        
         model.addAttribute("date", fecha);
-        List<Usuario> usuarios = userData.listUsers();
+        List<Department> departments = departmentData.listDepartments();
         Usuario u = userData.getUser(user.getUsername());
-        List<Office> offices = officeServiceImp.listarOficios();
-        Office of = offices.get(offices.size() - 1);
-        int INDX = of.getINDX();
-
-        String offNumber = "OFICIO" + "-" + "MSPH" + "-" + u.getDepartment().getCod() + "-"
-                + userData.getUser(of.getRECEIVER_ID()).getDepartment().getCod()
-                + "-" + (INDX + 1) + "-" + year;
-
-        officeAdd.setOffnumber(offNumber);
         officeAdd.setEmisor(u.getTempUser().getName());
         officeAdd.setEmisorDep(u.getDepartment().getName());
         officeAdd.setDateCreate(fechaS);
-        log.info(usuarios.toString());
-        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("departamentos", departments);
         model.addAttribute("officeAdd", officeAdd);
+        session.setAttribute("user", user); 
 
         return "offices/addOffice";
     }
@@ -275,28 +278,32 @@ public class OfficeController {
     @PostMapping("/saveOffice")
     public String saveOffice(Model model, @ModelAttribute("officeAdd") OfficeSimple office, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
         try {
+            log.info(office.toString());
             byte[] bytes = (byte[]) session.getAttribute("bytes");
             Pdf pdf = new Pdf();
             pdf.setOFFICE(office.getOffnumber());
             pdf.setURL(bytes);
-            String year = new SimpleDateFormat("yyyy").format(this.fecha);
+
             Office o = officeData.getOffice(office, 0);
-            String receptorDep = userData.getUser(o.getRECEIVER_ID()).getDepartment().getName();
-            String emisorDep = userData.getUser(o.getUSER_ID()).getDepartment().getName();
+            String year = new SimpleDateFormat("yyyy").format(this.fecha);
             String ownerEmail = o.getUSER_ID();
             String receiverEmail = o.getRECEIVER_ID();
-
-            log.info("Receptor: " + receptorDep);
-            log.info("Emisor: " + emisorDep);
-
-            int exp = addFile(receptorDep, emisorDep, year, ownerEmail, receiverEmail);
+            int exp = addFile(office.getReceptorDep(), office.getEmisorDep(), year, ownerEmail, receiverEmail);
             log.info("Valor Expediente :" + exp);
-
             o.setEXPEDIENTE(exp);
 
             log.info(o.toString());
             officeServiceImp.addOffice(o);
             pdfServiceImp.addPdf(pdf);
+            
+            if (session.getAttribute("FilesOther") != null && session.getAttribute("FilesOther") != "") {
+                List<OtherDocs> others = (List<OtherDocs>) session.getAttribute("FilesOther");
+                for(OtherDocs od:others){
+                    od.setOFFICE(o.getOFFNUMBER());
+                }
+                otherDocsServiceImp.addOtherDocs(others);
+            }
+
             redirectAttrs
                     .addFlashAttribute("mensaje", "Oficio agregado correctamente")
                     .addFlashAttribute("clase", "success");
@@ -304,7 +311,6 @@ public class OfficeController {
             redirectAttrs
                     .addFlashAttribute("mensaje", "Error al agregar oficio")
                     .addFlashAttribute("clase", "alert alert-danger");
-            log.info("Receptor: " + office.toString());
         }
         return "redirect:/offices/addOffice";
 
@@ -314,12 +320,12 @@ public class OfficeController {
     public String saveResponseOffice(Model model, @ModelAttribute("officeActual") OfficeSimple office, HttpSession session, RedirectAttributes redirectAttrs) throws ParseException {
         Office o = officeData.getOffice(office, 1);
         log.info(o.toString());
-         byte[] bytes = (byte[]) session.getAttribute("bytes");
-            Pdf pdf = new Pdf();
-            pdf.setOFFICE(office.getOffnumber());
-            pdf.setURL(bytes);
+        byte[] bytes = (byte[]) session.getAttribute("bytes");
+        Pdf pdf = new Pdf();
+        pdf.setOFFICE(office.getOffnumber());
+        pdf.setURL(bytes);
         try {
-           
+
             officeServiceImp.addOffice(o);
             String officeId = (String) session.getAttribute("officeResponse");
             log.info(officeId);
@@ -328,6 +334,13 @@ public class OfficeController {
             log.info(of.toString());
             officeServiceImp.addOffice(of);
             pdfServiceImp.addPdf(pdf);
+            if (session.getAttribute("FilesOther") != null && session.getAttribute("FilesOther") != "") {
+                List<OtherDocs> others = (List<OtherDocs>) session.getAttribute("FilesOther");
+                for(OtherDocs od:others){
+                    od.setOFFICE(o.getOFFNUMBER());
+                }
+                otherDocsServiceImp.addOtherDocs(others);
+            }
             redirectAttrs
                     .addFlashAttribute("mensaje", "Respuesta enviada correctamente")
                     .addFlashAttribute("clase", "success");
@@ -350,9 +363,11 @@ public class OfficeController {
         List<Office> offices = officeServiceImp.listarOficios();
         Office of = offices.get(offices.size() - 1);
         int INDX = of.getINDX();
+        Department depR = departmentData.getDepartment(office.getEmisorDep());
+        Department depE = departmentData.getDepartment(office.getReceptorDep());
         Usuario u = userData.getUser(user.getUsername());
-        String offNumber = "OFICIO" + "-" + "MSPH" + "-" + u.getDepartment().getCod() + "-"
-                + userData.getUser(of.getRECEIVER_ID()).getDepartment().getCod()
+        String offNumber = "OFICIO" + "-" + "MSPH" + "-" + depE.getCod() + "-"
+                + depR.getCod()
                 + "-" + (INDX + 1) + "-" + year;
 
         office_aux.setOffnumber(offNumber);
@@ -362,10 +377,10 @@ public class OfficeController {
         office_aux.setReceptorDep(office.getEmisorDep());
         office_aux.setReason("Responder a " + office.getOffnumber());
         office_aux.setDateCreate(fecha_);
-        office_aux.setDateLimit(office.getDateLimit());
         office_aux.setType_id(office.getType_id());
         session.setAttribute("officeResponse", officeAct.getOFFNUMBER());
         model.addAttribute("officeActual", office_aux);
+        model.addAttribute("date", fecha);
         return "offices/responseOffice";
     }
 
@@ -373,16 +388,18 @@ public class OfficeController {
     public String editOffice(@PathVariable String officeId, Model model) throws IOException {
         Office officeAct = officeServiceImp.searchOffice(officeId);
         OfficeSimple os = officeData.getOfficeSimple(officeAct);
+        List<OtherDocs> others=otherDocsServiceImp.getOtherDocs(officeId);
         model.addAttribute("date", fecha);
         model.addAttribute("officeActual", os);
         model.addAttribute("title", "Ver Oficio");
+        model.addAttribute("othersDocs", others);
         return "offices/editOffice";
     }
 
     @GetMapping(value = "/showPdf/{officeId}", produces = "application/pdf")
     public ResponseEntity<byte[]> showPdf(@PathVariable String officeId, Model model) {
         Pdf pdf = pdfServiceImp.getPdf(officeId);
-        byte[] pdfContents = pdfContents = pdf.getURL();
+        byte[] pdfContents = pdf.getURL();
         String filename = pdf.getOFFICE() + ".pdf";
         HttpHeaders headers = new HttpHeaders();
         headers.add("content-disposition", "attachment; filename=" + filename);
@@ -391,6 +408,21 @@ public class OfficeController {
 
         return response;
     }
+    @GetMapping(value = "/showDoc/{office}/{name}")
+    public ResponseEntity<byte[]> showDoc(@PathVariable String office,@PathVariable String name, Model model) {
+        OtherDocs other = otherDocsServiceImp.getOtherDocs(office, name);
+        log.info(office);
+        log.info(name);
+        byte[] content = other.getURL();
+        String filename = name;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "attachment; filename=" + filename);
+        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(
+                content, headers, HttpStatus.OK);
+
+        return response;
+    }
+
 
     @GetMapping("/listOffices")
     public String listOffice(Model model, @AuthenticationPrincipal User user) {
