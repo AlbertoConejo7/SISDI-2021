@@ -51,7 +51,7 @@
                                 <td>
                                     <div class='input-group'>
                                         <input type='text' class="form-control" placeholder="Título del oficio" 
-                                               th:field="*{offnumber}" required/>
+                                               th:field="*{offnumber}" readonly ="readonly"/>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -125,19 +125,19 @@
                                     </div>
                                 </td>
                             </tr>
-                            <input type="hidden" th:field="*{dateLimit}"/>
                             <tr>
                                 <td>
                                     <span>Fecha Límite de Respuesta</span>
-                                    <span class="help-block error-message hide-message" id="errorResponseTime">Error</span>
+                                    <a tabindex="0" role="button" data-html = "true" data-toggle="popover"
+                                       data-trigger="focus" title="Fecha Limite de Respuesta"
+                                       data-content="Si el Oficio lo requiere se le puede aplicar una fecha limite a responder.">
+                                        <img th:src="@{/images/info.png}" width=20>
+                                    </a>
                                 </td>
                                 <td>
-                                    <div class='input-group date' id='datepicker1'>
-                                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" 
-                                               id="responseTimeValue" th:field="*{dateLimit}" readonly = "readonly"/>
-                                        <span class="input-group-addon ">
-                                            <img class="icon-img" th:src="@{/images/calendar.svg}">
-                                        </span>
+                                    <div class='input-group'>
+                                        <input class="form-control w-100" id="dateLimit" placeholder="Fecha de Limite de Respuesta" th:field="*{dateLimit}" readonly="readonly"/>
+                                        <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#responseTime">Agregar Plazo de Respuesta</button>
                                     </div>
                                 </td>
                             </tr>
@@ -183,7 +183,16 @@
                                         <button type="button" class="btn btn-primary mt-2 mr-2" data-toggle="modal" data-target="#attachedModal">
                                             Seleccionar Archivo
                                         </button>
-                                        <span ><small id="isSigned"></small></span>
+                                        <span id="isSigned" >
+                                            <img th:src="@{/images/signed.png}" width="30px" class="hide-img" id="imgSingned">
+                                            <small id="aSingned"  class="hide-img" >
+                                               El Oficio adjuntado tiene firma digital
+                                            </small>
+                                            <img th:src="@{/images/no-signed.png}" id="imgNoSingned" width="25px" class="hide-img">
+                                            <small id="aNoSingned" class="hide-img">
+                                                El Oficio adjuntado no tiene firma digital
+                                            </small>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
@@ -193,11 +202,12 @@
 
                                 </td>
                                 <td>
-                                    <div class='input-group'>
-                                        <input type="file" name="adjunto" accept=".pdf,.jpg,.png, .pptx, .docx, .mp3, .mp4, .xml, .txt, .html" multiple />
-                                        <span class="input-group-addon ">
-                                        </span>
-                                        <p class="w-100">*Agregue aquí los adjuntos necesarios*</p>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control"  id="otherFiles"  placeholder="Ningun Archivo Seleccionado" readonly="readonly">
+                                        <button type="button" class="btn btn-primary mt-2 mr-2" data-toggle="modal" data-target="#attachedOtherModal">
+                                            Seleccionar Otros Archivos
+                                        </button>
+
                                     </div>
                                 </td>
                             </tr>
@@ -208,6 +218,56 @@
                             </tr>
                         </table>
                     </form>
+                </div>
+            </div>
+            <div class="modal fade" id="responseTime" tabindex="-1" role="dialog" aria-labelledby="responseTimeTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="responseTimeTitle">Plazo de Tiempo de Respuesta</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="containerPopUp">
+                                <div class="form-group">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span>Fecha de Emisión</span>
+                                            </td>
+                                            <td>
+                                                <div class='input-group date'>
+                                                    <input type='text' class="form-control" th:value="${#dates.format(date, 'dd/MM/yyyy')}" readonly="readonly"/>
+                                                    <span class="input-group-addon ">
+                                                        <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span>Fecha Límite de Respuesta</span>
+                                                <span class="help-block error-message hide-message" id="errorResponseTime">Error</span>
+                                            </td>
+                                            <td>
+                                                <div class='input-group date' id='datepicker1'>
+                                                    <input type='text' class="form-control" placeholder="dd/mm/yyyy" id="responseTimeValue"/>
+                                                    <span class="input-group-addon ">
+                                                        <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="saveResponseTime()">Guardar Plazo</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal fade" id="attachedModal" tabindex="-1" role="dialog" aria-labelledby="attachedModalLabel" aria-hidden="true">
@@ -228,6 +288,29 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary" id="btnSubmit">Validar Documento</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="attachedOtherModal" tabindex="-1" role="dialog" aria-labelledby="attachedOtherModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title w-100 d-block" id="attachedOtherModalLabel">Adjuntar Otros Documentos</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="adjuntofiles" enctype="multipart/form-data" class="form was-validated">
+                            <p class="ml-3">*Agregue aquí los adjuntos necesarios</p>
+                            <div class="modal-body" id="bodyFormFiles">
+                                <input  type="file" name="othersF" id="othersF" required accept=".pdf,.jpg,.png, .pptx, .docx, .mp3, .mp4, .xml, .txt, .html, .zip, .rar"  multiple/>                              
+                                <span class="input-group-addon ">
+                                </span>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" id="btnSaveFiles">Agregar Documentos</button>
                             </div>
                         </form>
                     </div>
