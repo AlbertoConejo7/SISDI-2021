@@ -106,7 +106,7 @@
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <input th:value="${session.usuarioCompleto.department.name}" class="form-control" th:field="*{emisorDep}" readonly="readonly"/>
+                                        <input th:value="${session.usuarioCompleto.department.name}" class="form-control" th:field="*{emisorDep}" readonly="readonly" id="emisorField"/>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -114,19 +114,36 @@
                             </tr>
                             <tr>
                                 <td>
+                                    <span>Departamento Receptor</span><span class="required"> *</span>
+                                </td>
+                                <td>
+                                    <div class='input-group'>
+                                        <select name="departamentos" class="custom-select" th:field="*{receptorDep}"  onchange="departamentosFunction(this)" required>
+                                            <option value="">Seleccione Departamento Receptor</option>
+                                            <option th:each="dep:${departamentos}" th:value="${dep.name}" th:text="${dep.name}"></option>
+                                        </select>
+                                        <div class="invalid-feedback">Debe seleccionar un Departamento Receptor</div>
+                                        <span class="input-group-addon ">
+                                        </span>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
                                     <span>Receptor</span><span class="required"> *</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <select name="usuarios" class="custom-select" th:field="*{receptor}" required>
+                                        <select name="userPorDep" id="userPorDep" class="custom-select" th:field="*{receptor}" required>
                                             <option value="">Seleccione Receptor</option>
-                                            <option th:each="usuario:${usuarios}" th:value="${usuario.tempUser.name}" th:text="${usuario.tempUser.name + ' / ' + usuario.department.name}"></option>
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar un Receptor</div>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
                                 </td>
+
                             </tr>
                             <tr>
                                 <td>
@@ -187,7 +204,16 @@
                                         <button type="button" class="btn btn-primary mt-2 mr-2" data-toggle="modal" data-target="#attachedModal">
                                             Seleccionar Archivo
                                         </button>
-                                        <span id="isSigned" > <img th:src="@{/images/signed.png}" width="30px"></span>
+                                        <span id="isSigned" >
+                                            <img th:src="@{/images/signed.png}" width="30px" class="hide-img" id="imgSingned">
+                                            <small id="aSingned"  class="hide-img" >
+                                               El Oficio adjuntado tiene firma digital
+                                            </small>
+                                            <img th:src="@{/images/no-signed.png}" id="imgNoSingned" width="25px" class="hide-img">
+                                            <small id="aNoSingned" class="hide-img">
+                                                El Oficio adjuntado no tiene firma digital
+                                            </small>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
@@ -196,11 +222,12 @@
                                     <span>Archivos adjuntos</span>
                                 </td>
                                 <td>
-                                    <div class='input-group'>
-                                        <input  type="file" name="adjunto2" id="adjunto2" accept=".pdf,.jpg,.png, .pptx, .docx, .mp3, .mp4, .xml, .txt, .html, .zip, .rar" multiple />
-                                        <span class="input-group-addon ">
-                                        </span>
-                                        <p class="w-100">*Agregue aquí los adjuntos necesarios*</p>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control"  id="otherFiles"  placeholder="Ningun Archivo Seleccionado" readonly="readonly">
+                                        <button type="button" class="btn btn-primary mt-2 mr-2" data-toggle="modal" data-target="#attachedOtherModal">
+                                            Seleccionar Otros Archivos
+                                        </button>
+
                                     </div>
                                 </td>
                             </tr>
@@ -254,22 +281,22 @@
                             </div>
                         </div>
                     </div>
-                        <script>
-                            document.getElementById("add-office").addEventListener("submit", submit);
-                            document.getElementById("add").addEventListener("click", send);
-                            document.getElementById("cancel").addEventListener("click", cancel);
-                            function submit(e){                            
-                                e.preventDefault();                            
-                                document.getElementById("exampleModal").style.display = "block";
-                            }                            
-                            function send(e) {                                ¨
-                                document.getElementById("exampleModal").style.display = "none";                                
-                                document.forms["add-office"].submit();
-                            }                            
-                            function cancel(e) {                              
-                                document.getElementById("exampleModal").style.display = "none";
-                            }
-    
+                    <script>
+                        document.getElementById("add-office").addEventListener("submit", submit);
+                        document.getElementById("add").addEventListener("click", send);
+                        document.getElementById("cancel").addEventListener("click", cancel);
+                        function submit(e) {
+                            e.preventDefault();
+                            document.getElementById("exampleModal").style.display = "block";
+                        }
+                        function send(e) {
+                            document.getElementById("exampleModal").style.display = "none";
+                            document.forms["add-office"].submit();
+                        }
+                        function cancel(e) {
+                            document.getElementById("exampleModal").style.display = "none";
+                        }
+
                     </script>
                 </div>
             </div>
@@ -342,6 +369,29 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary" id="btnSubmit">Validar Documento</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="attachedOtherModal" tabindex="-1" role="dialog" aria-labelledby="attachedOtherModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title w-100 d-block" id="attachedOtherModalLabel">Adjuntar Otros Documentos</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="adjuntofiles" enctype="multipart/form-data" class="form was-validated">
+                            <p class="ml-3">*Agregue aquí los adjuntos necesarios</p>
+                            <div class="modal-body" id="bodyFormFiles">
+                                <input  type="file" name="othersF" id="othersF" required accept=".pdf,.jpg,.png, .pptx, .docx, .mp3, .mp4, .xml, .txt, .html, .zip, .rar"  multiple/>                              
+                                <span class="input-group-addon ">
+                                </span>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" id="btnSaveFiles">Agregar Documentos</button>
                             </div>
                         </form>
                     </div>
