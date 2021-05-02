@@ -32,28 +32,38 @@ function doAjax() {
 }
 function printInfo(res) {
     var inputFile = $("#inputFile");
+    var imgS= $("#imgSingned");
+    var imgNS= $("#imgNoSingned");
+    var aS= $("#aSingned");
+    var aNS= $("#aNoSingned");
+
     inputFile.val(res.name);
     if (res.signed) {
         inputFile.removeClass("c-false");
         inputFile.addClass("c-true");
-        createContent("El Oficio " + res.name + " se encuentra firmado", "../../static/images/signature.png}");
+        //img
+        imgS.removeClass("hide-img");
+        imgNS.removeClass("show-img");
+        imgS.addClass("show-img");
+        imgNS.addClass("hide-img");
+        //a
+        aS.removeClass("hide-img");
+        aNS.removeClass("show-img");
+        aS.addClass("show-img");
+        aNS.addClass("hide-img");
+        
     } else {
         inputFile.removeClass("c-true");
         inputFile.addClass("c-false");
-        createContent("El Oficio " + res.name + " no se encuentra firmado", "/images/signature.png");
+        //img
+        imgS.removeClass("show-img");
+        imgNS.removeClass("hide-img");
+        imgS.addClass("hide-img");
+        imgNS.addClass("show-img");
+        //a
+        aS.removeClass("show-img");
+        aNS.removeClass("hide-img");
+        aS.addClass("hide-img");
+        aNS.addClass("show-img");
     }
-}
-
-function createContent(message, icono) {
-    var src = document.getElementById("isSigned");
-    var img = document.createElement("img");
-    img.src = icono;
-    img.width ="10px";
-        
-    var span = document.createElement('small');
-    span.innerHTML = message;
-    src.appendChild(img);
-    src.appendChild(span);
-
-
 }
