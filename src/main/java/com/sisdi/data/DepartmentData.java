@@ -37,6 +37,16 @@ public class DepartmentData {
     public Department getDepartment(int i) {
         return this.listDepartment.get(i);
     }
+     public Department getDepartment(String name) {
+         List<Department> aux =this.listDepartments();
+         Department dep=null;
+         for(Department d:aux){
+             if(d.getName().equals(name)){
+                 dep=d;
+             }
+         }
+        return dep;
+    }
 
     public List<Department> listDepartments() {
         List<Department> aux = new ArrayList();
