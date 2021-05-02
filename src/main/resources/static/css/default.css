@@ -107,3 +107,10 @@
   right: 15px;
   width: 30%;
 }
+
+.hide-img{
+    display: none;
+}
+.show-img{
+    display: inline-block;
+}
