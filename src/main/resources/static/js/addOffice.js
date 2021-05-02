@@ -1,3 +1,12 @@
+$(document).ready(function () {
+    $('[data-toggle="popover"]').popover();
+    $("#btnSaveFiles").click(function (e) {
+        e.preventDefault();
+        saveFiles();
+    });
+});
+
+
 function saveResponseTime() {
     var limite = document.getElementById("responseTimeValue");
     var dateLimit = document.getElementById("dateLimit");
@@ -31,9 +40,87 @@ function showAlert() {
         alertSave.addClass("fade");
         alertSave.removeClass("show");
     }, 3000);
-};
+}
+;
 
-$(document).ready(function () {
-    $('[data-toggle="popover"]').popover();
-});
+function saveFiles() {
+    var form = $('#adjuntofiles')[0];
+    var data = new FormData(form);
+    console.log(data.get("adjunto2"));
+    $.ajax({
+        url: "/filesUpload",
+        type: "POST",
+        data: data,
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        dataType: "json",
+        success: function (res) {
+            console.log(res);
+            printInfoOthers(res);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+}
+function printInfoOthers(res) {
+    var allDocs="";
+    for(var i=0; i<res.length;i++){
+        allDocs+=res[i].name+", ";
+        console.log(res[i].name);
+    }
+    $("#attachedOtherModal .close").click();
+    var otherFiles = $("#otherFiles");
+    otherFiles.val(allDocs);
+}
+function departamentosFunction(select){
+    generarTitulo(select);
+    listFuncionarios(select);
+}
+function generarTitulo(select) {
+    var receptor = select.value;
+    var emisor = $("#emisorField").val();
+    $.ajax({
+        type: "POST",
+        url: '/offNumber',
+        data: {"emisor": emisor, "receptor": receptor},
+        dataType: 'json',
+        success: function (res) {
+            $("#offnumber").val(res.Offnumber);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+    
+}
+function listFuncionarios(select) {
+    var name = select.value;
+    $('#userPorDep').find('option').remove().end();
+    $.ajax({
+        type: "POST",
+        url: '/userDepartment',
+        data: {"name": name},
+        dataType: 'json',
+        success: function (res) {
+            generateSelect(res);
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+}
+function generateSelect(res) {
+    var o = $('<option/>');
+    o.attr({'value': ""}).text("Seleccione Receptor");
+    $('#userPorDep').append(o);
 
+    for (var i = 0; i < res.length; i++) {
+        var option = $('<option/>');
+        option.attr({'value': res[i].Name}).text(res[i].Name);
+        $('#userPorDep').append(option);
+    }
+    ;
+}
