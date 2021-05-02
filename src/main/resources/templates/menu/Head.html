@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html  xmlns:th="http://www.thymeleaf.org">
-    <head>
-        
-    </head>
     <body>
         <nav th:fragment="menu" class="navbar navbar-expand-md navbar-light bg-dark fixed-top">
             <button type="button" class="navbar-toggler bg-light"
@@ -11,11 +8,6 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="nav"> 
                 <ul class="navbar-nav">
-
-
-
-
-
                     <li class="nav-item dropdown">
                         <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"> OFICIOS </a>
                         <div class="dropdown-menu">
@@ -58,7 +50,7 @@
                 </ul>
                 <ul class="nav pull-right">
                     <li class="nav-item" th:if="${session.Signature!='' && session.Signature!=null}">
-                        <a role="button" class='btn' data-container="body" data-toggle="popover" data-placement="left" data-content="Signature en sesión">
+                        <a role="button" class='btn' data-container="body" data-toggle="popover" data-placement="left" data-content="Autenticada con Firma Digital">
                             <img th:src="@{/images/signature.png}" alt="" width="40px"/>
                         </a>
                     </li>
