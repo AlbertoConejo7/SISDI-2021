@@ -143,10 +143,16 @@
                     </div>
                     <div class="col">
                          <table class="table"> 
-                            <tr class="m-0">
-                                <th>
+                             <tr class="m-0">
+                                <th colspan="2" style="text-align:center;">
                                     <p>Documento Oficio Adjuntado</p>
                                 </th>
+       
+                            </tr>
+                            <tr class="m-0">
+                                <td>
+                                    <p th:text="${officeActual.offnumber}"></p>
+                                </td>
                                 <td colspan="2">
                                     <a th:href="@{/offices/showPdf/{id} (id=${officeActual.offnumber})}"><img th:src="@{/images/pdf.png}" width="40" height="40"></a>
                                 </td>
@@ -157,9 +163,18 @@
                                 </th>
        
                             </tr>
-                            <tr class="m-0">
+                            <tr class="m-0" th:if="${othersDocs==null || othersDocs.empty}">
                                 <td colspan="2" style="text-align:center;">
                                     <p>No hay otros documentos</p>
+                                </td>
+       
+                            </tr>
+                            <tr class="m-0" th:if="${othersDocs!=null && !othersDocs.empty}" th:each="otherDoc : ${othersDocs}">
+                                <td>
+                                    <p th:text="${otherDoc.NAME_DOC}" ></p>
+                                </td>
+                                <td>
+                                    <a th:href="@{/offices/showDoc/{office}/{name} (office=${officeActual.offnumber}, name=${otherDoc.NAME_DOC})}"><img th:src="@{/images/download-file.png}" width="40" height="40"></a>
                                 </td>
        
                             </tr>
