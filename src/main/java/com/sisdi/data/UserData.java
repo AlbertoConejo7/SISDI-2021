@@ -78,4 +78,15 @@ public final class UserData {
         }
         return aux;
     }
+    
+    public List<Usuario> listUsersByDepartment(String name) {
+        List<Usuario> aux = new ArrayList();
+        for (Usuario u : listUser.values()) {
+            if(u.getDepartment().getName().equals(name)){
+                 aux.add(u);
+            }
+           
+        }
+        return aux;
+    }
 }
