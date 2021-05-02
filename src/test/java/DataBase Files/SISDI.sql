@@ -96,7 +96,7 @@ NAME varchar(45),
 EXPEDIENTE int DEFAULT 0,
 INCORDATE date,
 INCORTIME time,
-DEADLINE date,
+DEADLINE date null,
 SESSIONDATE date,
 OBSERVATIONS longtext,
 PUBLIC tinyint,
@@ -142,6 +142,14 @@ URL mediumblob,
 constraint PK_OFFPDF primary key(ID)
 );
 
+create table T_OTHERDOCS(
+ID int auto_increment,
+OFFICE varchar(45),
+URL mediumblob,
+NAME_DOC varchar(45),
+TYPE_DOC varchar(30),
+constraint PK_OFFPDF primary key(ID)
+);
 
 
 create table T_USEROFF(
