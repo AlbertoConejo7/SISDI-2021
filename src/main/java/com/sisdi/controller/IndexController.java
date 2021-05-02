@@ -1,11 +1,16 @@
 package com.sisdi.controller;
 
+import com.sisdi.data.DepartmentData;
+import com.sisdi.data.DocsData;
 import com.sisdi.data.FileData;
 import com.sisdi.data.SignatureData;
 import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
+import com.sisdi.model.Department;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.Office;
+import com.sisdi.model.OtherDocs;
+import com.sisdi.model.Usuario;
 import com.sisdi.service.ExpedienteServiceImp;
 import com.sisdi.service.OfficeServiceImp;
 import java.io.IOException;
@@ -49,22 +54,28 @@ public class IndexController {
 
     @Autowired
     private UserData userData;
-    
+
+    @Autowired
+    private DepartmentData departmentData;
+
     @Autowired
     private SignatureData signatureData;
-    
-     @Autowired
+
+    @Autowired
     private FileData fileData;
-     
-      @Autowired
+
+    @Autowired
+    private DocsData docsData;
+
+    @Autowired
     private TransferData transferData;
-    
+
     @Autowired
     private OfficeServiceImp officeServiceImp;
-    
+
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
-    
+
     private Date fecha = new Date();
 
     @GetMapping("/login")
@@ -78,12 +89,13 @@ public class IndexController {
         log.info("ejecutando el controlador Oficios");
         session.setAttribute("user", user);
         session.setAttribute("usuarioCompleto", userData.getUser(user.getUsername()));
-        model.addAttribute("user", user);   
+        model.addAttribute("user", user);
         return "/index";
     }
 
     @GetMapping("/error")
     public String showError(Model model, @AuthenticationPrincipal User user, HttpSession session) {
+        session.setAttribute("user", user);
         return "error";
     }
 
@@ -112,16 +124,32 @@ public class IndexController {
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 
+    @PostMapping("/filesUpload")
+    public ResponseEntity<?> filesUpload(Model model, @RequestParam("othersF") MultipartFile[] files, HttpServletResponse response, HttpSession session) throws IOException {
+        JSONArray f = new JSONArray();
+        List<OtherDocs> others = new ArrayList();
+        for (int i = 0; i < files.length; i++) {
+            OtherDocs other = docsData.getOtherDocs(files[i], "");
+            others.add(other);
+            JSONObject obj = new JSONObject();
+            obj.put("name", files[i].getOriginalFilename());
+            f.put(obj);
+        }
+        session.setAttribute("FilesOther", others);
+
+        return new ResponseEntity(f.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+
     @PostMapping("/notificationResponse")
     public ResponseEntity<?> notificationResponse(Model model, @AuthenticationPrincipal User user, HttpSession session) {
         List<Office> offices = officeServiceImp.listOfficeByReceptor(user.getUsername());
         List<Office> officesDate = new ArrayList<Office>();
-        JSONArray officesF=new JSONArray();
+        JSONArray officesF = new JSONArray();
         for (Office o : offices) {
             if (o.getDEADLINE() != null) {
                 if (o.getSTATE() != 2) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");  
-                    String strDate= formatter.format(o.getDEADLINE());  
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    String strDate = formatter.format(o.getDEADLINE());
                     JSONObject obj = new JSONObject();
                     obj.put("Offnumber", o.getOFFNUMBER());
                     obj.put("Deadline", strDate);
@@ -132,23 +160,24 @@ public class IndexController {
         }
         return new ResponseEntity(officesF.toString(), new HttpHeaders(), HttpStatus.OK);
     }
+
     @PostMapping("/notificationExpediente")
     public ResponseEntity<?> notificationExpediente(Model model, @AuthenticationPrincipal User user, HttpSession session) {
         List<Expediente> expedientes = expedienteServiceImp.listExpedienteByEmisor(user.getUsername());
-        JSONArray expedientesV= null;
-       if(!user.getUsername().equals("archivocentral@sanpablo.go.cr") ){
-            expedientesV=fileData.expedientesVencidos(expedientes);
-       }else{
-            expedientesV=transferData.listTransfersState();
-       }
+        JSONArray expedientesV = null;
+        if (!user.getUsername().equals("archivocentral@sanpablo.go.cr")) {
+            expedientesV = fileData.expedientesVencidos(expedientes);
+        } else {
+            expedientesV = transferData.listTransfersState();
+        }
         return new ResponseEntity(expedientesV.toString(), new HttpHeaders(), HttpStatus.OK);
     }
-   
+
     @PostMapping("/fileAmount")
     public ResponseEntity<?> fileAmount(Model model, @AuthenticationPrincipal User user, HttpSession session, @RequestParam("name") String name) {
         Expediente e = expedienteServiceImp.getExpediente(name);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
-        String strDate = dateFormat.format(e.getDATE_CREATE());  
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = dateFormat.format(e.getDATE_CREATE());
         JSONObject obj = new JSONObject();
         obj.put("Cantidad", e.getOFFICE_AMOUNT());
         obj.put("Indx", e.getINDX());
@@ -156,6 +185,7 @@ public class IndexController {
         log.info(strDate);
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
+
     @PostMapping("/authSignature")
     public ResponseEntity<?> authSignature(Model model, @AuthenticationPrincipal User user, @RequestParam("direccion") String dir, HttpSession session) {
         session.setAttribute("direccion", dir);
@@ -164,17 +194,46 @@ public class IndexController {
         obj.put("dir", "/offices/authSignature");
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
-    
-     @PostMapping("/signatureVerification")
+
+    @PostMapping("/signatureVerification")
     public ResponseEntity<?> signatureVerification(Model model, @AuthenticationPrincipal User user, HttpSession session, @RequestParam("name") String name) {
         JSONObject obj = signatureData.verificarCertificado(name);
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
+
     @PostMapping("/saveSignatureAuth")
     public ResponseEntity<?> saveSignatureAuth(Model model, @AuthenticationPrincipal User user, @RequestParam("name") String name, HttpSession session) {
         session.setAttribute("Signature", name);
         JSONObject obj = new JSONObject();
         obj.put("dir", session.getAttribute("direccion"));
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/userDepartment")
+    public ResponseEntity<?> userDepartment(Model model, @AuthenticationPrincipal User user, HttpSession session, @RequestParam("name") String name) {
+        List<Usuario> usuarios = userData.listUsersByDepartment(name);
+        JSONArray users = new JSONArray();
+        for (Usuario o : usuarios) {
+            JSONObject obj = new JSONObject();
+            obj.put("Email", o.getTempUser().getEmail());
+            obj.put("Name", o.getTempUser().getName());
+            users.put(obj);
+        }
+        return new ResponseEntity(users.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/offNumber")
+    public ResponseEntity<?> offnumBer(Model model, @AuthenticationPrincipal User user, HttpSession session, @RequestParam("emisor") String emisor, @RequestParam("receptor") String receptor) {
+
+        Department depR = departmentData.getDepartment(receptor);
+        Department depE = departmentData.getDepartment(emisor);
+        String year = new SimpleDateFormat("yyyy").format(this.fecha);
+        List<Office> offices = officeServiceImp.listarOficios();
+        Office of = offices.get(offices.size() - 1);
+        int INDX = of.getINDX();
+        String offNumber = "OFICIO-MSPH-" + depE.getCod() + "-" + depR.getCod() + "-" + (INDX + 1) + "-" + year;
+        JSONObject obj = new JSONObject();
+        obj.put("Offnumber", offNumber);
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 
