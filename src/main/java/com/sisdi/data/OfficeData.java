@@ -32,6 +32,7 @@ public class OfficeData {
               Date dateLimit=new SimpleDateFormat("dd/MM/yyyy").parse(office.getDateLimit());
               o.setDEADLINE(dateLimit);
          }
+         
          o.setOFFNUMBER(office.getOffnumber());
          o.setREASON(office.getReason());
          o.setINCORDATE(fecha);
