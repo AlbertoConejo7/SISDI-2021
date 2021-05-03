@@ -45,6 +45,7 @@ function showAlert() {
 
 function saveFiles() {
     var form = $('#adjuntofiles')[0];
+    var message = $('#messageErrorFiles');
     var data = new FormData(form);
     console.log(data.get("adjunto2"));
     $.ajax({
@@ -59,9 +60,13 @@ function saveFiles() {
         success: function (res) {
             console.log(res);
             printInfoOthers(res);
+            message.removeClass("show-img");
+            message.addClass("hide-img");
         },
         error: function (err) {
             console.error(err);
+           message.removeClass("hide-img");
+           message.addClass("show-img");
         }
     });
 }
