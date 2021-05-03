@@ -9,6 +9,7 @@ $(".readonly").keydown(function (e) {
 });
 function doAjax() {
     var form = $('#adjuntofile')[0];
+    var message = $('#messageErrorFile');
     var data = new FormData(form);
     console.log(data.get("adjunto"));
     $.ajax({
@@ -24,9 +25,13 @@ function doAjax() {
             console.log(res.name);
             $("#attachedModal .close").click();
             printInfo(res);
+            message.removeClass("show-img");
+            message.addClass("hide-img");
         },
         error: function (err) {
             console.error(err);
+            message.removeClass("hide-img");
+            message.addClass("show-img");
         }
     });
 }
