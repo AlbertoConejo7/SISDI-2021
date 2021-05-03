@@ -281,12 +281,12 @@
                         </div>
                         <form id="adjuntofile" enctype="multipart/form-data" class="form was-validated">
                             <div class="modal-body">
+                                <p class="ml-3">Agregue aquí los adjuntos necesarios <br/>  <small>Tamaño máximo 10MB</small></p>
                                 <input type="file" class="form-control  w-100"  name="adjunto" accept=".pdf" style="height:45px;" required/>
                                 <div class="invalid-feedback">Seleccione el Oficio</div>
-                                <p class="w-100">*Solo se admite un único archivo .pdf*</p>
-
                             </div>
                             <div class="modal-footer">
+                                <span id="messageErrorFile" class="hide-img" style="font-size:10pt; color:red;"><small>El documento es muy grande, tamaño máximo por documento: 10MB</small></span>
                                 <button type="submit" class="btn btn-primary" id="btnSubmit">Validar Documento</button>
                             </div>
                         </form>
@@ -303,13 +303,14 @@
                             </button>
                         </div>
                         <form id="adjuntofiles" enctype="multipart/form-data" class="form was-validated">
-                            <p class="ml-3">*Agregue aquí los adjuntos necesarios</p>
+                            <p class="ml-3">Agregue aquí los adjuntos necesarios  <br/>  <small>Tamaño máximo 10MB</small></p>
                             <div class="modal-body" id="bodyFormFiles">
                                 <input  type="file" name="othersF" id="othersF" required accept=".pdf,.jpg,.png, .pptx, .docx, .mp3, .mp4, .xml, .txt, .html, .zip, .rar"  multiple/>                              
                                 <span class="input-group-addon ">
                                 </span>
                             </div>
                             <div class="modal-footer">
+                                <span id="messageErrorFiles" class="hide-img" style="font-size:10pt; color:red;"><small>Uno de los documentos es muy grande, tamaño máximo por documento: 10MB</small></span>
                                 <button class="btn btn-primary" id="btnSaveFiles">Agregar Documentos</button>
                             </div>
                         </form>
