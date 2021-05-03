@@ -42,8 +42,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import signature.PDFSignatureInfo;
-import signature.PDFSignatureInfoParser;
+import com.sisdi.signature.PDFSignatureInfo;
+import com.sisdi.signature.PDFSignatureInfoParser;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
     El controlador de la pagina principal de SISDI
@@ -125,9 +126,10 @@ public class IndexController {
     }
 
     @PostMapping("/filesUpload")
-    public ResponseEntity<?> filesUpload(Model model, @RequestParam("othersF") MultipartFile[] files, HttpServletResponse response, HttpSession session) throws IOException {
+    public ResponseEntity<?> filesUpload(Model model, @RequestParam("othersF") MultipartFile[] files, HttpServletResponse response, HttpSession session, RedirectAttributes redirectAttrs) throws IOException {
         JSONArray f = new JSONArray();
         List<OtherDocs> others = new ArrayList();
+        try {
         for (int i = 0; i < files.length; i++) {
             OtherDocs other = docsData.getOtherDocs(files[i], "");
             others.add(other);
@@ -136,6 +138,9 @@ public class IndexController {
             f.put(obj);
         }
         session.setAttribute("FilesOther", others);
+        }catch (IOException e){
+             
+        }
 
         return new ResponseEntity(f.toString(), new HttpHeaders(), HttpStatus.OK);
     }
