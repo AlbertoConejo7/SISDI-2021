@@ -1,4 +1,4 @@
-package signature;
+package com.sisdi.signature;
 
 import java.util.Date;
 import java.util.HashMap;
