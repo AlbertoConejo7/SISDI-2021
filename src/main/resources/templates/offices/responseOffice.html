@@ -41,7 +41,7 @@
                     <h3 class='font-italic text-center' id='titleh3'> Responder Oficio</h3>
                 </div>
                 <div class="mx-auto w-75">
-                    <form class="form was-validated" method="POST" th:action="@{/offices/saveResponseOffice}"
+                    <form class="form was-validated" id="response" method="POST" th:action="@{/offices/saveResponseOffice}"
                           th:object="${officeActual}">
                         <table class="table table-borderless">
                             <tr>
@@ -186,11 +186,11 @@
                                         <span id="isSigned" >
                                             <img th:src="@{/images/signed.png}" width="30px" class="hide-img" id="imgSingned">
                                             <small id="aSingned"  class="hide-img" >
-                                               El Oficio adjuntado tiene firma digital
+                                               El Oficio adjunto tiene firma digital
                                             </small>
                                             <img th:src="@{/images/no-signed.png}" id="imgNoSingned" width="25px" class="hide-img">
                                             <small id="aNoSingned" class="hide-img">
-                                                El Oficio adjuntado no tiene firma digital
+                                                El Oficio adjunto no tiene firma digital
                                             </small>
                                         </span>
                                     </div>
@@ -213,13 +213,57 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="text-lg-right">
-                                    <button type="submit" class="btn btn-primary mt-2">Registrar respuesta</button>
+                                    <button type="submit" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">Registrar respuesta </button>
                                 </td>
                             </tr>
                         </table>
                     </form>
                 </div>
             </div>
+            
+            <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Seguro que desea dar respuesta?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">
+                                        Cancelar
+                                    </button>
+                                    <button type="button" class="btn btn-primary"id="responseOffice">
+                                        Responder oficio
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        document.getElementById("response").addEventListener("submit", submit);
+                        document.getElementById("responseOffice").addEventListener("click", send);
+                        document.getElementById("cancel").addEventListener("click", cancel);
+                        function submit(e) {
+                            e.preventDefault();
+                            document.getElementById("exampleModal").style.display = "block";
+                        }
+                        function send(e) {
+                            document.getElementById("exampleModal").style.display = "none";
+                            document.forms["response"].submit();
+                        }
+                        function cancel(e) {
+                            document.getElementById("exampleModal").style.display = "none";
+                        }
+
+                    </script>
+            
             <div class="modal fade" id="responseTime" tabindex="-1" role="dialog" aria-labelledby="responseTimeTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">

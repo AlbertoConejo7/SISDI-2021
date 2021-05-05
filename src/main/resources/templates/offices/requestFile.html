@@ -46,7 +46,7 @@
                     <h3 class='font-italic text-center' id='titleh3'>Solicitud de préstamo de expediente</h3>
                 </div>
                 <div class="mx-auto w-75">
-                    <form class="form was-validated" method="POST" th:action="@{/offices/sendRequestFile}" th:object="${requestFile}" id="add-office">
+                    <form class="form was-validated" method="POST" th:action="@{/offices/sendRequestFile}" th:object="${requestFile}" id="add-request">
                         <table class="table table-borderless">
                             <tr>
                                 <td>
@@ -112,8 +112,8 @@
                                                 var myDate = new Date();
                                                 var year = myDate.getFullYear();
                                                 document.write('<option value = "">Seleccione el año </option>')
-                                                for (var i = year -5; i < year + 1; i++) {
-                                                    document.write('<option value="'+i+'" >' + i + '</option>');
+                                                for (var i = year - 5; i < year + 1; i++) {
+                                                    document.write('<option value="' + i + '" >' + i + '</option>');
                                                 }
                                             </script>
                                         </select>
@@ -125,7 +125,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            
+
                             <tr>
                                 <td>
                                     <span>Observaciones</span>
@@ -146,14 +146,55 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="text-lg-right">
-                                    <button type="submit" class="btn btn-primary mt-2">Solicitar Expediente</button>
+                                    <button type="submit" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">Solicitar Expediente</button>
                                 </td>
                             </tr>
                         </table>
                     </form>
                 </div>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Seguro que desea enviar la solicitud?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">
+                                Cancelar
+                            </button>
+                            <button type="button" class="btn btn-primary"id="addRequest">
+                                Enviar solicitud
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.getElementById("add-request").addEventListener("submit", submit);
+                document.getElementById("addRequest").addEventListener("click", send);
+                document.getElementById("cancel").addEventListener("click", cancel);
+                function submit(e) {
+                    e.preventDefault();
+                    document.getElementById("exampleModal").style.display = "block";
+                }
+                function send(e) {
+                    document.getElementById("exampleModal").style.display = "none";
+                    document.forms["add-request"].submit();
+                }
+                function cancel(e) {
+                    document.getElementById("exampleModal").style.display = "none";
+                }
 
+            </script>
         </main>
         <script th:src="@{/js/addOffice.js}"></script>
         <script th:src="@{/js/calendar.js}"></script>
