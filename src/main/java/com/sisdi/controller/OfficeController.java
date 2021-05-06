@@ -249,12 +249,13 @@ public class OfficeController {
     @PostMapping("/saveFile")
     public String saveFile(Model model, @ModelAttribute("fileSend") FileSimple fileSend, RedirectAttributes redirectAttrs, @AuthenticationPrincipal User user) throws ParseException {
         try {
+            Expediente e1 = expedienteServiceImp.getExpediente(fileSend.getFileName());
             String send = userData.getUserByName(fileSend.getOwner()).getTempUser().getEmail();
             fileSend.setOwner("archivocentral@sanpablo.go.cr");
             fileSend.setReceiver("archivocentral@sanpablo.go.cr");
             Expediente exp = fileData.getFile(fileSend);
-            exp.setOWNER_DEPARTMENT("Servicios Públicos");
-            exp.setRECEIVER_DEPARTMENT("Servicios Públicos");
+            exp.setOWNER_DEPARTMENT(fileSend.getDepartment());
+            exp.setRECEIVER_DEPARTMENT(e1.getRECEIVER_DEPARTMENT());
             log.info("El expediente" + exp.toString());
             Transfer t = transferData.getTransfer(fileSend, send);
             redirectAttrs

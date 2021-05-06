@@ -70,7 +70,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form class="form was-validated" method="POST" th:action="@{/versions/saveVersion}" th:object="${officeActual}">
+                                                <form class="form was-validated" method="POST" id="version" th:action="@{/versions/saveVersion}" th:object="${officeActual}">
                                                     <div class="form-group">
                                                         <label for="officeName">Oficio</label>
                                                         <input type="text" class="form-control" id="exampleFormControlInput1" th:field="*{offnumber}" readonly="readonly"/>
@@ -122,11 +122,52 @@
                                                         <textarea class="form-control" id="observations" rows="3" th:field="*{observations}"></textarea>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-danger">Agregar versión</button>
+                                                        <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Agregar versión</button>
                                                     </div>
                                                 </form>
                                             </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            ¿Seguro que desea añadir la versión?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">
+                                                                Cancelar
+                                                            </button>
+                                                            <button type="button" class="btn btn-primary"id="addVersion">
+                                                                Agregar versión
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                document.getElementById("version").addEventListener("submit", submit);
+                                                document.getElementById("addVersion").addEventListener("click", send);
+                                                document.getElementById("cancel").addEventListener("click", cancel);
+                                                function submit(e) {
+                                                    e.preventDefault();
+                                                    document.getElementById("exampleModal").style.display = "block";
+                                                }
+                                                function send(e) {
+                                                    document.getElementById("exampleModal").style.display = "none";
+                                                    document.forms["version"].submit();
+                                                }
+                                                function cancel(e) {
+                                                    document.getElementById("exampleModal").style.display = "none";
+                                                }
 
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
