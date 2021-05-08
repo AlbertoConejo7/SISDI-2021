@@ -85,73 +85,73 @@
                                             <a th:href="@{/offices/viewOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
                                         </td>
 
-                                    </tr>
-                                </tbody>
+                                    </tr>                                   
+                                </tbody>                             
                             </table>
+                            <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal fade" id="searchOffice" tabindex="-1" role="dialog" aria-labelledby="searchOfficeTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="searchOfficeTitle">Buscar Oficio</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="containerPopUp">
-                                <div class="form-group">
+                <div class="modal fade" id="searchOffice" tabindex="-1" role="dialog" aria-labelledby="searchOfficeTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="searchOfficeTitle">Buscar Oficio</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="containerPopUp">
+                                    <div class="form-group">
 
-                                    <form class="form" method="POST" th:action="@{/offices/searchOffice}" th:object="${search}">
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <span>Número de Oficio</span>
-                                                </td>
-                                                <td>
-                                                    <div class='input-group date ml-4'>
-                                                        <input type='text' class="form-control" th:field="*{offnumber}" placeholder="Número de Oficio"/>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span>Fecha Emisión</span>
-                                                </td>
-                                                <td>
-                                                    <div class='input-group date ml-4' id='datepicker2'>
-                                                        <input type='text' class="form-control" placeholder="dd/mm/yyyy" th:field="*{dateCreate}"/>
-                                                        <span class="input-group-addon ">
-                                                            <img class="icon-img" th:src="@{/images/calendar.svg}">
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <span>Motivo</span>
-                                                </td>
-                                                <td>
-                                                    <div class='input-group date ml-4'>
-                                                        <input type='text' class="form-control" placeholder="Motivo" th:field="*{reason}"/>
-                                                    </div>
-                                                </td>
-                                            </tr>                                   
-                                        </table>
-                                        <div class="modal-footer mt-3">
-                                            <button type="reset" class="btn btn-primary d-flex" ><img th:src="@{/images/trash.png}" width=25> </button>
-                                            <button type="submit" class="btn btn-primary"><img th:src="@{/images/search.png}" width=25> </button>
-                                        </div>
-                                    </form>
+                                        <form class="form" method="POST" th:action="@{/offices/searchOffice}" th:object="${search}">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <span>Número de Oficio</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class='input-group date ml-4'>
+                                                            <input type='text' class="form-control" th:field="*{offnumber}" placeholder="Número de Oficio"/>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>Fecha Emisión</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class='input-group date ml-4' id='datepicker2'>
+                                                            <input type='text' class="form-control" placeholder="dd/mm/yyyy" th:field="*{dateCreate}"/>
+                                                            <span class="input-group-addon ">
+                                                                <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>Motivo</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class='input-group date ml-4'>
+                                                            <input type='text' class="form-control" placeholder="Motivo" th:field="*{reason}"/>
+                                                        </div>
+                                                    </td>
+                                                </tr>                                   
+                                            </table>
+                                            <div class="modal-footer mt-3">
+                                                <button type="reset" class="btn btn-primary d-flex" ><img th:src="@{/images/trash.png}" width=25> </button>
+                                                <button type="submit" class="btn btn-primary"><img th:src="@{/images/search.png}" width=25> </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </main>
         <script th:src="@{/js/calendar.js}"></script>
     </body>
