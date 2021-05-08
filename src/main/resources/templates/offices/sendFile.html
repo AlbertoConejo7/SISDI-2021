@@ -133,6 +133,7 @@
                             <tr>
                                 <td colspan="2" class="text-lg-right">
                                     <button type="submit" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">Trasladar Expediente</button>
+                                    <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
                                 </td>
                             </tr>
                         </table>
@@ -182,7 +183,7 @@
                 }
 
             </script>
-            
+
         </main>
         <script th:src="@{/js/addOffice.js}"></script>
         <script th:src="@{/js/calendar.js}"></script>
@@ -191,7 +192,7 @@
                 $('[data-toggle="popover"]').popover();
             });
             function amountOfiices(select) {
-                var name=select.value;
+                var name = select.value;
                 console.log(select.value);
                 $.ajax({
                     type: "POST",
