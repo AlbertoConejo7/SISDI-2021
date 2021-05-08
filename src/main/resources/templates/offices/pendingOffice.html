@@ -77,7 +77,7 @@
                                             <td >
                                                 <a th:if="${office.STATE == 1 && office.DEADLINE!=null}" th:href="@{/offices/responseOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/reply.svg}"width="25" height="25"></a>
                                             </td>
-                                          
+
                                             <td>
 
                                                 <div class='input-group'>
@@ -92,11 +92,12 @@
 
                                             <td th:if="${office.DEADLINE != null && office.STATE == 1 }" th:text="${#dates.format(office.DEADLINE, 'dd/MM/yyyy')}"></td>
                                             <!--   <td  th:each=${#dates.format(timeOuts.LIMITDATE, 'dd/MM/yyyy')}"></td> -->
-                                             <td th:if="${office.DEADLINE == null || office.STATE != 1 }"></td>
+                                            <td th:if="${office.DEADLINE == null || office.STATE != 1 }"></td>
                                         </tr>
 
                                     </tbody>
                                 </table>
+                                <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
                             </div>
                         </div>
                     </div>
@@ -149,25 +150,20 @@
                                             </td>
                                         </tr>
                                     </table>
+                                   
                                 </div>
+                                
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" onclick="saveResponseTime()">Registrar Recibido</button>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
-
-
-
-
-
             <script th:src="@{/js/acceptOffice.js}"></script>
 
-            <script th:src="@{/js/calendar.js}"></script>
-
-
+            <script th:src="@{/js/calendar.js}"></script>           
         </main>
     </body>
 </html>
