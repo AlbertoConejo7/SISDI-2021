@@ -16,5 +16,10 @@ public class TempUserServiceImp implements TempUserService{
     public List<TempUser> listarTempUser() {
         return  (List<TempUser>) tempUserDao.findAll();
     }
+
+    @Override
+    public TempUser addTempUser(TempUser u) {
+        return tempUserDao.save(u);
+    }
     
 }
