@@ -8,8 +8,16 @@
         <script src="/js/graphics2.js"></script>
         <link rel= "shortcut icon" th:href="@{/images/log4.ico}" type="image/x-icon"  >
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/css/default.css}" rel="stylesheet"/>
     </head>
     <body>
+        <div class="notice-login">
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        </div>
+        
         <img class="wave" th:src="@{/images/wave.png}">
         <div class="container">
             <div class="img">
