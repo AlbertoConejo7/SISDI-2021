@@ -14,5 +14,22 @@ public class UserServiceImp implements UserService{
     public List<UserEntity> listUsers() {
         return (List<UserEntity>) userDao.findAll();
     }
+
+    @Override
+    public UserEntity addUser(UserEntity u) {
+        return userDao.save(u);
+    }
+
+    @Override
+    public UserEntity getUser(String u) {
+        List<UserEntity> list=this.listUsers();
+        UserEntity us=null;
+        for(UserEntity user:list){
+            if(user.getTempuser().equals(u)){
+                us=user;
+            }
+        }
+        return us;
+    }
     
 }
