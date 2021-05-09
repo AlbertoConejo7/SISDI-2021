@@ -21,6 +21,8 @@ public class Signature implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String CERTIFICATE_ID;
+    private String CERTIFICATE_PEM;
+    private String USER_ID;
     
-    private Signature(){}
+    public Signature(){}
 }
