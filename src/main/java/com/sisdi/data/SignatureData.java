@@ -15,14 +15,14 @@ public class SignatureData {
     @Autowired
     private SignatureServiceImp signatureServiceImp;
     
-    public JSONObject verificarCertificado(String cert){
+    public JSONObject verificarCertificado(String cert, String user){
         JSONObject obj = new JSONObject();
         List<Signature> list=signatureServiceImp.listSignature();
         for(Signature s:list){
-            if(s.getCERTIFICATE_ID().equals(cert)){
-                
-                obj.put("Encontrado", true);
-               
+            if(s.getCERTIFICATE_PEM().equals(cert)){
+                if(s.getUSER_ID().equals(user)){
+                    obj.put("Encontrado", true);
+                }
             }
             
         }
