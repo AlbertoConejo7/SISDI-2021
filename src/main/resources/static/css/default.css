@@ -107,6 +107,18 @@
   right: 15px;
   width: 30%;
 }
+.notice-top {
+  position: fixed;
+  top: 70px;
+  right: 0px;
+  width: 30%;
+}
+.notice-login {
+  position: fixed;
+  top: 15px;
+  right: 0px;
+  width: 30%;
+}
 
 .hide-img{
     display: none;
