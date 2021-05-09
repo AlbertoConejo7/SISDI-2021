@@ -10,9 +10,16 @@ import com.sisdi.model.Department;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.Office;
 import com.sisdi.model.OtherDocs;
+import com.sisdi.model.Signature;
+import com.sisdi.model.TempUser;
+import com.sisdi.model.UserEntity;
 import com.sisdi.model.Usuario;
+import com.sisdi.model.UsuarioSimple;
 import com.sisdi.service.ExpedienteServiceImp;
 import com.sisdi.service.OfficeServiceImp;
+import com.sisdi.service.SignatureServiceImp;
+import com.sisdi.service.TempUserServiceImp;
+import com.sisdi.service.UserServiceImp;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -44,6 +51,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.sisdi.signature.PDFSignatureInfo;
 import com.sisdi.signature.PDFSignatureInfoParser;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
@@ -77,10 +88,22 @@ public class IndexController {
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
 
+    @Autowired
+    private UserServiceImp userServiceImp;
+
+    @Autowired
+    private TempUserServiceImp tempUserServiceImp;
+
+    @Autowired
+    private SignatureServiceImp signatureServiceImp;
+
     private Date fecha = new Date();
 
     @GetMapping("/login")
     public String login() {
+        userData.init();
+        Usuario u = userData.getUser("gestiondecobros@sanpablo.go.cr");
+        log.info("Usuario: " + u.toString());
         return "login";
     }
 
@@ -98,6 +121,16 @@ public class IndexController {
     public String showError(Model model, @AuthenticationPrincipal User user, HttpSession session) {
         session.setAttribute("user", user);
         return "error";
+    }
+
+    @GetMapping("/login-error")
+    public String login(HttpServletRequest request, Model model, RedirectAttributes redirectAttrs) {
+        String errorMessage = "Usuario o contraseña incorrectos";
+        log.info(errorMessage);
+        redirectAttrs
+                .addFlashAttribute("mensaje", errorMessage)
+                .addFlashAttribute("clase", "alert alert-danger");
+        return "redirect:/login";
     }
 
     @PostMapping("/singleFileUpload")
@@ -130,16 +163,16 @@ public class IndexController {
         JSONArray f = new JSONArray();
         List<OtherDocs> others = new ArrayList();
         try {
-        for (int i = 0; i < files.length; i++) {
-            OtherDocs other = docsData.getOtherDocs(files[i], "");
-            others.add(other);
-            JSONObject obj = new JSONObject();
-            obj.put("name", files[i].getOriginalFilename());
-            f.put(obj);
-        }
-        session.setAttribute("FilesOther", others);
-        }catch (IOException e){
-             
+            for (int i = 0; i < files.length; i++) {
+                OtherDocs other = docsData.getOtherDocs(files[i], "");
+                others.add(other);
+                JSONObject obj = new JSONObject();
+                obj.put("name", files[i].getOriginalFilename());
+                f.put(obj);
+            }
+            session.setAttribute("FilesOther", others);
+        } catch (IOException e) {
+
         }
 
         return new ResponseEntity(f.toString(), new HttpHeaders(), HttpStatus.OK);
@@ -200,9 +233,15 @@ public class IndexController {
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 
+    @GetMapping("/saveSignature")
+    public String saveSignature(Model model, @AuthenticationPrincipal User user, HttpSession session) {
+
+        return "offices/saveSignature";
+    }
+
     @PostMapping("/signatureVerification")
     public ResponseEntity<?> signatureVerification(Model model, @AuthenticationPrincipal User user, HttpSession session, @RequestParam("name") String name) {
-        JSONObject obj = signatureData.verificarCertificado(name);
+        JSONObject obj = signatureData.verificarCertificado(name, user.getUsername());
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -211,6 +250,27 @@ public class IndexController {
         session.setAttribute("Signature", name);
         JSONObject obj = new JSONObject();
         obj.put("dir", session.getAttribute("direccion"));
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/saveSignatureBD")
+    public ResponseEntity<?> saveSignatureBD(Model model, @AuthenticationPrincipal User user, @RequestParam("PEM") String pem,@RequestParam("CID") String cID, HttpSession session, RedirectAttributes redirectAttrs) {
+        JSONObject obj = new JSONObject();
+        try {
+
+            String cert = cID.substring(15,50);
+            log.info(cert);
+            Signature s = new Signature();
+            s.setCERTIFICATE_ID(cert);
+            s.setCERTIFICATE_PEM(pem);
+            s.setUSER_ID(user.getUsername());
+            signatureServiceImp.addSignature(s);
+            obj.put("Guardado", true);
+            session.setAttribute("mensajeFirma", "Firma Habilitada, ya puede utilizarla para acceder");
+        } catch (Exception e) {
+            obj.put("Guardado", false);
+        }
+
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -240,6 +300,50 @@ public class IndexController {
         JSONObject obj = new JSONObject();
         obj.put("Offnumber", offNumber);
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    @GetMapping("/perfilBefore")
+    public String beforePerfil(Model model, UsuarioSimple perfil, @AuthenticationPrincipal User user, HttpSession session) {
+        session.setAttribute("mensajeFirma", null);
+        return "redirect:/perfil";
+    }
+    @GetMapping("/perfil")
+    public String showPerfil(Model model, UsuarioSimple perfil, @AuthenticationPrincipal User user, HttpSession session) {
+
+        Usuario u = userData.getUser(user.getUsername());
+        boolean signature = signatureServiceImp.userSignature(user.getUsername());
+        perfil.setName(u.getTempUser().getName());
+        perfil.setEmail(u.getTempUser().getEmail());
+        perfil.setDepartment(u.getDepartment().getName());
+        perfil.setPassword(u.getPassword());
+        model.addAttribute("perfil", perfil);
+        model.addAttribute("signatureUser", signature);
+        return "/profile";
+    }
+
+    @PostMapping("/updatePerfil")
+    public String updatePerfil(Model model, @AuthenticationPrincipal User user, @ModelAttribute("perfil") UsuarioSimple perfil, RedirectAttributes redirectAttrs, HttpServletResponse response, HttpSession session) {
+        try {
+
+            Usuario u = userData.getUser(perfil.getEmail());
+
+            TempUser tm = u.getTempUser();
+            tm.setName(perfil.getName());
+
+            UserEntity us = userServiceImp.getUser(tm.getEmail());
+            us.setPassword(perfil.getPassword());
+
+            tempUserServiceImp.addTempUser(tm);
+            userServiceImp.addUser(us);
+            userData.init();
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Perfil Actualizado")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al actualizar perfil")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/perfil";
     }
 
 }
