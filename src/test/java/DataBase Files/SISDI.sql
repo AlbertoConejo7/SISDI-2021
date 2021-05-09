@@ -209,15 +209,19 @@ create table T_FILELOAN(
 	DATE_RETURN date, 
     STATE tinyint,
 	constraint PK_FILELOAN primary key(ID),
-	constraint UK_FILENAME unique key (FILENAME),
 	constraint FK_NAME_REQUEST foreign key (NAME_REQUEST) references T_USER(TEMPUSER),
 	constraint FK_DEPARTMENT_REQUEST foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME),
 	constraint FK_FILE_ID foreign key (FILE_ID) references T_EXPEDIENTE(INDX)
 );
 create table T_SIGNATURE(
 	ID int auto_increment,
-    CERTIFICATE_ID longtext,
-    constraint PK_SIGNATURE primary key(ID)
+    CERTIFICATE_ID varchar(45),
+    CERTIFICATE_PEM longtext,
+    USER_ID varchar(45),
+    constraint PK_SIGNATURE primary key(ID),
+    constraint UK_USERID unique key(USER_ID),
+    constraint UK_CERTIFICATEID unique key(CERTIFICATE_ID),
+    constraint FK_USERSIGNATURE foreign key (USER_ID) references T_USER(TEMPUSER)
 );
 
 CREATE TABLE T_FILEACT(
