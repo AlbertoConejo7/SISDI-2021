@@ -32,14 +32,16 @@
         <div class="mt-2 col-md-1">
             <br> <br>
         </div>
+        <div class="notice-top">
+            <div class="alert alert-success alert-dismissable alert-min fade" id="alert-save">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Fecha de Plazo de Respuesta</strong> guardada.
+            </div>
 
-        <div class="alert alert-success alert-dismissable alert-min fade" id="alert-save">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Fecha de Plazo de Respuesta</strong> guardada.
-        </div>
-        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
-             th:text="${mensaje}"
-             class="alert">
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+                 th:text="${mensaje}"
+                 class="alert">
+            </div>
         </div>
         <main>
             <div class="container mx-auto">
@@ -207,7 +209,7 @@
                                         <span id="isSigned" >
                                             <img th:src="@{/images/signed.png}" width="30px" class="hide-img" id="imgSingned">
                                             <small id="aSingned"  class="hide-img" >
-                                               El Oficio adjunto tiene firma digital
+                                                El Oficio adjunto tiene firma digital
                                             </small>
                                             <img th:src="@{/images/no-signed.png}" id="imgNoSingned" width="25px" class="hide-img">
                                             <small id="aNoSingned" class="hide-img">
@@ -398,7 +400,7 @@
                         </form>
                     </div>
                 </div>
-                
+
             </div>
         </main>
         <script th:src="@{/js/addOffice.js}"></script>
