@@ -1,3 +1,9 @@
+ var valor;
+$(document).ready(function (){
+   valor=$("#funcionSignature");
+    console.log(valor.val());
+    
+});
 function formatPEM(raw) {
     var pemString = pvtsutils.Convert.ToBase64(raw);
     var stringLength = pemString.length;
@@ -74,7 +80,15 @@ async function continueHandler(event) {
         var result = cms.toSchema().toBER(false);
         var pem = formatPEM(result);
         //console.log(pem);
-        signatureLogin(pem);
+        var cId=event.detail.certificateId;
+
+        if(valor.val() == "Guardar"){
+            signatureSave(pem, cId);
+            
+        }else{
+            signatureLogin(pem);
+        }
+
     } catch (error) {
         createAlertNoSignatureCMS();
         console.error(error);
@@ -127,6 +141,26 @@ function signatureLogin(certificateId) {
         }
     });
 }
+function signatureSave(pem,cId) {
+    //console.log("Cert: "+name);
+    $.ajax({
+        type: "POST",
+        url: '/saveSignatureBD',
+        data: {"PEM": pem, "CID":cId},
+        dataType: 'json',
+        success: function (res) {
+            if(res.Guardado==true){
+                window.location.href = "/perfil";
+            }else{
+                createAlertNoSaveSignatureBD();
+            }
+            
+        },
+        error: function (err) {
+            console.error(err);
+        }
+    });
+}
 
 function nextPage(certificateId) { 
     var name = certificateId;
@@ -162,6 +196,25 @@ function createAlertNoSignatureBD() {
     }).appendTo(msg);
     $("<strong />", {
         html: "Por favor verificar que esta seleccionando el certificado correcto "
+    }).appendTo(msg);
+    $('#signNotice').append(msg);
+}
+function createAlertNoSaveSignatureBD() {
+    var alertClasses = ["alert"," alert-dismissible"," alert-danger", " fade","show"];
+    var msg = $("<div/>", {
+        "class": alertClasses.join(" "),
+         "role":"alert"
+    });
+     $("<span />", {
+      "class": "close",
+      "data-dismiss": "alert",
+      html: "x"
+    }).appendTo(msg);
+    $("<h6 />", {
+        html: "El certificado no se guardo en el Sistema."
+    }).appendTo(msg);
+    $("<strong />", {
+        html: "Por favor intentelo nuevamente"
     }).appendTo(msg);
     $('#signNotice').append(msg);
 }
