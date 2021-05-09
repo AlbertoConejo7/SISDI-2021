@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public final class UserData {
 
     private HashMap<String, Usuario> listUser;
+    
     @Autowired
     private UserServiceImp uServ;
     @Autowired
