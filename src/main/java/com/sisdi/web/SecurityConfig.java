@@ -35,12 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .hasRole("USER")
                 .and()
                     .formLogin()
-                    .loginPage("/login")
+                    .loginPage("/login").failureUrl("/login-error")
                     .permitAll()
                 .and()
                     .logout()
                     .permitAll();
         http .csrf().disable() .authorizeRequests() .anyRequest().permitAll(); 
-        http.sessionManagement().maximumSessions(1).expiredUrl("/login");
+        http.sessionManagement().maximumSessions(30).expiredUrl("/login");
     }
 }
