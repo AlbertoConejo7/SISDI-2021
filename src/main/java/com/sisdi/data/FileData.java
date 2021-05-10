@@ -109,6 +109,21 @@ public class FileData {
         }
         return departamentos;
     }
+    public JSONArray listFileByYear(){
+        JSONArray years = new JSONArray();
+        String actual=new SimpleDateFormat("yyyy").format(this.fecha);
+        int year = Integer.parseInt(actual);
+        for(int y=2000;y<=year;y++){
+            List<Expediente> aux=expedienteServiceImp.listarExpedientesByYear(y);
+            if(!aux.isEmpty()){
+                JSONObject obj = new JSONObject();
+                obj.put("name", y);
+                obj.put("y", aux.size());
+                years.put(obj);
+            }
+        }
+        return years;
+    }
 
     public String dateToString(Date d) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
