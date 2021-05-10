@@ -254,11 +254,11 @@ public class IndexController {
     }
 
     @PostMapping("/saveSignatureBD")
-    public ResponseEntity<?> saveSignatureBD(Model model, @AuthenticationPrincipal User user, @RequestParam("PEM") String pem,@RequestParam("CID") String cID, HttpSession session, RedirectAttributes redirectAttrs) {
+    public ResponseEntity<?> saveSignatureBD(Model model, @AuthenticationPrincipal User user, @RequestParam("PEM") String pem, @RequestParam("CID") String cID, HttpSession session, RedirectAttributes redirectAttrs) {
         JSONObject obj = new JSONObject();
         try {
 
-            String cert = cID.substring(15,50);
+            String cert = cID.substring(15, 50);
             log.info(cert);
             Signature s = new Signature();
             s.setCERTIFICATE_ID(cert);
@@ -301,11 +301,13 @@ public class IndexController {
         obj.put("Offnumber", offNumber);
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
+
     @GetMapping("/perfilBefore")
     public String beforePerfil(Model model, UsuarioSimple perfil, @AuthenticationPrincipal User user, HttpSession session) {
         session.setAttribute("mensajeFirma", null);
         return "redirect:/perfil";
     }
+
     @GetMapping("/perfil")
     public String showPerfil(Model model, UsuarioSimple perfil, @AuthenticationPrincipal User user, HttpSession session) {
 
@@ -346,4 +348,13 @@ public class IndexController {
         return "redirect:/perfil";
     }
 
+    @PostMapping("/getDataFiles")
+    public ResponseEntity<?> getDataFiles(Model model, @AuthenticationPrincipal User user, HttpSession session) {
+        JSONArray data = new JSONArray();
+        JSONObject departamentos = new JSONObject(); 
+        departamentos.put("Dep", fileData.listFileByDepartment());
+        data.put(departamentos);
+        log.info("Data "+fileData.listFileByDepartment().toString());
+        return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
 }
