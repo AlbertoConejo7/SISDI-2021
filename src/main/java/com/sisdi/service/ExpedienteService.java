@@ -9,6 +9,8 @@ public interface ExpedienteService {
     List<Expediente> listarExpedientes();
     
     List<Expediente> listarExpedientesByDepartment(String dep);
+    
+    List<Expediente> listarExpedientesByYear(int y);
 
     Expediente addExpediente(Expediente expediente);
 
