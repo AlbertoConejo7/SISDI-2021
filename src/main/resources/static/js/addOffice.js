@@ -3,6 +3,9 @@ $(document).ready(function () {
     $("#btnSaveFiles").click(function (e) {
         e.preventDefault();
         saveFiles();
+        $("#loadingDocs").addClass("show-img");
+        $("#loadingDocs").removeClass("hide-img");
+        $("#btnSaveFiles").prop("disabled", true);
     });
 });
 
@@ -64,7 +67,10 @@ function saveFiles() {
             message.addClass("hide-img");
         },
         error: function (err) {
-            console.error(err);
+           console.error(err);
+           $("#btnSaveFiles").prop("disabled", false);
+           $("#loadingDocs").addClass("hide-img");
+           $("#loadingDocs").removeClass("show-img");
            message.removeClass("hide-img");
            message.addClass("show-img");
         }
@@ -77,6 +83,9 @@ function printInfoOthers(res) {
         console.log(res[i].name);
     }
     $("#attachedOtherModal .close").click();
+     $("#btnSaveFiles").prop("disabled", false);
+     $("#loadingDocs").addClass("hide-img");
+     $("#loadingDocs").removeClass("show-img");
     var otherFiles = $("#otherFiles");
     otherFiles.val(allDocs);
 }
