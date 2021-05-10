@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
-                .antMatchers("/addOffice", "/listOffices/**", "/versionOffice", "/pendingOffice", "/editOffice/**", "/showPerfil")
+                .antMatchers("/addOffice", "/listOffices/**", "/versionOffice", "/pendingOffice", "/editOffice/**", "/showPerfil",  "/reporteExpedientes")
                     .permitAll()
                     .antMatchers("/")
                     .hasRole("USER")
