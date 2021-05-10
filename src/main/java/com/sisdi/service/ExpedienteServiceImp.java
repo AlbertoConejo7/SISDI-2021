@@ -147,7 +147,7 @@ public class ExpedienteServiceImp implements ExpedienteService {
                     sameYearFile = f;
                 }
             }
-        } 
+        }
         return sameYearFile;
     }
 
@@ -166,23 +166,37 @@ public class ExpedienteServiceImp implements ExpedienteService {
         Expediente e = this.getExpediente(indx);
         return e.getFILENAME();
     }
-    
-      @Override
-    public void deleteExpediente(int id){
-         
-     expedienteDao.deleteById(id);
-     
-     }
+
+    @Override
+    public void deleteExpediente(int id) {
+
+        expedienteDao.deleteById(id);
+
+    }
 
     @Override
     public List<Expediente> listarExpedientesByDepartment(String dep) {
-         List<Expediente> list = this.listarExpedientes();
-         List<Expediente> aux=new ArrayList();
-         for(Expediente e: list){
-             if(e.getOWNER_DEPARTMENT().equals(dep)){
-                   aux.add(e);
-             }
-         }
-         return aux;
+        List<Expediente> list = this.listarExpedientes();
+        List<Expediente> aux = new ArrayList();
+        for (Expediente e : list) {
+            if (e.getOWNER_DEPARTMENT().equals(dep)) {
+                aux.add(e);
+            }
+        }
+        return aux;
+    }
+
+    @Override
+    public List<Expediente> listarExpedientesByYear(int y) {
+        List<Expediente> list = this.listarExpedientes();
+        List<Expediente> aux = new ArrayList();
+        for (Expediente e : list) {
+            String eDate = new SimpleDateFormat("yyyy").format(e.getDATE_CREATE());
+            int year = Integer.parseInt(eDate);
+            if (year==y) {
+                aux.add(e);
+            }
+        }
+        return aux;
     }
 }
