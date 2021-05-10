@@ -354,7 +354,9 @@ public class IndexController {
         JSONObject departamentos = new JSONObject(); 
         departamentos.put("Dep", fileData.listFileByDepartment());
         data.put(departamentos);
-        log.info("Data "+fileData.listFileByDepartment().toString());
+        JSONObject years = new JSONObject(); 
+        departamentos.put("Years", fileData.listFileByYear());
+        data.put(years);
         return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 }
