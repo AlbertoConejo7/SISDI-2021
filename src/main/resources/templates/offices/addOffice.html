@@ -370,6 +370,11 @@
                                 <div class="invalid-feedback">Seleccione el Oficio</div>
                             </div>
                             <div class="modal-footer">
+                                 <div class="hide-img" id="loadingDoc">
+                                    <div class="spinner-border " role="status" >
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
                                 <span id="messageErrorFile" class="hide-img" style="font-size:10pt; color:red;"><small>El documento es muy grande, tamaño máximo por documento: 10MB</small></span>
                                 <button type="submit" class="btn btn-primary" id="btnSubmit">Validar Documento</button>
                             </div>
@@ -393,7 +398,12 @@
                                 <span class="input-group-addon ">
                                 </span>
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer" >
+                                <div class="hide-img" id="loadingDocs">
+                                    <div class="spinner-border " role="status" >
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
                                 <span id="messageErrorFiles" class="hide-img" style="font-size:10pt; color:red;"><small>Uno de los documentos es muy grande, tamaño máximo por documento: 10MB</small></span>
                                 <button class="btn btn-primary" id="btnSaveFiles">Agregar Documentos</button>
                             </div>
