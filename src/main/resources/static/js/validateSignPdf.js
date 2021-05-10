@@ -2,6 +2,9 @@ $(document).ready(function () {
     $("#btnSubmit").click(function (e) {
         e.preventDefault();
         doAjax();
+        $("#loadingDoc").addClass("show-img");
+        $("#loadingDoc").removeClass("hide-img");
+        $("#btnSubmit").prop("disabled", true);
     });
 });
 $(".readonly").keydown(function (e) {
@@ -24,6 +27,9 @@ function doAjax() {
         success: function (res) {
             console.log(res.name);
             $("#attachedModal .close").click();
+            $("#loadingDoc").addClass("hide-img");
+            $("#loadingDoc").removeClass("show-img");
+            $("#btnSubmit").prop("disabled", false);
             printInfo(res);
             message.removeClass("show-img");
             message.addClass("hide-img");
@@ -32,6 +38,9 @@ function doAjax() {
             console.error(err);
             message.removeClass("hide-img");
             message.addClass("show-img");
+            $("#loadingDoc").addClass("hide-img");
+            $("#loadingDoc").removeClass("show-img");
+            $("#btnSubmit").prop("disabled", false);
         }
     });
 }
