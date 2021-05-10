@@ -658,7 +658,6 @@ public class OfficeController {
     @GetMapping("/reportes")
     public String reportes(Model model, @AuthenticationPrincipal User user) {
         List<Expediente> filesC=expedienteServiceImp.listarExpedientes();
-        log.info("Estory en Reportes");
         model.addAttribute("filesC", filesC.size());
         return "/offices/report";
     }
