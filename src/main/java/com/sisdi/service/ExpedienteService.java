@@ -7,6 +7,8 @@ import java.util.List;
 public interface ExpedienteService {
 
     List<Expediente> listarExpedientes();
+    
+    List<Expediente> listarExpedientesByDepartment(String dep);
 
     Expediente addExpediente(Expediente expediente);
 
