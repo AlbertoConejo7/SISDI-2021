@@ -173,4 +173,16 @@ public class ExpedienteServiceImp implements ExpedienteService {
      expedienteDao.deleteById(id);
      
      }
+
+    @Override
+    public List<Expediente> listarExpedientesByDepartment(String dep) {
+         List<Expediente> list = this.listarExpedientes();
+         List<Expediente> aux=new ArrayList();
+         for(Expediente e: list){
+             if(e.getOWNER_DEPARTMENT().equals(dep)){
+                   aux.add(e);
+             }
+         }
+         return aux;
+    }
 }
