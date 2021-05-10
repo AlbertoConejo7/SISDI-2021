@@ -1,7 +1,9 @@
 package com.sisdi.data;
 
+import com.sisdi.model.Department;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.FileSimple;
+import com.sisdi.service.ExpedienteServiceImp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +23,12 @@ import org.springframework.stereotype.Service;
 public class FileData {
 
     private Date fecha = new Date();
+    
+    @Autowired
+    private DepartmentData depData;
+    
+    @Autowired
+    private ExpedienteServiceImp expedienteServiceImp;
 
     public Expediente getFile(FileSimple file) throws ParseException {
         Date create = new SimpleDateFormat("dd/MM/yyyy").parse(file.getDateCreateFile());
@@ -85,6 +94,20 @@ public class FileData {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+    public JSONArray listFileByDepartment(){
+        JSONArray departamentos = new JSONArray();
+        List<Department> list=depData.listDepartments();
+        for(Department d:list){
+            List<Expediente> aux=expedienteServiceImp.listarExpedientesByDepartment(d.getName());
+            if(!aux.isEmpty()){
+                JSONObject obj = new JSONObject();
+                obj.put("name", d.getName());
+                obj.put("y", aux.size());
+                departamentos.put(obj);
+            }
+        }
+        return departamentos;
     }
 
     public String dateToString(Date d) {
