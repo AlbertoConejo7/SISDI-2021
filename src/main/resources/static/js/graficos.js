@@ -6,10 +6,15 @@ function getData(){
         data: {"name": name},
         dataType: 'json',
         success: function (res) {
+            console.log(res);
            var departamentos=res[0].Dep;
            var years=res[0].Years;
            generateGraphicDep(departamentos);
            generateGraphicYears(years);
+           $("#transferC").text(res[2].Trasladados);
+           $("#prestadosC").text(res[2].Prestados);
+           $("#actasC").text(res[2].Eliminados);
+           
         },
         error: function (err) {
             console.error(err);
