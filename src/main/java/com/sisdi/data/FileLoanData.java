@@ -5,6 +5,7 @@
  */
 package com.sisdi.data;
 
+import com.sisdi.model.Department;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.FileLoan;
 import com.sisdi.model.FileLoanSimple;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,11 @@ public class FileLoanData {
 
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
+    
+    @Autowired
+    private DepartmentData depData;
+    
+    private Date fecha = new Date();
 
     public List<FileLoanSimple> listFileLoanSimples() {
         List<FileLoanSimple> list = new ArrayList();
@@ -86,6 +94,36 @@ public class FileLoanData {
         SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
         String year = getYearFormat.format(date);
         return year;
+    }
+    
+    public JSONArray listFileLoanByDepartment(){
+        JSONArray departamentos = new JSONArray();
+        List<Department> list=depData.listDepartments();
+        for(Department d:list){
+            List<FileLoan> aux=fileLoanServiceImp.listFileLoanByDepartment(d.getName());
+            if(!aux.isEmpty()){
+                JSONObject obj = new JSONObject();
+                obj.put("name", d.getName());
+                obj.put("y", aux.size());
+                departamentos.put(obj);
+            }
+        }
+        return departamentos;
+    }
+    public JSONArray listFileLoanByYear(){
+        JSONArray years = new JSONArray();
+        String actual=new SimpleDateFormat("yyyy").format(this.fecha);
+        int year = Integer.parseInt(actual);
+        for(int y=2000;y<=year;y++){
+            List<FileLoan> aux=fileLoanServiceImp.listFileLoanByYear(y);
+            if(!aux.isEmpty()){
+                JSONObject obj = new JSONObject();
+                obj.put("name", y);
+                obj.put("y", aux.size());
+                years.put(obj);
+            }
+        }
+        return years;
     }
 
 }

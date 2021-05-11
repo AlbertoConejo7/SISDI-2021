@@ -9,4 +9,7 @@ public interface FileLoanService {
 
     FileLoan addFileLoan(FileLoan file);
     List<FileLoan> listarFileRequests();
+    
+    List<FileLoan> listFileLoanByDepartment(String dep);
+    List<FileLoan> listFileLoanByYear(int y);
 }

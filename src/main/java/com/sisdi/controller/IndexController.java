@@ -3,6 +3,7 @@ package com.sisdi.controller;
 import com.sisdi.data.DepartmentData;
 import com.sisdi.data.DocsData;
 import com.sisdi.data.FileData;
+import com.sisdi.data.FileLoanData;
 import com.sisdi.data.SignatureData;
 import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
@@ -82,6 +83,9 @@ public class IndexController {
 
     @Autowired
     private TransferData transferData;
+    
+    @Autowired
+    private FileLoanData fileLoanData;
 
     @Autowired
     private OfficeServiceImp officeServiceImp;
@@ -365,6 +369,21 @@ public class IndexController {
         others.put("Prestados", expedienteServiceImp.listarExpedientesByState(2).size());
         others.put("Trasladados", expedienteServiceImp.listarExpedientesByState(1).size());
         others.put("Eliminados", fileActServiceImp.listarFileActs().size());
+        data.put(others);
+        return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    
+    @PostMapping("/getDataFileLoan")
+    public ResponseEntity<?> getDataFileLoan(Model model, @AuthenticationPrincipal User user, HttpSession session) {
+        JSONArray data = new JSONArray();
+        JSONObject departamentos = new JSONObject(); 
+        departamentos.put("Dep", fileLoanData.listFileLoanByDepartment());
+        data.put(departamentos);
+        JSONObject years = new JSONObject(); 
+        departamentos.put("Years", fileLoanData.listFileLoanByYear());
+        data.put(years);
+        JSONObject others = new JSONObject(); 
+        others.put("Prestados", expedienteServiceImp.listarExpedientesByState(2).size());
         data.put(others);
         return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
     }
