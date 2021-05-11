@@ -25,7 +25,7 @@
         <script th:src="@{/js/notificacionesResponse.js}"></script>
         <script th:src="@{/js/notificacionesExpediente.js}"></script>
         <script th:src="@{/js/script.js}"></script>
-        
+
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="http://code.highcharts.com/highcharts.js"></script>
         <script src="http://code.highcharts.com/modules/exporting.js"></script>
@@ -46,6 +46,9 @@
             }
             .tab-content .row{
                 align-items: center;
+            }
+            .info {
+                align-items: end !important;
             }
             .card{
                 padding:0;
@@ -102,7 +105,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-3">
+                                <div class="row mt-3 info">
                                     <div class="col-sm-4">
                                         <div class="card">
                                             <div class="card-body" id="departamentos">
@@ -113,16 +116,37 @@
                                     <div class="col-sm-4">
                                         <div class="card">
                                             <div class="card-body" id="annio">
-                                               
+
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="col-sm-4">
+                                    <div class=" col-sm-4">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title">Special title treatment</h5>
-                                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                               
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <img width=60 th:src="@{/images/folder.png}">
+                                                    </div>
+                                                    <div class="col-8 card-info">
+                                                        <p ><span id="transferC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Trasladados</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <img width=60 th:src="@{/images/folder.png}">
+                                                    </div>
+                                                    <div class="col-8 card-info">
+                                                        <p ><span id="prestadosC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Prestados</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <img width=60 th:src="@{/images/folder.png}">
+                                                    </div>
+                                                    <div class="col-8 card-info">
+                                                        <p ><span id="actasC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Eliminados</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
