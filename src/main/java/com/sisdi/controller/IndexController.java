@@ -16,6 +16,7 @@ import com.sisdi.model.UserEntity;
 import com.sisdi.model.Usuario;
 import com.sisdi.model.UsuarioSimple;
 import com.sisdi.service.ExpedienteServiceImp;
+import com.sisdi.service.FileActServiceImp;
 import com.sisdi.service.OfficeServiceImp;
 import com.sisdi.service.SignatureServiceImp;
 import com.sisdi.service.TempUserServiceImp;
@@ -96,6 +97,9 @@ public class IndexController {
 
     @Autowired
     private SignatureServiceImp signatureServiceImp;
+    
+    @Autowired
+    private FileActServiceImp fileActServiceImp;
 
     private Date fecha = new Date();
 
@@ -357,6 +361,11 @@ public class IndexController {
         JSONObject years = new JSONObject(); 
         departamentos.put("Years", fileData.listFileByYear());
         data.put(years);
+        JSONObject others = new JSONObject(); 
+        others.put("Prestados", expedienteServiceImp.listarExpedientesByState(2).size());
+        others.put("Trasladados", expedienteServiceImp.listarExpedientesByState(1).size());
+        others.put("Eliminados", fileActServiceImp.listarFileActs().size());
+        data.put(others);
         return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 }
