@@ -199,4 +199,16 @@ public class ExpedienteServiceImp implements ExpedienteService {
         }
         return aux;
     }
+    
+    @Override
+    public List<Expediente> listarExpedientesByState(int s) {
+        List<Expediente> list = this.listarExpedientes();
+        List<Expediente> aux = new ArrayList();
+        for (Expediente e : list) {
+            if (e.getSTATE()==s) {
+                aux.add(e);
+            }
+        }
+        return aux;
+    }
 }
