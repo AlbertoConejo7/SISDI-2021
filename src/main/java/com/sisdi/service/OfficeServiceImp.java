@@ -1,7 +1,10 @@
 package com.sisdi.service;
 
 import com.sisdi.dao.OfficeDao;
+import com.sisdi.data.UserData;
 import com.sisdi.model.Office;
+import com.sisdi.model.Usuario;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +16,9 @@ public class OfficeServiceImp implements OfficeService {
 
     @Autowired
     private OfficeDao officeDao;
+    
+    @Autowired
+    private UserData userData;
 
     @Override
     public List<Office> listarOficios() {
@@ -71,13 +77,14 @@ public class OfficeServiceImp implements OfficeService {
         aux.addAll(receptor);
         return aux;
     }
+
     @Override
-    public List<Office> listByName(List <Office> list, String name) {
+    public List<Office> listByName(List<Office> list, String name) {
         List<Office> aux = new ArrayList();
-        String nameAux1=name.toLowerCase();
-        for(Office o : list){
-            String nameAux2=o.getOFFNUMBER().toLowerCase();
-            if(nameAux2.contains(nameAux1)){
+        String nameAux1 = name.toLowerCase();
+        for (Office o : list) {
+            String nameAux2 = o.getOFFNUMBER().toLowerCase();
+            if (nameAux2.contains(nameAux1)) {
                 aux.add(o);
             }
         }
@@ -87,8 +94,8 @@ public class OfficeServiceImp implements OfficeService {
     @Override
     public List<Office> listByDate(List<Office> list, Date date) {
         List<Office> aux = new ArrayList();
-        for(Office o : list){
-            if(date.equals(o.getINCORDATE())){
+        for (Office o : list) {
+            if (date.equals(o.getINCORDATE())) {
                 aux.add(o);
             }
         }
@@ -98,47 +105,84 @@ public class OfficeServiceImp implements OfficeService {
     @Override
     public List<Office> listByReason(List<Office> list, String reason) {
         List<Office> aux = new ArrayList();
-        String reasonAux1=reason.toLowerCase();
-        for(Office o : list){
-            String reasonAux2=o.getREASON().toLowerCase();
-            if(reasonAux2.contains(reasonAux1)){
+        String reasonAux1 = reason.toLowerCase();
+        for (Office o : list) {
+            String reasonAux2 = o.getREASON().toLowerCase();
+            if (reasonAux2.contains(reasonAux1)) {
                 aux.add(o);
             }
         }
         return aux;
     }
-    
-       @Override
+
+    @Override
     public List<Office> listarOficiosExp(int indx) {
-         List<Office> list = this.listarOficios();
+        List<Office> list = this.listarOficios();
         List<Office> aux = new ArrayList();
         for (Office o : list) {
-         //  o.getEXPEDIENTE().toLowerCase();
-         if(indx != 0)
-         {
-           if (o.getEXPEDIENTE()==indx) {
-                aux.add(o);
+            //  o.getEXPEDIENTE().toLowerCase();
+            if (indx != 0) {
+                if (o.getEXPEDIENTE() == indx) {
+                    aux.add(o);
+                }
             }
-        }
         }
         return aux;
     }
+
     @Override
-   public void deleteOfficesExp(int indx){
-    List<Office> list = this.listarOficios();
-     List<Office> aux = new ArrayList();
+    public void deleteOfficesExp(int indx) {
+        List<Office> list = this.listarOficios();
+        List<Office> aux = new ArrayList();
         for (Office o : list) {
-         //  o.getEXPEDIENTE().toLowerCase();
-         if(indx != 0)
-         {
-           if (o.getEXPEDIENTE()==indx) {
-                officeDao.delete(o);
+            //  o.getEXPEDIENTE().toLowerCase();
+            if (indx != 0) {
+                if (o.getEXPEDIENTE() == indx) {
+                    officeDao.delete(o);
+                }
             }
         }
+
+    }
+    
+    @Override
+    public List<Office> listOfficeByYear(int y) {
+        List<Office> list = this.listarOficios();
+        List<Office> aux = new ArrayList();
+        for (Office e : list) {
+            String eDate = new SimpleDateFormat("yyyy").format(e.getINCORDATE());
+            int year = Integer.parseInt(eDate);
+            if (year == y) {
+                aux.add(e);
+            }
         }
-  
-   
-   }
+        return aux;
+    }
 
+    @Override
+    public List<Office> listOfficeByDepartment(String departamento) {
+        List<Office> list = this.listarOficios();
+        List<Office> aux = new ArrayList();
+        for (Office o : list) {
+            Usuario user = userData.getUser(o.getUSER_ID());                    
+            if (user.getDepartment().getName().equals(departamento) ) {
+                aux.add(o);
+            }
+        }
 
+        return aux;
+    }
+
+    @Override
+    public List<Office> listOfficeByState3() {
+        List<Office> list = this.listarOficios();
+        List<Office> aux = new ArrayList();
+        for (Office o : list) {
+            if (o.getSTATE()==3) {
+                aux.add(o);
+            }
+        }
+
+        return aux;
+    }
 }
