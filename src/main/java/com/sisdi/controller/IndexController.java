@@ -4,6 +4,7 @@ import com.sisdi.data.DepartmentData;
 import com.sisdi.data.DocsData;
 import com.sisdi.data.FileData;
 import com.sisdi.data.FileLoanData;
+import com.sisdi.data.OfficeData;
 import com.sisdi.data.SignatureData;
 import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
@@ -68,6 +69,9 @@ public class IndexController {
 
     @Autowired
     private UserData userData;
+    
+    @Autowired
+    private OfficeData officeData;
 
     @Autowired
     private DepartmentData departmentData;
@@ -83,7 +87,7 @@ public class IndexController {
 
     @Autowired
     private TransferData transferData;
-    
+
     @Autowired
     private FileLoanData fileLoanData;
 
@@ -101,7 +105,7 @@ public class IndexController {
 
     @Autowired
     private SignatureServiceImp signatureServiceImp;
-    
+
     @Autowired
     private FileActServiceImp fileActServiceImp;
 
@@ -359,31 +363,46 @@ public class IndexController {
     @PostMapping("/getDataFiles")
     public ResponseEntity<?> getDataFiles(Model model, @AuthenticationPrincipal User user, HttpSession session) {
         JSONArray data = new JSONArray();
-        JSONObject departamentos = new JSONObject(); 
+        JSONObject departamentos = new JSONObject();
         departamentos.put("Dep", fileData.listFileByDepartment());
         data.put(departamentos);
-        JSONObject years = new JSONObject(); 
+        JSONObject years = new JSONObject();
         departamentos.put("Years", fileData.listFileByYear());
         data.put(years);
-        JSONObject others = new JSONObject(); 
+        JSONObject others = new JSONObject();
         others.put("Prestados", expedienteServiceImp.listarExpedientesByState(2).size());
         others.put("Trasladados", expedienteServiceImp.listarExpedientesByState(1).size());
         others.put("Eliminados", fileActServiceImp.listarFileActs().size());
         data.put(others);
         return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
     }
-    
+
     @PostMapping("/getDataFileLoan")
     public ResponseEntity<?> getDataFileLoan(Model model, @AuthenticationPrincipal User user, HttpSession session) {
         JSONArray data = new JSONArray();
-        JSONObject departamentos = new JSONObject(); 
-        departamentos.put("Dep", fileLoanData.listFileLoanByDepartment());
+        JSONObject departamentos = new JSONObject();
+        departamentos.put("DepFileLoan", fileLoanData.listFileLoanByDepartment());
         data.put(departamentos);
-        JSONObject years = new JSONObject(); 
-        departamentos.put("Years", fileLoanData.listFileLoanByYear());
+        JSONObject years = new JSONObject();
+        departamentos.put("YearsFileLoan", fileLoanData.listFileLoanByYear());
         data.put(years);
-        JSONObject others = new JSONObject(); 
+        JSONObject others = new JSONObject();
         others.put("Prestados", expedienteServiceImp.listarExpedientesByState(2).size());
+        data.put(others);
+        return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/getDataOffice")
+    public ResponseEntity<?> getDataOffice(Model model, @AuthenticationPrincipal User user, HttpSession session) {
+        JSONArray data = new JSONArray();
+        JSONObject departamentos = new JSONObject();
+        departamentos.put("OfficeDep", officeData.listOfficeByDepartment());
+        data.put(departamentos);
+        JSONObject years = new JSONObject();
+        departamentos.put("Annio", officeData.listOfficeByYear());
+        data.put(years);
+        JSONObject others = new JSONObject();
+        others.put("Eliminados", officeServiceImp.listOfficeByState3().size());
         data.put(others);
         return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
     }
