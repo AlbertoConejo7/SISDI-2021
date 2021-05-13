@@ -74,7 +74,7 @@
                 <div class="row">
                     <div class="col-3 bg-light">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-offices-tab" data-toggle="pill" href="#v-pills-offices" role="tab" aria-controls="v-pills-offices" aria-selected="true">Reporte de Oficios</a>
+                            <a class="nav-link active" id="v-pills-offices-tab" data-toggle="pill" href="#v-pills-offices" role="tab" aria-controls="v-pills-offices" aria-selected="false" onclick="getDataOffice()">Reporte de Oficios</a>
                             <a class="nav-link" id="v-pills-files-tab" data-toggle="pill" href="#v-pills-files" role="tab" aria-controls="v-pills-files" aria-selected="false" onclick="getData()">Reporte de Expedientes</a>
                             <a class="nav-link" id="v-pills-fileLoans-tab" data-toggle="pill" href="#v-pills-fileLoans" role="tab" aria-controls="v-pills-fileLoans" aria-selected="false" onclick="getDataFileLoan()">Reporte de Expedientes en préstamo</a>
                         </div>
@@ -82,24 +82,18 @@
                     <div class="col-9">
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-offices" role="tabpanel" aria-labelledby="v-pills-offices-tab">
-                                <div  id="titulo">
-                                    <h5 class='font-italic' >Reporte de Oficios</h5>
-                                </div>
-
-                            </div>
-                            <div class="tab-pane fade" id="v-pills-files" role="tabpanel" aria-labelledby="v-pills-files-tab">
                                 <div class="row">
                                     <div class="col-8" id="titulo">
-                                        <h5 class='font-italic' >Reporte de Expedientes</h5>
+                                        <h5 class='font-italic' >Reporte de Oficios</h5>
                                     </div>
                                     <div class="card col-3">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-4">
-                                                    <img width=60 th:src="@{/images/folder.png}">
+                                                    <img width=60 th:src="@{/images/Doc.png}">
                                                 </div>
                                                 <div class="col-8 card-info">
-                                                    <p ><span th:text="${filesC}" class="mb-0" style="font-size:40pt;"></span><br>Expedientes</p>
+                                                    <p ><span th:text="${officesC}" class="mb-0" style="font-size:40pt;"></span><br>Oficios totales</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -108,14 +102,14 @@
                                 <div class="row mt-3 info">
                                     <div class="col-sm-4">
                                         <div class="card">
-                                            <div class="card-body" id="departamentos">
+                                            <div class="card-body" id="departamentosOficios">
 
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="card">
-                                            <div class="card-body" id="annio">
+                                            <div class="card-body" id="annioOffices">
 
                                             </div>
                                         </div>
@@ -125,76 +119,128 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-4">
-                                                        <img width=60 th:src="@{/images/folder.png}">
+                                                        <img width=60 th:src="@{/images/Doc.png}">
                                                     </div>
                                                     <div class="col-8 card-info">
-                                                        <p ><span id="transferC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Trasladados</p>
+                                                        <p ><span id="eliminados_C" class="mb-0" style="font-size:40pt;"></span><br>Oficios eliminados</p>
+                                                        
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <img width=60 th:src="@{/images/folder.png}">
-                                                    </div>
-                                                    <div class="col-8 card-info">
-                                                        <p ><span id="prestadosC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Prestados</p>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <img width=60 th:src="@{/images/folder.png}">
-                                                    </div>
-                                                    <div class="col-8 card-info">
-                                                        <p ><span id="actasC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Eliminados</p>
-                                                    </div>
-                                                </div>
+                                                </div>                                  
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="v-pills-fileLoans" role="tabpanel" aria-labelledby="v-pills-fileLoans-tab">
-                                <div class="row">
-                                    <div class="col-8" id="titulo">
-                                        <h5 class='font-italic' >Reporte de Expedientes en préstamo</h5>
+
+                        </div>
+                        <hr>
+                        <div class="tab-pane fade" id="v-pills-files" role="tabpanel" aria-labelledby="v-pills-files-tab">
+                            <div class="row">
+                                <div class="col-8" id="titulo">
+                                    <h5 class='font-italic' >Reporte de Expedientes</h5>
+                                </div>
+                                <div class="card col-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <img width=60 th:src="@{/images/folder.png}">
+                                            </div>
+                                            <div class="col-8 card-info">
+                                                <p ><span th:text="${filesC}" class="mb-0" style="font-size:40pt;"></span><br>Expedientes</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card col-3">
+                                </div>
+                            </div>
+                            <div class="row mt-3 info">
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body" id="departamentos">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body" id="annio">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" col-sm-4">
+                                    <div class="card">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-4">
                                                     <img width=60 th:src="@{/images/folder.png}">
                                                 </div>
                                                 <div class="col-8 card-info">
-                                                    <p ><span th:text="${filesLoanC}" class="mb-0" style="font-size:40pt;"></span><br>Expedientes prestados</p>
+                                                    <p ><span id="transferC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Trasladados</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <img width=60 th:src="@{/images/folder.png}">
+                                                </div>
+                                                <div class="col-8 card-info">
+                                                    <p ><span id="prestadosC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Prestados</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <img width=60 th:src="@{/images/folder.png}">
+                                                </div>
+                                                <div class="col-8 card-info">
+                                                    <p ><span id="actasC" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Eliminados</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-3 info">
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body" id="departamentosFileLoan">
-
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-fileLoans" role="tabpanel" aria-labelledby="v-pills-fileLoans-tab">
+                            <div class="row">
+                                <div class="col-8" id="titulo">
+                                    <h5 class='font-italic' >Reporte de Expedientes en préstamo</h5>
+                                </div>
+                                <div class="card col-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <img width=60 th:src="@{/images/folder.png}">
+                                            </div>
+                                            <div class="col-8 card-info">
+                                                <p ><span th:text="${filesLoanC}" class="mb-0" style="font-size:40pt;"></span><br>Expedientes prestados</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body" id="annioFileLoan">
+                                </div>
+                            </div>
+                            <div class="row mt-3 info">
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body" id="departamentosFileLoan">
 
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class=" col-sm-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <img width=60 th:src="@{/images/folder.png}">
-                                                    </div>
-                                                    <div class="col-8 card-info">
-                                                        <p ><span id="prestadosCFileLoan" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Prestados</p>
-                                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body" id="annioFileLoan">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <img width=60 th:src="@{/images/folder.png}">
+                                                </div>
+                                                <div class="col-8 card-info">
+                                                    <p ><span id="prestadosCFileLoan" class="mb-0" style="font-size:40pt;"></span><br>Expedientes Prestados</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -204,7 +250,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>          
         </main>
     </body>
 </html>
