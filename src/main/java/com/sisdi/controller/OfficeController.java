@@ -659,8 +659,10 @@ public class OfficeController {
     public String reportes(Model model, @AuthenticationPrincipal User user) {
         List<Expediente> filesC=expedienteServiceImp.listarExpedientes();
         List<FileLoan> filesLoanC = fileLoanServiceImp.listarFileLoans();
+        List<Office> officesC = officeServiceImp.listarOficios();
         model.addAttribute("filesC", filesC.size());
         model.addAttribute("filesLoanC", filesLoanC.size());
+        model.addAttribute("officesC", officesC.size());
         return "/offices/report";
     }
 
