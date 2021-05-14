@@ -24,12 +24,12 @@
 
         <script th:src="@{/js/notificacionesResponse.js}"></script>
         <script th:src="@{/js/notificacionesExpediente.js}"></script>
-      
+
         <script th:src="@{/js/script.js}"></script>
-        
-        
-        
-        
+
+
+
+
     </head>
     <body>
         <header th:insert="menu/Head :: menu"></header>
@@ -37,7 +37,7 @@
         <div class="mt-2 col-md-1">
             <br> <br> <br>
         </div>
-        
+
         <div class="container">
             <div id="titulo">
                 <h3 class='font-italic text-center' id='titleh3' >Expedientes Borrados</h3>
@@ -52,7 +52,7 @@
                                     <th style="text-align: center">Fecha de Eliminacion</th>
                                     <th style="text-align: center">Fecha de Ingreso al Archivo central</th>
                                     <th style="text-align: center">Resumen</th>
-                                    
+
 
                                 </tr>
                             </thead>
@@ -65,10 +65,10 @@
                                 <tr th:each="fileAct : ${fileActs}" th:if="${fileActs != null and !fileActs.empty}">
                                     <td th:text="${fileAct.fileName}"></td>
                                     <td  th:text="${#dates.format(fileAct.dateCreate, 'dd/MM/yyyy')}"></td>
-                                     <td  th:text="${#dates.format(fileAct.dateFile, 'dd/MM/yyyy')}"></td>
-                                    
+                                    <td  th:text="${#dates.format(fileAct.dateFile, 'dd/MM/yyyy')}"></td>
+
                                     <td  th:text="${fileAct.observations}"></td>
-                                                                                         
+
                                 </tr>
 
                             </tbody>
