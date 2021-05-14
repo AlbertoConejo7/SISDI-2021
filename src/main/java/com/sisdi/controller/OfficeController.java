@@ -676,6 +676,7 @@ public class OfficeController {
 
     @GetMapping("/exitAct/{deleteId}")
     public String exitAct(Model model, @AuthenticationPrincipal User user, @PathVariable String deleteId) {
+        log.info("problema aqui");
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
         String year = new SimpleDateFormat("yyyy").format(this.fecha);
         model.addAttribute("date", fecha);
@@ -685,7 +686,7 @@ public class OfficeController {
 
         Expediente deleteFile = expedienteServiceImp.getExpediente(deleteId);
         FileActSimple exitAct = fileActData.SaveAct(deleteFile);        
-        String fecha = new SimpleDateFormat("dd/MM/yyyy").format(deleteFile.getDATE_RETURN());
+        String fecha = new SimpleDateFormat("dd/MM/yyyy").format(deleteFile.getDATE_CREATE());
         exitAct.setDateCreate(fechaS);
         exitAct.setDateFile(fecha);
         exitAct.setState(1);
