@@ -53,6 +53,7 @@ public class FileActData {
          aux.setDateFile(dfile);
         aux.setNameRequest(file.getNAME_REQUEST());
         aux.setDepartmentRequest(file.getDEPARTMENT_REQUEST());
+        aux.setState(file.getSTATE());
        
      
         return aux;
@@ -69,7 +70,7 @@ public class FileActData {
         aux.setDepartmentRequest(file.getOWNER_DEPARTMENT());
         aux.setNameRequest(file.getOWNER_ID());
         aux.setFileId(file.getINDX());
-      
+        aux.setState(file.getSTATE());
       
         
       
@@ -89,6 +90,7 @@ public class FileActData {
         aux.setDATE_FILE(dfile);
         aux.setNAME_REQUEST(file.getNameRequest());
         aux.setDEPARTMENT_REQUEST(file.getDepartmentRequest());
+        aux.setSTATE (file.getState());
         return aux;
     }
     private String getYear(Date date){
