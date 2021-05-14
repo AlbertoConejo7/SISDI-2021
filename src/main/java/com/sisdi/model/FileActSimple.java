@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class FileActSimple {
     private int id;
+    private int state;
     private int fileId;
     private String fileName;
     private String observations;
