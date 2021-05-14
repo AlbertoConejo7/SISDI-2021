@@ -155,7 +155,7 @@ public class OfficeController {
     @GetMapping("/addOffice")
     public String addOffice(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user, HttpSession session) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
-        
+
         model.addAttribute("date", fecha);
         List<Department> departments = departmentData.listDepartments();
         Usuario u = userData.getUser(user.getUsername());
@@ -164,7 +164,7 @@ public class OfficeController {
         officeAdd.setDateCreate(fechaS);
         model.addAttribute("departamentos", departments);
         model.addAttribute("officeAdd", officeAdd);
-        session.setAttribute("user", user); 
+        session.setAttribute("user", user);
 
         return "offices/addOffice";
     }
@@ -296,10 +296,10 @@ public class OfficeController {
             log.info(o.toString());
             officeServiceImp.addOffice(o);
             pdfServiceImp.addPdf(pdf);
-            
+
             if (session.getAttribute("FilesOther") != null && session.getAttribute("FilesOther") != "") {
                 List<OtherDocs> others = (List<OtherDocs>) session.getAttribute("FilesOther");
-                for(OtherDocs od:others){
+                for (OtherDocs od : others) {
                     od.setOFFICE(o.getOFFNUMBER());
                 }
                 otherDocsServiceImp.addOtherDocs(others);
@@ -337,7 +337,7 @@ public class OfficeController {
             pdfServiceImp.addPdf(pdf);
             if (session.getAttribute("FilesOther") != null && session.getAttribute("FilesOther") != "") {
                 List<OtherDocs> others = (List<OtherDocs>) session.getAttribute("FilesOther");
-                for(OtherDocs od:others){
+                for (OtherDocs od : others) {
                     od.setOFFICE(o.getOFFNUMBER());
                 }
                 otherDocsServiceImp.addOtherDocs(others);
@@ -389,7 +389,7 @@ public class OfficeController {
     public String editOffice(@PathVariable String officeId, Model model) throws IOException {
         Office officeAct = officeServiceImp.searchOffice(officeId);
         OfficeSimple os = officeData.getOfficeSimple(officeAct);
-        List<OtherDocs> others=otherDocsServiceImp.getOtherDocs(officeId);
+        List<OtherDocs> others = otherDocsServiceImp.getOtherDocs(officeId);
         model.addAttribute("date", fecha);
         model.addAttribute("officeActual", os);
         model.addAttribute("title", "Ver Oficio");
@@ -409,8 +409,9 @@ public class OfficeController {
 
         return response;
     }
+
     @GetMapping(value = "/showDoc/{office}/{name}")
-    public ResponseEntity<byte[]> showDoc(@PathVariable String office,@PathVariable String name, Model model) {
+    public ResponseEntity<byte[]> showDoc(@PathVariable String office, @PathVariable String name, Model model) {
         OtherDocs other = otherDocsServiceImp.getOtherDocs(office, name);
         log.info(office);
         log.info(name);
@@ -423,7 +424,6 @@ public class OfficeController {
 
         return response;
     }
-
 
     @GetMapping("/listOffices")
     public String listOffice(Model model, @AuthenticationPrincipal User user) {
@@ -631,10 +631,10 @@ public class OfficeController {
         // actAdd.setFileName(actNumber);
         actAdd.setDateCreate(fechaS);
         actAdd.setDateFile(fechaS);
+        actAdd.setState(0);
 
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("actAdd", actAdd);
-
         return "offices/addAct";
     }
 
@@ -655,15 +655,63 @@ public class OfficeController {
         return "offices/pendingExpediente";
 
     }
+    
+    @PostMapping("/saveExitAct/{expedienteId}")
+    public String saveExitAct(Model model, @ModelAttribute("exitAct") FileActSimple exitAct, @ModelAttribute("expedienteId") String id, RedirectAttributes redirectAttrs) throws ParseException {
+
+        try {
+            Expediente deleteFile = expedienteServiceImp.getExpediente(id);
+            FileAct newAct = fileActData.fileActSimpleToFileAct(exitAct);
+            int deleteIndx = deleteFile.getINDX();
+            fileActServiceImp.addFileAct(newAct);
+            officeServiceImp.deleteOfficesExp(deleteIndx);
+            expedienteServiceImp.deleteExpediente(deleteIndx);
+        } catch (Exception excepcion) {
+            excepcion.printStackTrace();
+        }
+
+        return "offices/pendingExpediente";
+
+    }
+
+    @GetMapping("/exitAct/{deleteId}")
+    public String exitAct(Model model, @AuthenticationPrincipal User user, @PathVariable String deleteId) {
+        String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
+        String year = new SimpleDateFormat("yyyy").format(this.fecha);
+        model.addAttribute("date", fecha);
+        List<Usuario> usuarios = userData.listUsers();
+        Usuario u = userData.getUser(user.getUsername());
+        List<FileAct> actas = fileActServiceImp.listarFileActs();
+
+        Expediente deleteFile = expedienteServiceImp.getExpediente(deleteId);
+        FileActSimple exitAct = fileActData.SaveAct(deleteFile);        
+        String fecha = new SimpleDateFormat("dd/MM/yyyy").format(deleteFile.getDATE_RETURN());
+        exitAct.setDateCreate(fechaS);
+        exitAct.setDateFile(fecha);
+        exitAct.setState(1);
+        model.addAttribute("usuarios", usuarios);
+        model.addAttribute("exitAct", exitAct);
+        return "offices/exitAct";
+    }
+
     @GetMapping("/reportes")
     public String reportes(Model model, @AuthenticationPrincipal User user) {
-        List<Expediente> filesC=expedienteServiceImp.listarExpedientes();
+        List<Expediente> filesC = expedienteServiceImp.listarExpedientes();
         List<FileLoan> filesLoanC = fileLoanServiceImp.listarFileLoans();
         List<Office> officesC = officeServiceImp.listarOficios();
         model.addAttribute("filesC", filesC.size());
         model.addAttribute("filesLoanC", filesLoanC.size());
         model.addAttribute("officesC", officesC.size());
         return "/offices/report";
+    }
+
+    @GetMapping("/exitFile")
+    public String exitFile(Model model, TransferSimple transferFile, @AuthenticationPrincipal User user) {
+        String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
+        model.addAttribute("date", fecha);
+        List<Transfer> transfers = transferData.listExpiredTransfers(transferServiceImp.listTransfers());
+        model.addAttribute("expedientes", transfers);
+        return "offices/exitFile";
     }
 
 }
