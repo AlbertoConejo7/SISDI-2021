@@ -5,6 +5,9 @@ import com.sisdi.model.Transfer;
 import com.sisdi.model.TransferSimple;
 import com.sisdi.service.ExpedienteServiceImp;
 import com.sisdi.service.TransferServiceImp;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +71,7 @@ public class TransferData {
     }
 
     public List<TransferSimple> listTransfers() {
-        List<Transfer> list = transferServiceImp.listTrasfers();
+        List<Transfer> list = transferServiceImp.listTransfers();
         List<TransferSimple> lT = new ArrayList();
         for (Transfer t : list) {
             lT.add(this.getTransfer(t));
@@ -91,5 +94,24 @@ public class TransferData {
             expedientesV.put(obj);
         }
         return expedientesV;
+    }
+    
+    public List<Transfer> listExpiredTransfers(List<Transfer> transfers) {
+        List<Transfer> exp = new ArrayList();
+        for (Transfer e : transfers) {
+            LocalDate fHoy = LocalDate.now();
+            LocalDate localDate = this.convertToLocalDate(e.getDATE_TRANSFER());
+            long years = ChronoUnit.YEARS.between(localDate, fHoy);
+            if (years >= 5.0) {
+               exp.add(e);
+            }
+        }
+        return exp;
+    }
+    
+        public LocalDate convertToLocalDate(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }
