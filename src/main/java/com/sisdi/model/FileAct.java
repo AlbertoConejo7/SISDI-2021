@@ -25,6 +25,7 @@ public class FileAct implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int FILE_ID;
+    private int STATE;
     private String FILENAME;
     private String OBSERVATIONS;
     private String NAME_REQUEST;
