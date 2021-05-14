@@ -10,19 +10,20 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet"/>
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
         <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script th:src="@{/bootstrap/js/jquery.js}"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
         <script th:src="@{/js/notificacionesResponse.js}"></script>
         <script th:src="@{/js/notificacionesExpediente.js}"></script>
         <script th:src="@{/js/script.js}"></script>
-       
 
-       
+
+
     </head>
     <body>
         <header th:insert="menu/Head :: menu"></header>
@@ -30,10 +31,10 @@
             <br> <br> <br>
         </div>
         <div class="notice-top">
-        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
-             th:text="${mensaje}"
-             class="alert">
-        </div>
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+                 th:text="${mensaje}"
+                 class="alert">
+            </div>
         </div>
         <main>
             <div class="container">
@@ -48,11 +49,10 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align: center">Nombre del Expediente</th>
-                                            <th style="text-align: center">Fecha de Creacion</th>
+                                            <th style="text-align: center">Fecha de Creación</th>
                                             <th style="text-align: center">Ver Oficios</th>
-                                              <th style="text-align: center">Eliminar</th>
-                                             
-
+                                            <th style="text-align: center">Eliminar</th>                                            
+                                            <th style="text-align: center">Enviar</th> 
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -65,21 +65,21 @@
                                             <td th:text="${expediente.FILENAME}"></td>
                                             <td th:text="${#dates.format(expediente.DATE_CREATE, 'dd/MM/yyyy')}"></td>
                                             <td >
-                                                  
-                                                  <a th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${expediente.INDX})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
-                                               
-                                            </td>
-                                              <td >
-                                                  
-                                                 <!-- <button type="button" id="a-del" class="btn btn-danger" onclick="swal()" th:href="@{/offices/deleteFile/{deleteId} (deleteId=${expediente.FILENAME})}">Eliminar</button>-->
-                                                    <a type="button"  class="btn btn-danger"  th:href="@{/offices/addAct/{deleteId} (deleteId=${expediente.FILENAME})}"><img th:src="@{/images/delete.svg}" width="25" height="25"></a>  
-                                               
-                                            </td>
-                                          
-                                           
 
+                                                <a th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${expediente.INDX})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
+
+                                            </td>
+                                            <td >
+
+                                                <!-- <button type="button" id="a-del" class="btn btn-danger" onclick="swal()" th:href="@{/offices/deleteFile/{deleteId} (deleteId=${expediente.FILENAME})}">Eliminar</button>-->
+                                                <a type="button"  class="btn btn-danger"  th:href="@{/offices/addAct/{deleteId} (deleteId=${expediente.FILENAME})}"><img th:src="@{/images/delete.svg}" width="25" height="25"></a>  
+
+                                            </td>
+                                            <td>                                                 
+                                                <a type="button" class="fa fa-mail-forward" th:href="@{/offices/exitAct/{deleteId} (deleteId=${expediente.FILENAME})}"></a>  
+
+                                            </td>
                                         </tr>
-
                                     </tbody>
                                 </table>
                                 <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
@@ -91,8 +91,8 @@
             <script th:src="@{/js/calendar.js}"></script>
 
             <script>
-        
-    </script>
+
+            </script>
 
         </main>
     </body>
