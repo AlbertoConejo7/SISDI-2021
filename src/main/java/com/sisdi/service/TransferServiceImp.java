@@ -13,7 +13,7 @@ public class TransferServiceImp implements TransferService{
     private TransferDao transferDao;
 
     @Override
-    public List<Transfer> listTrasfers() {
+    public List<Transfer> listTransfers() {
         return (List<Transfer>) transferDao.findAll();
     }
 
@@ -24,7 +24,7 @@ public class TransferServiceImp implements TransferService{
 
     @Override
     public List<Transfer> listTransfersState(int state) {
-        List<Transfer> transfers=this.listTrasfers();
+        List<Transfer> transfers=this.listTransfers();
         List<Transfer> list= new ArrayList();
         for(Transfer t: transfers){
             if(t.getSTATE()== state){
@@ -36,7 +36,7 @@ public class TransferServiceImp implements TransferService{
     
     @Override
     public Transfer searchTransfer(int INDX){
-         List<Transfer> transfers=this.listTrasfers();
+         List<Transfer> transfers=this.listTransfers();
          Transfer tr= new Transfer();
          for(Transfer t: transfers){
             if(t.getINDX()== INDX){
