@@ -305,7 +305,7 @@ public class IndexController {
         Department depR = departmentData.getDepartment(receptor);
         Department depE = departmentData.getDepartment(emisor);
         String year = new SimpleDateFormat("yyyy").format(this.fecha);
-        List<Office> offices = officeServiceImp.listarOficios();
+        List<Office> offices = officeServiceImp.listOfficeByDepartment(emisor);
         Office of = offices.get(offices.size() - 1);
         int INDX = of.getINDX();
         String offNumber = "OFICIO-MSPH-" + depE.getCod() + "-" + depR.getCod() + "-" + (INDX + 1) + "-" + year;
@@ -322,7 +322,7 @@ public class IndexController {
 
     @GetMapping("/perfil")
     public String showPerfil(Model model, UsuarioSimple perfil, @AuthenticationPrincipal User user, HttpSession session) {
-
+        
         Usuario u = userData.getUser(user.getUsername());
         boolean signature = signatureServiceImp.userSignature(user.getUsername());
         perfil.setName(u.getTempUser().getName());
