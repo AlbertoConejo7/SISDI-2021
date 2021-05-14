@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface TransferService {
     
-    List<Transfer> listTrasfers();
+    List<Transfer> listTransfers();
     
     Transfer addTransfer(Transfer transfer);
     
