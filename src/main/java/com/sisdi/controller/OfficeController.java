@@ -56,6 +56,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import com.sisdi.service.ConservationTableServiceImpl;
+import com.sisdi.model.TableSimple;
+import com.sisdi.data.ConservationTableData;
+import com.sisdi.model.ConservationTable;
 
 @Controller
 @Slf4j
@@ -114,6 +118,10 @@ public class OfficeController {
 
     @Autowired
     private OtherDocsServiceImp otherDocsServiceImp;
+    @Autowired
+    private ConservationTableServiceImpl conservationServiceImpl;
+       @Autowired
+    private  ConservationTableData  conservationTableData;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -719,5 +727,113 @@ public class OfficeController {
         model.addAttribute("expedientes", transfers);
         return "offices/exitFile";
     }
+  
+    @GetMapping("/addConservationTable")
+    public String addTable(Model model, TableSimple tableAdd, @AuthenticationPrincipal User user, HttpSession session) {
+        String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
+        
+        model.addAttribute("date", fecha);
+        List<Department> departments = departmentData.listDepartments();
+        Usuario u = userData.getUser(user.getUsername());
+        tableAdd.setAutor(u.getTempUser().getName());
+        tableAdd.setFondo(" Municipalidad de San Pablo de Heredia.");
+        tableAdd.setDate_create(fechaS);
+        tableAdd.setFirst_date(fechaS);
+        tableAdd.setLast_date(fechaS);
+        model.addAttribute("departamentos", departments);
+        model.addAttribute("tableAdd", tableAdd);
+        session.setAttribute("user", user); 
+        model.addAttribute("date", fecha);
 
+        return "offices/addConservationTable";
+    }
+    
+    
+     @PostMapping("/saveTable")
+    public String saveTable(Model model, @ModelAttribute("tableAdd") TableSimple table, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+         
+            table.setDepartment_request("Archivo Central");
+           ConservationTable table2 = conservationTableData.getTable(table);
+          conservationServiceImpl.addConservationTable(table2);
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Tabla de Conservacion agregada correctamente")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al agregar Tabla de Conservacion ")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/addConservationTable";
+
+    }
+    
+    @GetMapping("/listTables")
+    public String listTables(Model model, @AuthenticationPrincipal User user) {
+        
+        List<ConservationTable> tables = conservationServiceImpl.listConservationTable();
+        model.addAttribute("tables", tables);
+      
+        return "offices/listTables";
+    }
+    
+       @GetMapping("/editTable/{tableId}")
+    public String editTable(@PathVariable int tableId, Model model, @AuthenticationPrincipal User user, HttpSession session) throws IOException {
+         List<Department> departments = departmentData.listDepartments();
+         model.addAttribute("departamentos", departments);
+         ConservationTable tableAdd = conservationServiceImpl.searchTable(tableId);
+         TableSimple ts = conservationTableData.getTableSimple(tableAdd);
+         log.info(ts.toString());
+         model.addAttribute("tableActual", ts);
+         session.setAttribute("user", user); 
+        
+  
+          return "offices/editTable";
+  
+        
+    }
+    
+      @GetMapping("/deleteTable/{tableId}")
+    public String deleteTable(@PathVariable int tableId, Model model, @AuthenticationPrincipal User user, HttpSession session) throws IOException {
+
+        ConservationTable tableAdd = conservationServiceImpl.searchTable(tableId); 
+        conservationServiceImpl.deleteTable(tableAdd);
+
+          return "redirect:/offices/listTables";
+           
+    }
+    
+     @GetMapping("/viewTable/{tableId}")
+    public String viewTable(@PathVariable int tableId, Model model,@AuthenticationPrincipal User user, HttpSession session) throws IOException {
+  
+            ConservationTable tableActual = conservationServiceImpl.searchTable(tableId);
+            model.addAttribute("tableActual", tableActual);
+        
+        return "offices/viewTable";
+    }
+    
+
+     @PostMapping("/saveEditTable")
+    public String saveEditTable(Model model, @ModelAttribute("tableActual") TableSimple table, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+             String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);    
+            log.info(table.toString());
+            table.setDate_create(fechaS); 
+            table.setLast_date(fechaS);    
+            ConservationTable ts =conservationTableData.getTable(table);
+            conservationServiceImpl.addConservationTable(ts);
+ 
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Tabla de Conservacion editado correctamente")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al editar Tabla de Conservacion ")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/addConservationTable";
+
+    }
+    
 }

@@ -38,6 +38,15 @@
                              <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/listActs}">Actas</a> 
                         </div>
                     </li>
+                    <li th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" class="nav-item dropdown">
+                        <a class="nav-link text-light font-weight-bold px-3 dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"> TABLAS DE PLAZO</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"  th:href="@{/offices/addConservationTable}">Agregar Tabla </a> 
+                            <a class="dropdown-item"th:href="@{/offices/listTables}">Lista de Tablas </a>
+                            
+                           
+                        </div>
+                    </li>
                   
                      <li class="nav-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" >
                         <a class="nav-link text-light font-weight-bold px-3" th:href="@{/offices/reportes}" >REPORTES</a>

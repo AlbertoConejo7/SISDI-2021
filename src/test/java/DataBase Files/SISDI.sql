@@ -239,3 +239,27 @@ constraint FK_NAME_REQUEST_ACT foreign key (NAME_REQUEST) references T_USER(TEMP
 constraint FK_DEPARTMENT_REQUEST_ACT foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME)
 
 );
+
+CREATE TABLE T_CONSERVATIONTABLE(
+INDX int auto_increment,
+FONDO varchar(45),
+SUBFONDO varchar(100),
+SECTION longtext,
+AUTOR varchar(45),
+SERIEDOCUMENTAL varchar(45),
+ISORIGINAL varchar(45),
+CANTCOPIES varchar(45),
+CONTENTS longtext,
+SUPPORT varchar(45),
+VALIDITY varchar(45),
+CANTMETERS varchar(45),
+EXTREMEDATES varchar(45),
+OBSERVATIONS longtext,
+DEPARTMENT_REQUEST varchar(45),
+DATE_CREATE date,
+FINALTIME varchar(45),
+FIRST_DATE date,
+LAST_DATE date,
+constraint PK_CONSERVATIONTABLE primary key(INDX)
+);
+
