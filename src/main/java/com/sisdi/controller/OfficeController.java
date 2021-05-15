@@ -173,7 +173,7 @@ public class OfficeController {
     public String sendFile(Model model, FileSimple fileSend, @AuthenticationPrincipal User user) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
         model.addAttribute("date", fecha);
-        List<Expediente> expedientes = fileData.listExpVencidos(expedienteServiceImp.listExpedienteByEmisor(user.getUsername()));
+        List<Expediente> expedientes = fileData.listExpVencidos(expedienteServiceImp.listarExpedientesByUserState(0, user.getUsername()));
 
         List<Usuario> usuarios = userData.listUsers();
         Usuario u = userData.getUser(user.getUsername());
@@ -466,14 +466,12 @@ public class OfficeController {
         model.addAttribute("date", fecha);
         log.info("ejecutando el controlador Oficios");
         model.addAttribute("officesPending", offices);
-
-        // model.addAttribute("timeOuts", time);
         return "offices/pendingOffice";
     }
 
     @GetMapping("/pendingExpediente")
     public String pendingExpediente(Model model, @AuthenticationPrincipal User user) {
-        List<Expediente> expedientes = expedienteServiceImp.listExpedienteByUser(user.getUsername());
+        List<Expediente> expedientes = expedienteServiceImp.listarExpedientesByUserState(0,user.getUsername());
         log.info(expedientes.toString());
         model.addAttribute("expedientesPending", expedientes);
         return "offices/pendingExpediente";
@@ -561,7 +559,14 @@ public class OfficeController {
     public String authSignature(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
         return "offices/authSignature";
     }
-
+    @GetMapping("/transfersExpediente")
+    public String transfersExpediente(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
+        List<Expediente> list = expedienteServiceImp.listarExpedientesByState(1);
+        log.info(list.toString());
+        model.addAttribute("transfersFiles", list);
+        return "offices/transfersExpediente";
+    }
+    
     @GetMapping("/transfersFiles")
     public String transfersFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
         List<TransferSimple> list = transferData.listTransfers();
