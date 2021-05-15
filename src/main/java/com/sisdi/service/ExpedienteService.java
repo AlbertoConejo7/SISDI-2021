@@ -23,6 +23,8 @@ public interface ExpedienteService {
     List<Expediente> listExpedienteByEmisor(String emisor);
 
     List<Expediente> listExpedienteByReceptor(String receptor);
+    
+    List<Expediente> listarExpedientesByUserState(int s, String name);
 
     Expediente getExpediente(String filename);
     
