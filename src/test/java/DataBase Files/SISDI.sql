@@ -227,6 +227,7 @@ create table T_SIGNATURE(
 CREATE TABLE T_FILEACT(
 ID int auto_increment,
 FILE_ID INT,
+STATE INT,
 FILENAME varchar(100),
 OBSERVATIONS longtext, 
 NAME_REQUEST varchar(45),
