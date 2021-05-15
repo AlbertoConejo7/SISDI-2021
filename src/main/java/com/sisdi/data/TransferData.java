@@ -74,7 +74,11 @@ public class TransferData {
         List<Transfer> list = transferServiceImp.listTransfers();
         List<TransferSimple> lT = new ArrayList();
         for (Transfer t : list) {
-            lT.add(this.getTransfer(t));
+            TransferSimple aux = this.getTransfer(t);
+            if(!aux.getNombreExpediente().equals("")){
+                lT.add(aux);
+            }
+            
         }
         return lT;
     }
