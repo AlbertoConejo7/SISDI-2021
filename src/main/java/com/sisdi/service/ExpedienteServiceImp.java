@@ -164,7 +164,11 @@ public class ExpedienteServiceImp implements ExpedienteService {
     @Override
     public String getFileName(int indx) {
         Expediente e = this.getExpediente(indx);
-        return e.getFILENAME();
+        String name = "";
+        if(e!=null){
+            name=e.getFILENAME();
+        }
+        return name;
     }
 
     @Override
@@ -206,6 +210,18 @@ public class ExpedienteServiceImp implements ExpedienteService {
         List<Expediente> aux = new ArrayList();
         for (Expediente e : list) {
             if (e.getSTATE()==s) {
+                aux.add(e);
+            }
+        }
+        return aux;
+    }
+
+    @Override
+    public List<Expediente> listarExpedientesByUserState(int s, String name) {
+         List<Expediente> list = this.listarExpedientesByState(s);
+         List<Expediente> aux = new ArrayList();
+        for (Expediente e : list) {
+            if (e.getOWNER_ID().equals(name)) {
                 aux.add(e);
             }
         }
