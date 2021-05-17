@@ -684,7 +684,7 @@ public class OfficeController {
             excepcion.printStackTrace();
         }
 
-        return "offices/pendingExpediente";
+        return "offices/listActs";
 
     }
 
@@ -718,15 +718,6 @@ public class OfficeController {
         model.addAttribute("filesLoanC", filesLoanC.size());
         model.addAttribute("officesC", officesC.size());
         return "/offices/report";
-    }
-
-    @GetMapping("/exitFile")
-    public String exitFile(Model model, TransferSimple transferFile, @AuthenticationPrincipal User user) {
-        String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
-        model.addAttribute("date", fecha);
-        List<Transfer> transfers = transferData.listExpiredTransfers(transferServiceImp.listTransfers());
-        model.addAttribute("expedientes", transfers);
-        return "offices/exitFile";
     }
   
     @GetMapping("/addConservationTable")
