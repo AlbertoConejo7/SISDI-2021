@@ -80,6 +80,17 @@ public final class UserData {
         return aux;
     }
     
+    public List<Usuario> listUsersStatus() {
+        List<Usuario> aux = new ArrayList();
+        for (Usuario u : listUser.values()) {
+            if(u.getStatus()==true){
+                aux.add(u);
+            }
+            
+        }
+        return aux;
+    }
+    
     public List<Usuario> listUsersByDepartment(String name) {
         List<Usuario> aux = new ArrayList();
         for (Usuario u : listUser.values()) {
