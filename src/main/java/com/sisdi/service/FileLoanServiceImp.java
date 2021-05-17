@@ -97,7 +97,9 @@ public class FileLoanServiceImp implements FileLoanService{
     public void reviewFile(){
         List<FileLoan> list = this.listarFileLoanByState(1);
         for (FileLoan e : list) {
-            if (e.getDATE_RETURN().equals(fecha)) {
+            String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
+            String fechaR = new SimpleDateFormat("dd/MM/yyyy").format(e.getDATE_RETURN());
+            if (fechaR.equals(fechaS)) {
                 e.setSTATE(2);
                 Expediente ex = expedienteServiceImp.getExpediente(e.getFILENAME());
                 ex.setSTATE(1);

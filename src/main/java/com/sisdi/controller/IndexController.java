@@ -464,17 +464,11 @@ public class IndexController {
     @PostMapping("/returnFile")
     public ResponseEntity<?> returnFile(Model model, @AuthenticationPrincipal User user, HttpSession session) {
         JSONObject obj = new JSONObject();
-        
         try {
-            //fileLoanService.reviewFile();
-            FileLoan fl = fileLoanService.searchFileLoan(1);
-            log.info(fl.toString());
-            if (fl.getDATE_RETURN().equals(fecha)) {
-                obj.put("Evaluado", "fechas iguales");
-            }else{
-            obj.put("Evaluado", "fechas no iguales");}
+            fileLoanService.reviewFile();
+            obj.put("Evaluado", true);
         } catch (Exception e) {
-            obj.put("Evaluado", "no busco");
+            obj.put("Evaluado", false);
         }
         return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
