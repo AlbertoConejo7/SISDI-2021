@@ -60,6 +60,10 @@ import com.sisdi.service.ConservationTableServiceImpl;
 import com.sisdi.model.TableSimple;
 import com.sisdi.data.ConservationTableData;
 import com.sisdi.model.ConservationTable;
+import com.sisdi.model.TempUser;
+import com.sisdi.model.UserEntity;
+import com.sisdi.service.TempUserServiceImp;
+import com.sisdi.service.UserServiceImp;
 
 @Controller
 @Slf4j
@@ -118,10 +122,18 @@ public class OfficeController {
 
     @Autowired
     private OtherDocsServiceImp otherDocsServiceImp;
+    
     @Autowired
     private ConservationTableServiceImpl conservationServiceImpl;
-       @Autowired
+    
+    @Autowired
     private  ConservationTableData  conservationTableData;
+    
+    @Autowired
+    private UserServiceImp userServiceImp;
+
+    @Autowired
+    private TempUserServiceImp tempUserServiceImp;
 
     public int addFile(String receptor, String emisor, String year, String ownerEmail, String receiverEmail) throws ParseException {
         Expediente e = expedienteServiceImp.searchFile(receptor, emisor, year);
@@ -834,6 +846,141 @@ public class OfficeController {
         log.info(expedientes.toString());
         model.addAttribute("loans", expedientes);
         return "offices/fileLoans";
+    }
+    
+    @GetMapping("/listUsers")
+    public String listUsers(Model model, @AuthenticationPrincipal User user) {
+
+        List<Usuario> users = userData.listUsersStatus();
+        model.addAttribute("Usuarios", users);
+
+        return "offices/listUsers";
+    }
+
+    @GetMapping("/addUser")
+    public String addUser(Model model, Usuario userAdd, @AuthenticationPrincipal User user, HttpSession session) {
+        List<Department> departments = departmentData.listDepartments();
+        model.addAttribute("departamentos", departments);
+        model.addAttribute("userAdd", userAdd);
+        model.addAttribute("date", fecha);
+
+        return "offices/addUser";
+    }
+
+    @GetMapping("/editUser/{userEmail}")
+    public String addUser(@PathVariable String userEmail, Model model, Usuario userAdd, @AuthenticationPrincipal User user, HttpSession session) {
+        List<Department> departments = departmentData.listDepartments();
+        Usuario u = userData.getUser(userEmail);
+        model.addAttribute("departamentos", departments);
+        model.addAttribute("userAdd", u);
+        model.addAttribute("date", fecha);
+
+        return "offices/editUser";
+    }
+
+    @PostMapping("/saveUser")
+    public String saveUser(Model model, @ModelAttribute("userAdd") Usuario userAdd, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+            log.info(userAdd.toString());
+            Department d = departmentData.getDepartment(userAdd.getDepartment().getName());
+            userAdd.setDepartment(d);
+            userAdd.setIsBoss(false);
+            userAdd.setStatus(true);
+
+            TempUser tm = userAdd.getTempUser();
+
+            UserEntity us = new UserEntity();
+            us.setTempuser(tm.getEmail());
+            us.setDepartment(d.getId());
+            us.setIsboss(0);
+            us.setStatus(1);
+            us.setPassword(userAdd.getPassword());
+
+            tempUserServiceImp.addTempUser(tm);
+            userServiceImp.addUser(us);
+            userData.init();
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Usuario agregado correctamente")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al agregar usuario")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/addUser";
+
+    }
+
+    @PostMapping("/updateUser")
+    public String updateUser(Model model, @ModelAttribute("userAdd") Usuario userAdd, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+            Usuario u = userData.getUser(userAdd.getTempUser().getEmail());
+            log.info(userAdd.toString());
+            Department d = departmentData.getDepartment(userAdd.getDepartment().getName());
+
+            TempUser tm = u.getTempUser();
+            tm.setName(userAdd.getTempUser().getName());
+
+            UserEntity us = userServiceImp.getUser(tm.getEmail());
+            us.setPassword(userAdd.getPassword());
+            us.setDepartment(d.getId());
+
+            tempUserServiceImp.addTempUser(tm);
+            userServiceImp.addUser(us);
+            userData.init();
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Usuario actualizado correctamente")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al actualizar usuario")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/listUsers";
+
+    }
+
+    @GetMapping("/signUserEnable/{userEmail}")
+    public String signUserEnable(@PathVariable String userEmail, Model model, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+            UserEntity us = userServiceImp.getUser(userEmail);
+            us.setIsboss(1);
+            userServiceImp.addUser(us);
+            userData.init();
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Usuario ahora necesita firma")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al actualizar usuario")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/listUsers";
+
+    }
+
+    @GetMapping("/deleteUser/{userEmail}")
+    public String deleteUser(@PathVariable String userEmail, Model model, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+            Usuario u = userData.getUser(userEmail);
+            UserEntity us = userServiceImp.getUser(userEmail);
+            us.setStatus(0);
+            userServiceImp.addUser(us);
+            userData.init();
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Usuario eliminado correctamente")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al eliminar usuario")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/listUsers";
+
     }
     
 }
