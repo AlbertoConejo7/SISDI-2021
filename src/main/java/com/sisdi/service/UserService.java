@@ -7,4 +7,5 @@ public interface UserService {
     List<UserEntity> listUsers();
     UserEntity addUser(UserEntity u);
     UserEntity getUser(String u);
+    void deleteUser(UserEntity u);
 }
