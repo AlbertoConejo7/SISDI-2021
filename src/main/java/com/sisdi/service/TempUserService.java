@@ -6,4 +6,5 @@ import java.util.List;
 public interface TempUserService {
     List<TempUser> listarTempUser();
     TempUser addTempUser(TempUser u);
+    void deleteTempUser(TempUser u);
 }
