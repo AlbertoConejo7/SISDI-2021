@@ -10,6 +10,7 @@ import com.sisdi.data.TransferData;
 import com.sisdi.data.UserData;
 import com.sisdi.model.Department;
 import com.sisdi.model.Expediente;
+import com.sisdi.model.FileLoan;
 import com.sisdi.model.Office;
 import com.sisdi.model.OtherDocs;
 import com.sisdi.model.Signature;
@@ -19,6 +20,7 @@ import com.sisdi.model.Usuario;
 import com.sisdi.model.UsuarioSimple;
 import com.sisdi.service.ExpedienteServiceImp;
 import com.sisdi.service.FileActServiceImp;
+import com.sisdi.service.FileLoanServiceImp;
 import com.sisdi.service.OfficeServiceImp;
 import com.sisdi.service.SignatureServiceImp;
 import com.sisdi.service.TempUserServiceImp;
@@ -54,6 +56,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.sisdi.signature.PDFSignatureInfo;
 import com.sisdi.signature.PDFSignatureInfoParser;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -84,6 +88,9 @@ public class IndexController {
 
     @Autowired
     private DocsData docsData;
+    
+    @Autowired
+    private FileLoanServiceImp fileLoanService;
 
     @Autowired
     private TransferData transferData;
@@ -405,5 +412,70 @@ public class IndexController {
         others.put("Eliminados", officeServiceImp.listOfficeByState3().size());
         data.put(others);
         return new ResponseEntity(data.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    
+    public Date convertToDateViaInstant(LocalDateTime dateToConvert) {
+    return java.util.Date
+      .from(dateToConvert.atZone(ZoneId.systemDefault())
+      .toInstant());
+}
+    
+    @PostMapping("/approval")
+    public ResponseEntity<?> approval(Model model, @AuthenticationPrincipal User user, @RequestParam("ID") int id , HttpSession session, RedirectAttributes redirectAttrs) {
+        JSONObject obj = new JSONObject();
+        try {
+            FileLoan fl = fileLoanService.searchFileLoan(id);
+            fl.setSTATE(1);
+            Expediente e = expedienteServiceImp.getExpediente(fl.getFILENAME());
+            e.setSTATE(2);
+            e.setRECEIVER_ID(fl.getNAME_REQUEST());
+            LocalDateTime today = LocalDateTime.now();     //Today
+            LocalDateTime newDate = today.plusDays(7);     //Plus 7 day
+            fl.setDATE_RETURN(convertToDateViaInstant(newDate));
+            fileLoanService.addFileLoan(fl);
+            expedienteServiceImp.addExpediente(e);
+            obj.put("Aceptado", true);
+            session.setAttribute("loansMessage", "Solicitud Aceptada");
+            session.setAttribute("claseLoan", "success");
+        } catch (Exception e) {
+            obj.put("Aceptado", false);
+        }
+
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    
+    @PostMapping("/rejected")
+    public ResponseEntity<?> rejected(Model model, @AuthenticationPrincipal User user, @RequestParam("ID") int id , HttpSession session, RedirectAttributes redirectAttrs) {
+        JSONObject obj = new JSONObject();
+        try {
+            FileLoan fl = fileLoanService.searchFileLoan(id);
+            fl.setSTATE(2);
+            fileLoanService.addFileLoan(fl);
+            obj.put("Aceptado", true);
+            session.setAttribute("loansMessage", "Solicitud Rechazada");
+            session.setAttribute("claseLoan", "success");
+        } catch (Exception e) {
+            obj.put("Aceptado", false);
+        }
+
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
+    }
+    
+    @PostMapping("/returnFile")
+    public ResponseEntity<?> returnFile(Model model, @AuthenticationPrincipal User user, HttpSession session) {
+        JSONObject obj = new JSONObject();
+        
+        try {
+            //fileLoanService.reviewFile();
+            FileLoan fl = fileLoanService.searchFileLoan(1);
+            log.info(fl.toString());
+            if (fl.getDATE_RETURN().equals(fecha)) {
+                obj.put("Evaluado", "fechas iguales");
+            }else{
+            obj.put("Evaluado", "fechas no iguales");}
+        } catch (Exception e) {
+            obj.put("Evaluado", "no busco");
+        }
+        return new ResponseEntity(obj.toString(), new HttpHeaders(), HttpStatus.OK);
     }
 }

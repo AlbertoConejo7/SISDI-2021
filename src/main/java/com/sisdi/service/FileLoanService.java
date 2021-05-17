@@ -12,4 +12,8 @@ public interface FileLoanService {
     
     List<FileLoan> listFileLoanByDepartment(String dep);
     List<FileLoan> listFileLoanByYear(int y);
+    
+    public List<FileLoan> listarFileLoanByState(int s);
+    
+    void reviewFile();
 }

@@ -15,7 +15,7 @@
         <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-        
+
     </head>
     <body>
         <header th:insert="menu/Head :: menu"></header>
@@ -23,7 +23,7 @@
             <br> <br> <br>
         </div>
         <div class="notice" id="pageMessages">
-            
+
         </div>
         <div class="imgen">
             <img th:src="@{/images/SISDI.png}">
@@ -35,8 +35,24 @@
             $(document).ready(function () {
                 doAjaxExp("pageMessages");
                 doAjaxRes("pageMessages");
+                returnFile();
             });
+            function returnFile() {
+                var id = "return";
+                $.ajax({
+                    type: "POST",
+                    url: '/returnFile',
+                    data: {"ID": id},
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res.Evaluado);
 
+                    },
+                    error: function (err) {
+                        console.error(err);
+                    }
+                });
+            }
         </script>
     </body>
 </html>

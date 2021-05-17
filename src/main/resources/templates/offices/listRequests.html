@@ -27,6 +27,12 @@
         <div class="mt-2 col-md-1">
             <br> <br> <br>
         </div>
+        <div class="notice-top">
+            <div th:classappend="'alert-' + (${claseLoan != null} ? ${claseLoan} : info)" th:if="${loansMessage != null}"
+                 th:text="${loansMessage}"
+                 class="alert">
+            </div>
+        </div>
         <main>
             <div class="container mb-3">
                 <div id="titulo">

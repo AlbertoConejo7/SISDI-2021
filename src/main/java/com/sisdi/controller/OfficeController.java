@@ -673,6 +673,7 @@ public class OfficeController {
     public String saveExitAct(Model model, @ModelAttribute("exitAct") FileActSimple exitAct, @ModelAttribute("expedienteId") String id, RedirectAttributes redirectAttrs) throws ParseException {
 
         try {
+            log.info(exitAct.toString());
             Expediente deleteFile = expedienteServiceImp.getExpediente(id);
             FileAct newAct = fileActData.fileActSimpleToFileAct(exitAct);
             int deleteIndx = deleteFile.getINDX();
@@ -834,6 +835,14 @@ public class OfficeController {
         }
         return "redirect:/offices/addConservationTable";
 
+    }
+    
+    @GetMapping("/fileLoans")
+    public String fileLoans(Model model, @AuthenticationPrincipal User user) {
+        List<Expediente> expedientes = expedienteServiceImp.listarExpedientesByUserReceiverState(2,user.getUsername());
+        log.info(expedientes.toString());
+        model.addAttribute("loans", expedientes);
+        return "offices/fileLoans";
     }
     
 }

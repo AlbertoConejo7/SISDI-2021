@@ -64,8 +64,8 @@
 
                                 <tr th:each="fileAct : ${fileActs}" th:if="${fileActs != null and !fileActs.empty}">
                                     <td th:text="${fileAct.fileName}"></td>
-                                    <td  th:text="${#dates.format(fileAct.dateCreate, 'dd/MM/yyyy')}"></td>
-                                    <td  th:text="${#dates.format(fileAct.dateFile, 'dd/MM/yyyy')}"></td>
+                                    <td  th:text="${fileAct.dateCreate}"></td>
+                                    <td  th:text="${fileAct.dateFile}"></td>
 
                                     <td  th:text="${fileAct.observations}"></td>
 

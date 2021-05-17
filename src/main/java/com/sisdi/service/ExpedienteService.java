@@ -42,4 +42,6 @@ public interface ExpedienteService {
     
     void deleteExpediente(int id);
     
+    List<Expediente> listarExpedientesByUserReceiverState(int s, String name);
+    
 }

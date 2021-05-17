@@ -227,4 +227,16 @@ public class ExpedienteServiceImp implements ExpedienteService {
         }
         return aux;
     }
+    
+    @Override
+    public List<Expediente> listarExpedientesByUserReceiverState(int s, String name) {
+         List<Expediente> list = this.listarExpedientesByState(s);
+         List<Expediente> aux = new ArrayList();
+        for (Expediente e : list) {
+            if (e.getRECEIVER_ID().equals(name)) {
+                aux.add(e);
+            }
+        }
+        return aux;
+    }
 }

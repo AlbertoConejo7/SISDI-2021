@@ -59,7 +59,7 @@
 
                                 <tr th:each="fileLoan : ${fileLoans}" th:if="${fileLoans != null and !fileLoans.empty}">
                                     <td th:text="${fileLoan.fileName}"></td>
-                                    <td  th:text="${#dates.format(fileLoan.dateCreate, 'dd/MM/yyyy')}"></td>
+                                    <td  th:text="${fileLoan.dateCreate}"></td>
                                     <td  th:text="${fileLoan.nameRequest}"></td>
                                     <td  th:text="${fileLoan.ofiicesAmount}"></td>
                                     <td>

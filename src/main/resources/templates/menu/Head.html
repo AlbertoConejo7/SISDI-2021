@@ -24,7 +24,8 @@
                             <a class="dropdown-item" th:href="@{/offices/pendingExpediente}">Expedientes</a> 
                             <a class="dropdown-item" th:if="${session.Signature!='' && session.Signature!=null}"  th:href="@{/offices/requestFile}">Solicitar expediente</a>
                             <a class="dropdown-item"  style="cursor:pointer;" role="button"  th:if="${session.Signature=='' || session.Signature==null}"  onclick="doAjaxAuthSign('/offices/requestFile')">Solicitar expediente</a>
-                            <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/borrowedFiles}">Expedientes Prestados</a> 
+                            <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/borrowedFiles}">Expedientes Prestados</a>
+                            <a class="dropdown-item" th:if="${session.user.username!='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/fileLoans}">Expedientes Prestados</a>
                             <a class="dropdown-item" th:if="${session.user.username=='archivocentral@sanpablo.go.cr'}" th:href="@{/offices/listRequests}">Solicitudes de Prestamos</a>
                             <a class="dropdown-item dropdown-toggle " href="#" id="navbardrop" data-toggle="dropdown"> Traslados </a>
                             <div class="dropdown-menu dropright">
