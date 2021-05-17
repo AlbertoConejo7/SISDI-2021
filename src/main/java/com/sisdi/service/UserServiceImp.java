@@ -31,5 +31,10 @@ public class UserServiceImp implements UserService{
         }
         return us;
     }
+
+    @Override
+    public void deleteUser(UserEntity u) {
+        userDao.delete(u);
+    }
     
 }
