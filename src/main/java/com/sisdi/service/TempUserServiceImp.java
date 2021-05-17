@@ -21,5 +21,9 @@ public class TempUserServiceImp implements TempUserService{
     public TempUser addTempUser(TempUser u) {
         return tempUserDao.save(u);
     }
+    @Override
+    public void deleteTempUser(TempUser u){
+        tempUserDao.delete(u);
+    }
     
 }
