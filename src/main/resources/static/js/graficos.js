@@ -123,7 +123,7 @@ function generateGraphicDepFileLoan(departamentos) {
             type: 'pie'
         },
         title: {
-            text: 'Expedientes prestados por Departamento'
+            text: 'Solicitudes de préstamo por Departamento'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y}</b>'
@@ -140,7 +140,7 @@ function generateGraphicDepFileLoan(departamentos) {
             }
         },
         series: [{
-                name: 'Expedientes prestados',
+                name: 'Solicitudes realizadas',
                 colorByPoint: true,
                 data: departamentos
             }]
