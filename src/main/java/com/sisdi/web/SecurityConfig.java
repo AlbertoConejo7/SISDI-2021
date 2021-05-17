@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure (AuthenticationManagerBuilder auth) throws Exception{
         this.userData.init();
-        for(Usuario u:userData.getUsuarios().values()){
+        for(Usuario u:userData.listUsersStatus()){
             auth.inMemoryAuthentication()
                     .withUser(u.getTempUser().getEmail())
                     .password("{noop}"+u.getPassword())
