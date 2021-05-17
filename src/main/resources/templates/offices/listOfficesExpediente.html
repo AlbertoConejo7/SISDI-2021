@@ -73,8 +73,14 @@
                                         <td th:if="${office.STATE == 1}" th:text="Recibido"></td>
                                         <td th:if="${office.STATE == 2}" th:text="Respondido"></td>
                                         <td th:if="${office.STATE == 3}" th:text="Anulado"></td>
-                                        <td th:if="${office.STATE != 3}">
+                                        <td th:if="${office.STATE != 3 && session.usuarioCompleto.isBoss}">
                                             <a th:href="@{/offices/editOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/edit.svg}"></a>
+                                        </td>
+                                        <td th:if="${!session.usuarioCompleto.isBoss}">
+                                            <a></a>
+                                        </td>
+                                        <td th:if="${office.STATE == 3 && session.usuarioCompleto.isBoss}">
+                                            <a ></a>
                                         </td>
                                         <td >
                                             <a th:href="@{/offices/viewOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
