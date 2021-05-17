@@ -961,6 +961,25 @@ public class OfficeController {
         return "redirect:/offices/listUsers";
 
     }
+    @GetMapping("/signUserDisabled/{userEmail}")
+    public String signUserDisabled(@PathVariable String userEmail, Model model, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
+        try {
+            UserEntity us = userServiceImp.getUser(userEmail);
+            us.setIsboss(0);
+            userServiceImp.addUser(us);
+            userData.init();
+
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Usuario ya no necesita firma")
+                    .addFlashAttribute("clase", "success");
+        } catch (Exception e) {
+            redirectAttrs
+                    .addFlashAttribute("mensaje", "Error al actualizar usuario")
+                    .addFlashAttribute("clase", "alert alert-danger");
+        }
+        return "redirect:/offices/listUsers";
+
+    }
 
     @GetMapping("/deleteUser/{userEmail}")
     public String deleteUser(@PathVariable String userEmail, Model model, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
