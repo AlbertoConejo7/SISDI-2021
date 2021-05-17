@@ -50,9 +50,7 @@
                                         <tr>
                                             <th style="text-align: center">Nombre del Expediente</th>
                                             <th style="text-align: center">Fecha de Creación</th>
-                                            <th style="text-align: center">Ver Oficios</th>
-                                            <th style="text-align: center">Eliminar</th>                                            
-                                            <th style="text-align: center">Enviar</th> 
+                                            <th style="text-align: center">Ver Oficios</th>                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,17 +66,7 @@
 
                                                 <a th:href="@{/offices/listExpedient/{expedienteId} (expedienteId=${expediente.INDX})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
 
-                                            </td>
-                                            <td >
-
-                                                <!-- <button type="button" id="a-del" class="btn btn-danger" onclick="swal()" th:href="@{/offices/deleteFile/{deleteId} (deleteId=${expediente.FILENAME})}">Eliminar</button>-->
-                                                <a type="button"  class="btn btn-danger"  th:href="@{/offices/addAct/{deleteId} (deleteId=${expediente.FILENAME})}"><img th:src="@{/images/delete.svg}" width="25" height="25"></a>  
-
-                                            </td>
-                                            <td>                                                 
-                                                <a type="button" class="fa fa-mail-forward" th:href="@{/offices/exitAct/{deleteId} (deleteId=${expediente.FILENAME})}"></a>  
-
-                                            </td>
+                                            </td>                                            
                                         </tr>
                                     </tbody>
                                 </table>
