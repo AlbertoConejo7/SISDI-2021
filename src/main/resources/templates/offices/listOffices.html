@@ -74,9 +74,12 @@
                                         <td th:if="${office.STATE == 1}" th:text="Recibido"></td>
                                         <td th:if="${office.STATE == 2}" th:text="Respondido"></td>
                                         <td th:if="${office.STATE == 3}" th:text="Anulado"></td>
-                                        <td th:if="${office.STATE != 3}">
+                                        <td th:if="${office.STATE != 3 && session.usuarioCompleto.isBoss}">
                                             <a th:if="${session.Signature!='' && session.Signature!=null}" th:href="@{/offices/editOffice/{id} (id=${office.OFFNUMBER})}"><img th:src="@{/images/edit.svg}"></a>
                                             <a th:if="${session.Signature=='' || session.Signature==null}" style="cursor:pointer;" role="button" onclick="doAjaxAuthSign('/offices/listOffices')"><img th:src="@{/images/edit.svg}"></a>
+                                        </td>
+                                        <td th:if="${!session.usuarioCompleto.isBoss}">
+                                             <a></a>
                                         </td>
                                         <td th:if="${office.STATE == 3}">
                                             <a></a>
