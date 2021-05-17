@@ -11,6 +11,7 @@ public class Usuario{
     private Boolean status;
     private Boolean isBoss;
 
+    public Usuario(){}
     public Usuario(TempUser tempUser, String password, Department department, Boolean status, Boolean isBoss) {
         this.tempUser = tempUser;
         this.password = password;
