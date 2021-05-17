@@ -41,9 +41,9 @@ public class FileActData {
     
     public FileActSimple fileActToFileActSimple(FileAct file){
         FileActSimple aux=new FileActSimple();
-       SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String create = format.format(file.getDATE_CREATE());
-         String dfile = format.format(file.getDATE_FILE());
+        String dfile = format.format(file.getDATE_FILE());
         
         aux.setId(file.getId());
         aux.setFileId(file.getFILE_ID());
