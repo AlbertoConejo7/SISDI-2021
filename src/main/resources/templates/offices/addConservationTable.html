@@ -21,9 +21,9 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
         <script th:src="@{/js/calendar.js}"></script>
-         <script th:src="@{/js/notificacionesResponse.js}"></script>
+        <script th:src="@{/js/notificacionesResponse.js}"></script>
         <script th:src="@{/js/notificacionesExpediente.js}"></script>
-       <script th:src="@{/js/script.js}"></script>
+        <script th:src="@{/js/script.js}"></script>
 
     </head>
 
@@ -33,11 +33,11 @@
             <br> <br>
         </div>
 
-         <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
              th:text="${mensaje}"
              class="alert">
         </div>
-       
+
         <main>
             <div class="container mx-auto">
                 <div id="titulo">
@@ -47,7 +47,7 @@
                     <form class="form was-validated" method="POST" th:action="@{/offices/saveTable}" th:object="${tableAdd}" id="add-office" >
                         <table class="table table-borderless">
                             <tr>
-                                
+
                                 <td>
                                     <span>Fondo</span>
                                 </td>
@@ -59,8 +59,8 @@
                                     </div>
                                 </td>
                             </tr>
-                            
-                             <tr>
+
+                            <tr>
                                 <td>
                                     <span>Sub Fondo</span><span class="required"> *</span>
                                 </td>
@@ -77,8 +77,8 @@
                                 </td>
 
                             </tr>
-                            
-                             <tr>
+
+                            <tr>
                                 <td>
                                     <span>Sección:</span><span class="required"> *</span>
                                 </td>
@@ -86,10 +86,10 @@
                                     <div class='input-group'>
                                         <select name="secciones" class="custom-select" th:field="*{section}">
                                             <option value="">Seleccione la seccion</option>
-                                              <option value="Tesorería">Tesorería</option> 
-                                              <option value="Contabilidad">Contabilidad</option>
-                                              <option value="Contabilidad">Infraestructura Privada</option>
-                                              <option value="Contabilidad">Infraestructura Pública</option>
+                                            <option value="Tesorería">Tesorería</option> 
+                                            <option value="Contabilidad">Contabilidad</option>
+                                            <option value="Contabilidad">Infraestructura Privada</option>
+                                            <option value="Contabilidad">Infraestructura Pública</option>
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar un Departamento Receptor</div>
                                         <span class="input-group-addon ">
@@ -98,7 +98,7 @@
                                 </td>
 
                             </tr>
-                            
+
                             <tr>
                                 <td>
                                     <span>Elaborado por:</span>
@@ -111,11 +111,11 @@
                                     </div>
                                 </td>
                             </tr>
-                             
-                            
-                            
-  
-                             <tr>
+
+
+
+
+                            <tr>
                                 <td>
                                     <span>Serie Documental</span><span class="required"> *</span>
                                 </td>
@@ -123,10 +123,10 @@
                                     <div class='input-group'>
                                         <select name="series" class="custom-select" th:field="*{seriedocumental}" required>
                                             <option value="">Seleccione la serie documental</option>
-                                              <option value="Correspondencia">Correspondencia</option> 
-                                              <option value="Actas">Actas</option>
-                                              <option value="Contratos">Contratos</option>
-                                              <option value="Expedientes">Expedientes</option>
+                                            <option value="Correspondencia">Correspondencia</option> 
+                                            <option value="Actas">Actas</option>
+                                            <option value="Contratos">Contratos</option>
+                                            <option value="Expedientes">Expedientes</option>
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar una serie documental</div>
                                         <span class="input-group-addon ">
@@ -135,10 +135,10 @@
                                 </td>
 
                             </tr>
-                            
-                            
-                            
-                          
+
+
+
+
                             <tr>
                                 <td>
                                     <span>Señale a la si es Original o Copia</span><span class="required"> *</span>
@@ -147,9 +147,9 @@
                                     <div class='input-group'>
                                         <select name="series" class="custom-select" th:field="*{isoriginal}">
                                             <option value="">Seleccione si es origial o copia</option>
-                                              <option value="Original">Original</option> 
-                                              <option value="Copia">Copia</option>
-                                             
+                                            <option value="Original">Original</option> 
+                                            <option value="Copia">Copia</option>
+
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar una opcion</div>
                                         <span class="input-group-addon ">
@@ -158,26 +158,26 @@
                                 </td>
 
                             </tr>
-  
-                            
+
+
                             <tr>
-                                    
+
                                 <td>
                                     <span>Contenido </span>
-                                    
+
                                 </td>
                                 <td>
                                     <div class='input-group'>
                                         <textarea rows="4" class="w-100" name="contents" id="contents" placeholder="Digite una muy breve descripción de la función específica
-del tipo documental" 
+                                                  del tipo documental" 
                                                   style="resize: none;" th:field="*{contents}"></textarea>                             
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
                                 </td>
-                          
+
                             </tr>
-                            
+
                             <tr>
                                 <td>
                                     <span>Soporte</span><span class="required"> *</span>
@@ -186,9 +186,9 @@ del tipo documental"
                                     <div class='input-group'>
                                         <select name="series" class="custom-select" th:field="*{support}" required>
                                             <option value="">Seleccione el soporte</option>
-                                              <option value="Textual">Textual</option> 
-                                              <option value="Electrónicos">Electrónicos</option> 
-                                             <option value="Legibles por máquina">Legibles por máquina</option>
+                                            <option value="Textual">Textual</option> 
+                                            <option value="Electrónicos">Electrónicos</option> 
+                                            <option value="Legibles por máquina">Legibles por máquina</option>
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar una opcion</div>
                                         <span class="input-group-addon ">
@@ -197,9 +197,9 @@ del tipo documental"
                                 </td>
 
                             </tr>
-                            
-                            
-                           
+
+
+
                             <tr>
                                 <td>
                                     <span>Vigencia</span><span class="required"> *</span>
@@ -208,9 +208,9 @@ del tipo documental"
                                     <div class='input-group'>
                                         <select name="series" class="custom-select" th:field="*{validity}">
                                             <option value="">Seleccione</option>
-                                              <option value="Oficina">Oficina</option> 
-                                              <option value="Archivo">Archivo</option> 
-                                             
+                                            <option value="Oficina">Oficina</option> 
+                                            <option value="Archivo">Archivo</option> 
+
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar una opcion</div>
                                         <span class="input-group-addon ">
@@ -231,7 +231,7 @@ del tipo documental"
                                     </div>
                                 </td>
                             </tr>
-                             <tr>
+                            <tr>
                                 <td>
                                     <span>Cantidad de copias</span>
                                 </td>
@@ -243,42 +243,42 @@ del tipo documental"
                                     </div>
                                 </td>
                             </tr>
-                            
-                              <tr>
-                                <td>
-                                     <span>Fecha mas Antigua</span>
-                                </td>
-                                      <td>
-                                        <div class='input-group date'>
-                                            <input type='text' class="form-control" th:field="*{first_date}" th:value="${#dates.format(date, 'dd/MM/yyyy')}"readonly="readonly"/>
-                                             <span class="input-group-addon ">
-                                                    <img class="icon-img" th:src="@{/images/calendar.svg}">
-                                             </span>
-                                        </div>
-                                    </td>
-                            
-                              </tr>
-                               <tr>
-                                <td>
-                                     <span>Fecha mas Reciente</span>
-                                </td>
-                                      <td>
-                                        <div class='input-group date'>
-                                            <input type='text' class="form-control" th:field="*{last_date}" th:value="${#dates.format(date, 'dd/MM/yyyy')}"readonly="readonly"/>
-                                             <span class="input-group-addon ">
-                                                    <img class="icon-img" th:src="@{/images/calendar.svg}">
-                                             </span>
-                                        </div>
-                                    </td>
-                            
-                              </tr>
 
-                            
                             <tr>
-    
+                                <td>
+                                    <span>Fecha mas Antigua</span>
+                                </td>
+                                <td>
+                                    <div class='input-group date'>
+                                        <input type='text' class="form-control" th:field="*{first_date}" th:value="${#dates.format(date, 'dd/MM/yyyy')}"readonly="readonly"/>
+                                        <span class="input-group-addon ">
+                                            <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                        </span>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Fecha mas Reciente</span>
+                                </td>
+                                <td>
+                                    <div class='input-group date'>
+                                        <input type='text' class="form-control" th:field="*{last_date}" th:value="${#dates.format(date, 'dd/MM/yyyy')}"readonly="readonly"/>
+                                        <span class="input-group-addon ">
+                                            <img class="icon-img" th:src="@{/images/calendar.svg}">
+                                        </span>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
                                 <td>
                                     <span>Observaciones</span>
-                                    
+
                                 </td>
                                 <td>
                                     <div class='input-group'>
@@ -288,9 +288,9 @@ del tipo documental"
                                         </span>
                                     </div>
                                 </td>
-                          
+
                             </tr>
-                             <tr>
+                            <tr>
                                 <td>
                                     <span>Plazo estimado</span><span class="required"> *</span>
                                 </td>
@@ -298,13 +298,13 @@ del tipo documental"
                                     <div class='input-group'>
                                         <select name="series" class="custom-select" th:field="*{finaltime}">
                                             <option value="">Seleccione</option>
-                                              <option value="CONSERVACIÓN PERMANENTE">VALOR CIENTÍFICO-CULTURAL / CONSERVACIÓN PERMANENTE</option> 
-                                              <option value="50 AÑOS DE VIGENCIA">50 AÑOS DE VIGENCIA</option>   
-                                             <option value="10 AÑOS DE VIGENCIA">10 AÑOS DE VIGENCIA</option>
-                                             <option value="5 AÑOS DE VIGENCIA">5 AÑOS DE VIGENCIA</option>
-                                             <option value="3 AÑOS DE VIGENCIA">3 AÑOS DE VIGENCIA</option>
-                                             <option value="2 AÑOS DE VIGENCIA">2 AÑOS DE VIGENCIA</option>
-                                             
+                                            <option value="CONSERVACIÓN PERMANENTE">VALOR CIENTÍFICO-CULTURAL / CONSERVACIÓN PERMANENTE</option> 
+                                            <option value="50 AÑOS DE VIGENCIA">50 AÑOS DE VIGENCIA</option>   
+                                            <option value="10 AÑOS DE VIGENCIA">10 AÑOS DE VIGENCIA</option>
+                                            <option value="5 AÑOS DE VIGENCIA">5 AÑOS DE VIGENCIA</option>
+                                            <option value="3 AÑOS DE VIGENCIA">3 AÑOS DE VIGENCIA</option>
+                                            <option value="2 AÑOS DE VIGENCIA">2 AÑOS DE VIGENCIA</option>
+
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar una opcion</div>
                                         <span class="input-group-addon ">
@@ -313,23 +313,23 @@ del tipo documental"
                                 </td>
 
                             </tr>
-                        
-                            
-                           
-                          <tr>
+
+
+
+                            <tr>
                                 <td colspan="2" class="text-lg-right">
                                     <button type="submit" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
                                         Agregar tabla de plazo de conservacion
                                     </button>
                                 </td>
                             </tr>
-                            
-                            
-                            
+
+
+
                         </table>
                     </form>
-                    
-                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+
+                    <!--<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -347,7 +347,7 @@ del tipo documental"
                                         Cancelar
                                     </button>
                                     <button type="button" class="btn btn-primary" id="add">
-                                         Agregar tabla de plazo de conservacion
+                                        Agregar tabla de plazo de conservacion
                                     </button>
                                 </div>
                             </div>
@@ -371,15 +371,15 @@ del tipo documental"
 
                     </script>
                 </div>
-            </div>
-            
-             
+            </div>-->
+
+
 
         </main>
-           <script th:src="@{/js/addTable.js}"></script>
+        <script th:src="@{/js/addTable.js}"></script>
         <script th:src="@{/js/calendar.js}"></script>
-            <script th:src="@{/js/validateSignPdf.js}"></script>
-        
+        <script th:src="@{/js/validateSignPdf.js}"></script>
+
     </body>
 
 </html>
