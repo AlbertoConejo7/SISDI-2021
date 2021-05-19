@@ -261,7 +261,7 @@ insert into T_USER (TEMPUSER,PASSWORD,DEPARTMENT,STATUS,ISBOSS) values
  ('serviciospublicos@sanpablo.go.cr','serviciospublicos',6,1,1); # pass:$2y$12$sv9mXszFFms8Vsp2gtJ21eJcJKq/dd7aTdB35Q6QHmqtynRdAsruW
 insert into T_USER_ROLE (USER_ID,ROLE_NAME) values('serviciospublicos@sanpablo.go.cr','Dirección de Servicios Públicos');
 
-insert into T_USER (TEMPUSER,PASSWORD,DEPARTMENT,STATUS) values
+insert into T_USER (TEMPUSER,PASSWORD,DEPARTMENT,STATUS,ISBOSS) values
  ('archivocentral@sanpablo.go.cr','archivocentral',6,1,1); # pass:$2y$12$9knVYUk7M6gUmt9XIdHO/OMWZURJOmlAp8hcX/pNCtoRhiz6xOSqm
 insert into T_USER_ROLE (USER_ID,ROLE_NAME) values('archivocentral@sanpablo.go.cr','Archivo Central');
 
@@ -400,6 +400,22 @@ UPDATE `sisdi`.`t_department` SET `COD` = 'PV' WHERE (`ID` = '7');
 UPDATE `sisdi`.`t_department` SET `COD` = 'RH' WHERE (`ID` = '8');
 
 INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES ('2016 Hacienda Municipal-Desarrollo Urbano', 'No Existen', 'gestiondecobros@sanpablo.go.cr', 'infraestructurapublica@sanpablo.go.cr', '0', '2016-01-01', 'Hacienda Municipal', 'Desarrollo Urbano');
+INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES
+
+ ('2016 Hacienda Municipal-Servicios Públicos', 'No Existen', 'gestiondecobros@sanpablo.go.cr', 'serviciospublicos@sanpablo.go.cr', '0', '2016-04-10', 'Hacienda Municipal', 'Servicios Públicos');
+
+INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES 
+
+('2016 Recursos Humanos-Desarrollo Urbano', 'No Existen', 'recursoshumanos@sanpablo.go.cr', 'infraestructurapublica@sanpablo.go.cr', '0', '2016-10-08', 'Recursos Humanos', 'Desarrollo Urbano');
+
+INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES
+
+ ('2016 Hacienda Municipal-Alcaldia', 'No Existen', 'gestiondecobros@sanpablo.go.cr', 'informatica@sanpablo.go.cr', '0', '2016-11-12', 'Hacienda Municipal', 'Alcaldia');
+
+INSERT INTO `sisdi`.`t_expediente` (`FILENAME`, `OBSERVATIONS`, `OWNER_ID`, `RECEIVER_ID`, `OFFICE_AMOUNT`, `DATE_CREATE`,`OWNER_DEPARTMENT`, `RECEIVER_DEPARTMENT`) VALUES
+
+ ('2016 Recursos Humanos-Servicios Públicos', 'No Existen', 'recursoshumanos@sanpablo.go.cr', 'serviciospublicos@sanpablo.go.cr', '0', '2016-08-01', 'Recursos Humanos', 'Servicios Públicos');
+
 /*insert into `sisdi`.`t_fileloan`(`FILE_ID`, `FILENAME`, `OBSERVATIONS`, `NAME_REQUEST`, `DEPARTMENT_REQUEST`, `DATE_CREATE`, `DATE_RETURN`) 
 VALUES (1, '2016 Hacienda Municipal-Desarrollo Urbano', 'Solicito para revision', 'gestiondecobros@sanpablo.go.cr', 'Hacienda Municipal', '2021-04-19', '2021-04-26');
 */
