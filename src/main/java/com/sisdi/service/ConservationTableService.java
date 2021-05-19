@@ -13,6 +13,7 @@ import java.util.List;
 public interface ConservationTableService {
     List<ConservationTable> listConservationTable();
     ConservationTable addConservationTable(ConservationTable conservationtable);
-      ConservationTable  searchTable(int tablenumber);
-      void deleteTable(ConservationTable t);
+    ConservationTable  searchTable(int tablenumber);
+    void deleteTable(ConservationTable t);
+    long getTable(String dep, String type, String serie);
 }
