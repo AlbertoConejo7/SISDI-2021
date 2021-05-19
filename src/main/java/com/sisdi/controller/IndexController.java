@@ -429,13 +429,11 @@ public class IndexController {
             e.setSTATE(2);
             e.setRECEIVER_ID(fl.getNAME_REQUEST());
             LocalDateTime today = LocalDateTime.now();     //Today
-            LocalDateTime newDate = today.plusDays(7);     //Plus 7 day
+            LocalDateTime newDate = today.plusDays(7);    
             fl.setDATE_RETURN(convertToDateViaInstant(newDate));
             fileLoanService.addFileLoan(fl);
             expedienteServiceImp.addExpediente(e);
             obj.put("Aceptado", true);
-            session.setAttribute("loansMessage", "Solicitud Aceptada");
-            session.setAttribute("claseLoan", "success");
         } catch (Exception e) {
             obj.put("Aceptado", false);
         }
@@ -451,8 +449,6 @@ public class IndexController {
             fl.setSTATE(2);
             fileLoanService.addFileLoan(fl);
             obj.put("Aceptado", true);
-            session.setAttribute("loansMessage", "Solicitud Rechazada");
-            session.setAttribute("claseLoan", "success");
         } catch (Exception e) {
             obj.put("Aceptado", false);
         }
