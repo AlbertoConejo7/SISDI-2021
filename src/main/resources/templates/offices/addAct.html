@@ -55,7 +55,7 @@
                             </tr>
                              <tr>
                                 <td>
-                                    <span>Fecha de Ingreso Al Archivo Central</span>
+                                    <span>Fecha de Ingreso al Archivo Central</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
@@ -71,7 +71,7 @@
                             
                             <tr>
                                 <td>
-                                    <span>Fecha de Destruccion</span>
+                                    <span>Fecha de Eliminación</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
@@ -106,73 +106,62 @@
                            
                             <tr>
                                 <td colspan="2" class="text-lg-right">
-                                    <a  id="a-del" class="btn btn-primary mt-2">Agregar Acta y Eliminar Expediente</a>
+                                    <a  id="exit-file" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal"> Eliminar Expediente</a>
+                                    <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
                                 </td>
+
                             </tr>
                         </table>
                     </form>
+                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Seguro que desea eliminar permanentemente el expediente?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">
+                                        Cancelar
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="add">
+                                        Eliminar 
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </main>
+        
+        
        
         <script th:src="@{/js/calendar.js}"></script>
-        <script >
-        $(function () {
-            $('#a-del').click(function () {
+       <script>
+                        document.getElementById("add-act").addEventListener("submit", submit);
+                        document.getElementById("add").addEventListener("click", send);
+                        document.getElementById("cancel").addEventListener("click", cancel);
+                        function submit(e) {
+                            e.preventDefault();
+                            document.getElementById("exampleModal").style.display = "block";
+                        }
+                        function send(e) {
+                            document.getElementById("exampleModal").style.display = "none";
+                            document.forms["add-act"].submit();
+                        }
+                        function cancel(e) {
+                            document.getElementById("exampleModal").style.display = "none";
+                        }
 
-                swal({
-                    text: "Esta seguro que desea eliminar este expediente?",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ff0000',
-                    cancelButtonText: 'cancel',
-                    cancelButtonColor: '#4cd964',
-                    confirmButtonText: 'delete',
-
-                }).then(function (isConfirm) {
-                    if (isConfirm) {
-                        $.get({
-                            url: '/CMS/delbook/',
-                            data: {
-                                val: $('#a-del').parent().prev().text()
-                            },
-                            success: function (data) {
-                                if (data) {
-                                    $('#a-del').parent().parent().remove();
-
-                                }
-                            }
-                        });
-                        swal({
-                                text: "El Expediente ha sido borrado",
-                                type: 'success',
-                                showCancelButton: false,
-                                showConfirmButton: false
-                            }
-                        );
-                         setTimeout(function () {
-                            //window.location.href = '/offices/saveAct/{expedienteId} (expedienteId=${actAdd.fileName})';
-                             document.forms["add-act"].submit()
-                        }, 2000)
-
-
-                    }
-                }, function (dismiss) {
-                    if (dismiss === 'cancel') {
-                        swal(
-                            'cancel',
-                            '',
-                            'error'
-                        )
-                    }
-                })
-
-
-            })
-
-        })
-       </script>
+                    </script>
     </body>
 
 </html>

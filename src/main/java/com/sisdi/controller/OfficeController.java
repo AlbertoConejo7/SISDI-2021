@@ -643,19 +643,15 @@ public class OfficeController {
     @GetMapping("/addAct/{deleteId}")
     public String addAct(Model model, @AuthenticationPrincipal User user, @PathVariable String deleteId) {
         String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);
-        String year = new SimpleDateFormat("yyyy").format(this.fecha);
         model.addAttribute("date", fecha);
         List<Usuario> usuarios = userData.listUsers();
         Usuario u = userData.getUser(user.getUsername());
         List<FileAct> actas = fileActServiceImp.listarFileActs();
-        // FileAct ac = actas.get(actas.size() - 1);
-        // int INDX = ac.getId();
         Expediente deleteFile = expedienteServiceImp.getExpediente(deleteId);
         FileActSimple actAdd = fileActData.SaveAct(deleteFile);
-        // String actNumber = "Acta" + "-" + "MSPH" + "-"+ (INDX + 1) + "-" + year;
-        // actAdd.setFileName(actNumber);
+        String fecha = new SimpleDateFormat("dd/MM/yyyy").format(deleteFile.getDATE_CREATE());
         actAdd.setDateCreate(fechaS);
-        actAdd.setDateFile(fechaS);
+        actAdd.setDateFile(fecha);
         actAdd.setState(0);
 
         model.addAttribute("usuarios", usuarios);
@@ -696,7 +692,7 @@ public class OfficeController {
             excepcion.printStackTrace();
         }
 
-        return "offices/listActs";
+        return "redirect:/offices/listActs";
 
     }
 
