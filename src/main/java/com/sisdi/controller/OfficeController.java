@@ -607,7 +607,7 @@ public class OfficeController {
 
     @GetMapping("/borrowedFiles")
     public String borrowedFiles(Model model, OfficeSimple officeAdd, @AuthenticationPrincipal User user) {
-        List<FileLoanSimple> list = fileLoanData.listFileLoanSimples();
+        List<FileLoanSimple> list = fileLoanData.listFileLoanSimplesByState(1);
         //log.info(list.toString());
         model.addAttribute("fileLoans", list);
         return "offices/borrowedFiles";
