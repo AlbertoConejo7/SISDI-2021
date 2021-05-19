@@ -3,6 +3,7 @@ package com.sisdi.data;
 import com.sisdi.model.Department;
 import com.sisdi.model.Expediente;
 import com.sisdi.model.FileSimple;
+import com.sisdi.service.ConservationTableService;
 import com.sisdi.service.ExpedienteServiceImp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,9 @@ public class FileData {
     
     @Autowired
     private ExpedienteServiceImp expedienteServiceImp;
+    
+    @Autowired
+    private ConservationTableService tablasPlazoServiceImp;
 
     public Expediente getFile(FileSimple file) throws ParseException {
         Date create = new SimpleDateFormat("dd/MM/yyyy").parse(file.getDateCreateFile());
@@ -80,10 +84,11 @@ public class FileData {
     public List<Expediente> listExpVencidos(List<Expediente> expedientes) {
         List<Expediente> exp = new ArrayList();
         for (Expediente e : expedientes) {
+            long time= tablasPlazoServiceImp.getTable(e.getOWNER_DEPARTMENT(), "Oficina", "Expedientes");
             LocalDate fHoy = LocalDate.now();
             LocalDate localDate = this.convertToLocalDate(e.getDATE_CREATE());
             long years = ChronoUnit.YEARS.between(localDate, fHoy);
-            if (years >= 5.0) {
+            if (years >= time) {
                exp.add(e);
             }
         }
