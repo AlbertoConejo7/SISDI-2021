@@ -115,7 +115,7 @@ insert into T_DEPARTMENT (NAME) values ('Alcaldia'); #3
 insert into T_DEPARTMENT (NAME) values ('Desarrollo Urbano');#4
 insert into T_DEPARTMENT (NAME) values ('Hacienda Municipal'); #5
 insert into T_DEPARTMENT (NAME) values ('Servicios Públicos'); #6
-insert into T_DEPARTMENT (NAME) values ('Prooveduría'); #7
+insert into T_DEPARTMENT (NAME) values ('Proveeduría'); #7
 insert into T_DEPARTMENT (NAME) values ('Recursos Humanos'); #8
 
 
@@ -262,7 +262,7 @@ insert into T_USER (TEMPUSER,PASSWORD,DEPARTMENT,STATUS,ISBOSS) values
 insert into T_USER_ROLE (USER_ID,ROLE_NAME) values('serviciospublicos@sanpablo.go.cr','Dirección de Servicios Públicos');
 
 insert into T_USER (TEMPUSER,PASSWORD,DEPARTMENT,STATUS) values
- ('archivocentral@sanpablo.go.cr','archivocentral',6,1); # pass:$2y$12$9knVYUk7M6gUmt9XIdHO/OMWZURJOmlAp8hcX/pNCtoRhiz6xOSqm
+ ('archivocentral@sanpablo.go.cr','archivocentral',6,1,1); # pass:$2y$12$9knVYUk7M6gUmt9XIdHO/OMWZURJOmlAp8hcX/pNCtoRhiz6xOSqm
 insert into T_USER_ROLE (USER_ID,ROLE_NAME) values('archivocentral@sanpablo.go.cr','Archivo Central');
 
 insert into T_USER (TEMPUSER,PASSWORD,DEPARTMENT,STATUS) values
