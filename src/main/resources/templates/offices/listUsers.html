@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>SISDI-Lista de Oficios</title>
+        <title>SISDI-Lista de Usuarios</title>
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
         <link th:href="@{/css/default.css}" rel="stylesheet"/>
         <link th:href="@{/css/errors.css}" rel="stylesheet"/>
@@ -40,8 +40,11 @@
                 <div id="titulo">
                     <h3 class='font-italic text-center' id='titleh3'>Lista Usuarios</h3>
                 </div>
-                <div>
-                    <input class="form-control" id="myInput" type="text" placeholder="Buscar usuario..">
+                <div class="input-group mb-3 w-50">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><img th:src="@{/images/search.png}" width="25" height="25"></span>
+                    </div>
+                    <input type="text" class="form-control" id="buscarUsuario" placeholder="Buscar usuario" aria-describedby="basic-addon1">
                 </div>
             </div>
 
@@ -94,7 +97,7 @@
         <script th:src="@{/js/calendar.js}"></script>
         <script>
             $(document).ready(function () {
-                $("#myInput").on("keyup", function () {
+                $("#buscarUsuario").on("keyup", function () {
                     var value = $(this).val().toLowerCase();
                     $("#tableUsers tr").filter(function () {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)

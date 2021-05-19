@@ -37,11 +37,18 @@
         <div class="mt-2 col-md-1">
             <br> <br> <br>
         </div>
-
-        <div class="container">
+        <div class="container mb-3">
             <div id="titulo">
-                <h3 class='font-italic text-center' id='titleh3' >Expedientes Borrados</h3>
+                <h3 class='font-italic text-center' id='titleh3'>Actas</h3>
             </div>
+            <div class="input-group mb-3 w-50">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><img th:src="@{/images/search.png}" width="25" height="25"></span>
+                </div>
+                <input type="text" class="form-control" id="buscarActs" placeholder="Buscar actas" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive">
@@ -49,14 +56,14 @@
                             <thead>
                                 <tr>
                                     <th style="text-align: center">Nombre del Expediente</th>
-                                    <th style="text-align: center">Fecha de Eliminacion</th>
+                                    <th style="text-align: center">Fecha de  Acta</th>
                                     <th style="text-align: center">Fecha de Ingreso al Archivo central</th>
                                     <th style="text-align: center">Resumen</th>
 
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tableActa">
 
                                 <tr th:if="${fileActs == null or fileActs.empty}">
                                     <td colspan="6" style="text-align: center;">No hay Actas</td>
@@ -78,5 +85,15 @@
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function () {
+                $("#buscarActs").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tableActa tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

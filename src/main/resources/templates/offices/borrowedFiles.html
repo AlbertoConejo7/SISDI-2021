@@ -32,11 +32,19 @@
         <div class="mt-2 col-md-1">
             <br> <br> <br>
         </div>
-        
-        <div class="container">
+        <div class="container mb-3">
             <div id="titulo">
-                <h3 class='font-italic text-center' id='titleh3' >Expedientes Prestados</h3>
+                <h3 class='font-italic text-center' id='titleh3'>Expedientes Prestados</h3>
             </div>
+            <div class="input-group mb-3 w-50">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><img th:src="@{/images/search.png}" width="25" height="25"></span>
+                </div>
+                <input type="text" class="form-control" id="buscarPres" placeholder="Buscar prestados" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="container">
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="table-responsive">
@@ -51,7 +59,7 @@
 
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tablePres">
 
                                 <tr th:if="${fileLoans == null or fileLoans.empty}">
                                     <td colspan="6" style="text-align: center;">No hay expedientes prestados</td>
@@ -74,5 +82,15 @@
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function () {
+                $("#buscarPres").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tablePres tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

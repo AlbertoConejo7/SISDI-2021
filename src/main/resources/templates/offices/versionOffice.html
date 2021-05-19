@@ -28,6 +28,14 @@
         <main>
             <div class="container">
                 <div th:insert="menu/HeadOffice :: menuOffice"></div>
+                <div class="container mt-3 mb-3">
+                <div class="input-group mb-3 w-50">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><img th:src="@{/images/search.png}" width="25" height="25"></span>
+                    </div>
+                    <input type="text" class="form-control" id="buscarVersion" placeholder="Buscar version" aria-describedby="basic-addon1">
+                </div>
+            </div>
                 <div class="container">
                     <div class="row mt-4">
                         <div class="col-lg-12">
@@ -41,7 +49,7 @@
                                             <th style="text-align: center">Motivo de versión</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tableVersion">
 
                                         <tr th:if="${versions == null or versions.empty}">
                                             <td colspan="6" style="text-align: center;">No existen versiones del oficio</td>
@@ -52,13 +60,15 @@
                                             <td  th:text="${#dates.format(Version.version_date, 'dd/MM/yyyy')}"></td>
                                             <td  th:text="${Version.version_description}"></td>
                                         </tr>
-                                        <tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
                                             <td colspan="5">
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#newVersionModal">Agregar Versión</button>
                                             </td>
 
                                         </tr>
-                                    </tbody>
+                                    </tfoot>
                                 </table>
                                 <div class="modal fade" id="newVersionModal" tabindex="-1" role="dialog" aria-labelledby="newVersionTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -177,5 +187,15 @@
                 </div>
             </div>
         </main>
+        <script>
+                $(document).ready(function () {
+                    $("#buscarVersion").on("keyup", function () {
+                        var value = $(this).val().toLowerCase();
+                        $("#tableVersion tr").filter(function () {
+                            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        });
+                    });
+                });
+            </script>
     </body>
 </html>

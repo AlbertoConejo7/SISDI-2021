@@ -32,10 +32,11 @@
         <div class="mt-2 col-md-1">
             <br> <br>
         </div>
-
-        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
-             th:text="${mensaje}"
-             class="alert">
+        <div class="notice-top">   
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+                 th:text="${mensaje}"
+                 class="alert">
+            </div>
         </div>
 
         <main>
@@ -206,7 +207,7 @@
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <select name="series" class="custom-select" th:field="*{validity}">
+                                        <select name="series" class="custom-select" th:field="*{validity}" required>
                                             <option value="">Seleccione</option>
                                             <option value="Oficina">Oficina</option> 
                                             <option value="Archivo">Archivo</option> 
@@ -296,14 +297,14 @@
                                 </td>
                                 <td>
                                     <div class='input-group'>
-                                        <select name="series" class="custom-select" th:field="*{finaltime}">
+                                        <select name="series" class="custom-select" th:field="*{finaltime}" required>
                                             <option value="">Seleccione</option>
-                                            <option value="CONSERVACIÓN PERMANENTE">VALOR CIENTÍFICO-CULTURAL / CONSERVACIÓN PERMANENTE</option> 
-                                            <option value="50 AÑOS DE VIGENCIA">50 AÑOS DE VIGENCIA</option>   
-                                            <option value="10 AÑOS DE VIGENCIA">10 AÑOS DE VIGENCIA</option>
-                                            <option value="5 AÑOS DE VIGENCIA">5 AÑOS DE VIGENCIA</option>
-                                            <option value="3 AÑOS DE VIGENCIA">3 AÑOS DE VIGENCIA</option>
-                                            <option value="2 AÑOS DE VIGENCIA">2 AÑOS DE VIGENCIA</option>
+                                            <option value="1000">VALOR CIENTÍFICO-CULTURAL / CONSERVACIÓN PERMANENTE</option> 
+                                            <option value="50">50 AÑOS DE VIGENCIA</option>   
+                                            <option value="10">10 AÑOS DE VIGENCIA</option>
+                                            <option value="5">5 AÑOS DE VIGENCIA</option>
+                                            <option value="3">3 AÑOS DE VIGENCIA</option>
+                                            <option value="2">2 AÑOS DE VIGENCIA</option>
 
                                         </select>
                                         <div class="invalid-feedback">Debe seleccionar una opcion</div>
@@ -375,11 +376,11 @@
 
 
 
-        </main>
-        <script th:src="@{/js/addTable.js}"></script>
-        <script th:src="@{/js/calendar.js}"></script>
-        <script th:src="@{/js/validateSignPdf.js}"></script>
+                    </main>
+                    <script th:src="@{/js/addTable.js}"></script>
+                    <script th:src="@{/js/calendar.js}"></script>
+                    <script th:src="@{/js/validateSignPdf.js}"></script>
 
-    </body>
+                    </body>
 
-</html>
+                    </html>

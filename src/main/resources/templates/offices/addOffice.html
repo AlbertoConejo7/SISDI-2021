@@ -33,10 +33,6 @@
             <br> <br>
         </div>
         <div class="notice-top">
-            <div class="alert alert-success alert-dismissable alert-min fade" id="alert-save">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Fecha de Plazo de Respuesta</strong> guardada.
-            </div>
 
             <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
                  th:text="${mensaje}"

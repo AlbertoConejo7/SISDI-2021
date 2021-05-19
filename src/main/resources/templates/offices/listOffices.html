@@ -32,10 +32,11 @@
                 <div id="titulo">
                     <h3 class='font-italic text-center' id='titleh3'>Lista Oficios</h3>
                 </div>
-                <div>                             
-
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchOffice"><img th:src="@{/images/search.png}" width=25> </button>
-
+                <div class="input-group mb-3 w-50">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><img th:src="@{/images/search.png}" width="25" height="25"></span>
+                    </div>
+                    <input type="text" class="form-control" id="buscarOffice" placeholder="Buscar oficio" aria-describedby="basic-addon1">
                 </div>
             </div>
 
@@ -56,10 +57,10 @@
 
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tableOffice">
 
                                     <tr th:if="${offices == null or offices.empty}">
-                                        <td colspan="6" style="text-align: center;">No hay oficios</td>
+                                        <td colspan="7" style="text-align: center;">No hay oficios</td>
                                     </tr>
                                     <tr th:each="office : ${offices}" th:if="${offices != null and !offices.empty}">
                                         <td th:text="${office.OFFNUMBER}"></td>
@@ -79,7 +80,7 @@
                                             <a th:if="${session.Signature=='' || session.Signature==null}" style="cursor:pointer;" role="button" onclick="doAjaxAuthSign('/offices/listOffices')"><img th:src="@{/images/edit.svg}"></a>
                                         </td>
                                         <td th:if="${!session.usuarioCompleto.isBoss}">
-                                             <a></a>
+                                            <a></a>
                                         </td>
                                         <td th:if="${office.STATE == 3}">
                                             <a></a>
@@ -95,67 +96,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="searchOffice" tabindex="-1" role="dialog" aria-labelledby="searchOfficeTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="searchOfficeTitle">Buscar Oficio</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="containerPopUp">
-                                    <div class="form-group">
-
-                                        <form class="form" method="POST" th:action="@{/offices/searchOffice}" th:object="${search}">
-                                            <table>
-                                                <tr>
-                                                    <td>
-                                                        <span>Número de Oficio</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class='input-group date ml-4'>
-                                                            <input type='text' class="form-control" th:field="*{offnumber}" placeholder="Número de Oficio"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span>Fecha Emisión</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class='input-group date ml-4' id='datepicker2'>
-                                                            <input type='text' class="form-control" placeholder="dd/mm/yyyy" th:field="*{dateCreate}"/>
-                                                            <span class="input-group-addon ">
-                                                                <img class="icon-img" th:src="@{/images/calendar.svg}">
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span>Motivo</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class='input-group date ml-4'>
-                                                            <input type='text' class="form-control" placeholder="Motivo" th:field="*{reason}"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>                                   
-                                            </table>
-                                            <div class="modal-footer mt-3">
-                                                <button type="reset" class="btn btn-primary d-flex" ><img th:src="@{/images/trash.png}" width=25> </button>
-                                                <button type="submit" class="btn btn-primary"><img th:src="@{/images/search.png}" width=25> </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
         </main>
         <script th:src="@{/js/calendar.js}"></script>
+        <script>
+            $(document).ready(function () {
+                $("#buscarOffice").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tableOffice tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

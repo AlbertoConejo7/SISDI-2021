@@ -38,6 +38,12 @@
                 <div id="titulo">
                     <h3 class='font-italic text-center' id='titleh3'>Solicitudes de prestamo de expedientes</h3>
                 </div>
+                <div class="input-group mb-3 w-50">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><img th:src="@{/images/search.png}" width="25" height="25"></span>
+                    </div>
+                    <input type="text" class="form-control" id="buscarSol" placeholder="Buscar solicitudes" aria-describedby="basic-addon1">
+                </div>
             </div>
 
             <div class="container">
@@ -53,10 +59,10 @@
                                         <th style="text-align: center">Departamento solicitante</th>
                                         <th style="text-align: center">Fecha de solicitud</th>
                                         <th style="text-align: center">Ver solicitud </th>
-                                        
+
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tableSol">
 
                                     <tr th:if="${requests == null or requests.empty}">
                                         <td colspan="6" style="text-align: center;">No hay oficios</td>
@@ -67,11 +73,11 @@
                                         <td  th:text="${request.NAME_REQUEST}"></td>
                                         <td  th:text="${request.DEPARTMENT_REQUEST}"></td>
                                         <td  th:text="${#dates.format(request.DATE_CREATE, 'dd/MM/yyyy')}"></td>
-                                        
+
                                         <td >
                                             <a th:href="@{/offices/viewRequest/{id} (id=${request.FILE_ID})}"><img th:src="@{/images/ojo.svg}" width="25" height="25"></a>
                                         </td>
-                                       
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -80,8 +86,18 @@
                     </div>
                 </div>
             </div>
-           
-    </main>
+
+        </main>
         <script th:src="@{/js/calendar.js}"></script>
-</body>
+        <script>
+            $(document).ready(function () {
+                $("#buscarSol").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tableSol tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+    </body>
 </html>
