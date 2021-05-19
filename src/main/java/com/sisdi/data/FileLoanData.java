@@ -45,6 +45,17 @@ public class FileLoanData {
         }
         return list;
     }
+     public List<FileLoanSimple> listFileLoanSimplesByState(int s) {
+        List<FileLoanSimple> list = new ArrayList();
+        List<FileLoan> file = fileLoanServiceImp.listarFileLoans();
+        for (FileLoan f : file) {
+            if(f.getSTATE()==s){
+                list.add(this.fileLoanToFileLoanSimple(f));
+            }
+            
+        }
+        return list;
+    }
 
     public FileLoanSimple fileLoanToFileLoanSimple(FileLoan file) {
         FileLoanSimple aux = new FileLoanSimple();
