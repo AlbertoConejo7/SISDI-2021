@@ -382,8 +382,7 @@ public class OfficeController {
 
         String year = new SimpleDateFormat("yyyy").format(this.fecha);
         List<Office> offices = officeServiceImp.listarOficios();
-        Office of = offices.get(offices.size() - 1);
-        int INDX = of.getINDX();
+        int INDX = offices.size();
         Department depR = departmentData.getDepartment(office.getEmisorDep());
         Department depE = departmentData.getDepartment(office.getReceptorDep());
         Usuario u = userData.getUser(user.getUsername());
@@ -410,6 +409,7 @@ public class OfficeController {
         Office officeAct = officeServiceImp.searchOffice(officeId);
         OfficeSimple os = officeData.getOfficeSimple(officeAct);
         List<OtherDocs> others = otherDocsServiceImp.getOtherDocs(officeId);
+        log.info(others.toString());
         model.addAttribute("date", fecha);
         model.addAttribute("officeActual", os);
         model.addAttribute("title", "Ver Oficio");
@@ -557,10 +557,11 @@ public class OfficeController {
     public String viewOffice(@PathVariable String officeId, Model model) {
         Office officeAct = officeServiceImp.searchOffice(officeId);
         OfficeSimple os = officeData.getOfficeSimple(officeAct);
+        List<OtherDocs> others = otherDocsServiceImp.getOtherDocs(officeId);
         model.addAttribute("date", fecha);
         model.addAttribute("officeActual", os);
         model.addAttribute("title", "no");
-        model.addAttribute("url", "https://ucu.edu.uy/sites/default/files/facultad/dcsp/Concurso_2015/038_Tecno2015_tecnologia_un_beneficio_o_una_adicci%C3%B3n.pdf");
+       model.addAttribute("othersDocs", others);
         return "offices/editOffice";
     }
 
@@ -571,7 +572,6 @@ public class OfficeController {
         model.addAttribute("date", fecha);
         model.addAttribute("officeActual", os);
         model.addAttribute("title", "no-r");
-        model.addAttribute("url", "https://ucu.edu.uy/sites/default/files/facultad/dcsp/Concurso_2015/038_Tecno2015_tecnologia_un_beneficio_o_una_adicci%C3%B3n.pdf");
         return "offices/editOffice";
     }
 

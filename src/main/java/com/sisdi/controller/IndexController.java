@@ -313,8 +313,7 @@ public class IndexController {
         Department depE = departmentData.getDepartment(emisor);
         String year = new SimpleDateFormat("yyyy").format(this.fecha);
         List<Office> offices = officeServiceImp.listOfficeByDepartment(emisor);
-        Office of = offices.get(offices.size() - 1);
-        int INDX = of.getINDX();
+        int INDX = offices.size();
         String offNumber = "OFICIO-MSPH-" + depE.getCod() + "-" + depR.getCod() + "-" + (INDX + 1) + "-" + year;
         JSONObject obj = new JSONObject();
         obj.put("Offnumber", offNumber);
