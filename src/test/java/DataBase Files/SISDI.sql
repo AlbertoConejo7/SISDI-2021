@@ -1,5 +1,5 @@
-SET GLOBAL max_allowed_packet=16777216; 
-SHOW VARIABLES LIKE 'max_allowed_packet';
+/*SET GLOBAL max_allowed_packet=16777216; 
+SHOW VARIABLES LIKE 'max_allowed_packet';*/
 DROP DATABASE SISDI;
 CREATE SCHEMA IF NOT EXISTS `SISDI` DEFAULT CHARACTER SET utf8 ;
 
@@ -211,8 +211,8 @@ create table T_FILELOAN(
     STATE tinyint,
 	constraint PK_FILELOAN primary key(ID),
 	constraint FK_NAME_REQUEST foreign key (NAME_REQUEST) references T_USER(TEMPUSER),
-	constraint FK_DEPARTMENT_REQUEST foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME),
-	constraint FK_FILE_ID foreign key (FILE_ID) references T_EXPEDIENTE(INDX)
+	constraint FK_DEPARTMENT_REQUEST foreign key (DEPARTMENT_REQUEST) references T_DEPARTMENT(NAME)
+	/*constraint FK_FILE_ID foreign key (FILE_ID) references T_EXPEDIENTE(INDX)*/
 );
 create table T_SIGNATURE(
 	ID int auto_increment,
