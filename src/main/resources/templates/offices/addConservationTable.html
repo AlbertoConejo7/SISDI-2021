@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>SISDI-Agregar Tabla de plazo de conservacion</title>
+        <title>SISDI-Agregar Tabla de plazo de conservación</title>
 
         <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
         <link th:href="@{/css/default.css}" rel="stylesheet"/>
@@ -42,7 +42,7 @@
         <main>
             <div class="container mx-auto">
                 <div id="titulo">
-                    <h3 class='font-italic text-center' id='titleh3'>Crear Tabla de Plazo de Conservacion</h3>
+                    <h3 class='font-italic text-center' id='titleh3'>Crear Tabla de Plazo de Conservación</h3>
                 </div>
                 <div class="mx-auto w-75">
                     <form class="form was-validated" method="POST" th:action="@{/offices/saveTable}" th:object="${tableAdd}" id="add-office" >
@@ -81,7 +81,7 @@
 
                             <tr>
                                 <td>
-                                    <span>Sección:</span><span class="required"> *</span>
+                                    <span>Sección</span><span class="required"> *</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
@@ -102,7 +102,7 @@
 
                             <tr>
                                 <td>
-                                    <span>Elaborado por:</span>
+                                    <span>Elaborado por</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
@@ -142,7 +142,7 @@
 
                             <tr>
                                 <td>
-                                    <span>Señale a la si es Original o Copia</span><span class="required"> *</span>
+                                    <span>Señale si es Original o Copia</span><span class="required"> *</span>
                                 </td>
                                 <td>
                                     <div class='input-group'>
@@ -152,7 +152,7 @@
                                             <option value="Copia">Copia</option>
 
                                         </select>
-                                        <div class="invalid-feedback">Debe seleccionar una opcion</div>
+                                        <div class="invalid-feedback">Debe seleccionar una opción</div>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -191,7 +191,7 @@
                                             <option value="Electrónicos">Electrónicos</option> 
                                             <option value="Legibles por máquina">Legibles por máquina</option>
                                         </select>
-                                        <div class="invalid-feedback">Debe seleccionar una opcion</div>
+                                        <div class="invalid-feedback">Debe seleccionar una opción</div>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -213,7 +213,7 @@
                                             <option value="Archivo">Archivo</option> 
 
                                         </select>
-                                        <div class="invalid-feedback">Debe seleccionar una opcion</div>
+                                        <div class="invalid-feedback">Debe seleccionar una opción</div>
                                         <span class="input-group-addon ">
                                         </span>
                                     </div>
@@ -247,7 +247,7 @@
 
                             <tr>
                                 <td>
-                                    <span>Fecha mas Antigua</span>
+                                    <span>Fecha más Antigua</span>
                                 </td>
                                 <td>
                                     <div class='input-group date'>
@@ -261,7 +261,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span>Fecha mas Reciente</span>
+                                    <span>Fecha más Reciente</span>
                                 </td>
                                 <td>
                                     <div class='input-group date'>
@@ -322,6 +322,7 @@
                                     <button type="submit" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
                                         Agregar tabla de plazo de conservacion
                                     </button>
+                                    <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
                                 </td>
                             </tr>
 
@@ -330,7 +331,7 @@
                         </table>
                     </form>
 
-                    <!--<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -372,7 +373,7 @@
 
                     </script>
                 </div>
-            </div>-->
+            </div>
 
 
 
