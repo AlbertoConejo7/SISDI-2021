@@ -48,9 +48,12 @@
                     <form class="form was-validated" method="POST" th:action="@{/offices/saveEditTable}" th:object="${tableActual}" id="add-office" >
                         <table class="table table-borderless">
                              
-                            
+                                
                             <tr>
                                  <input type="hidden" class="form-control" name="indx" id="indx" th:field="*{indx}"  readonly="readonly"/>
+                                 <input type="hidden" class="form-control" name="date_create" id="date_create" th:field="*{date_create}"  readonly="readonly"/>
+                                 <input type="hidden" class="form-control" name="first_date" id="first_date" th:field="*{first_date}"  readonly="readonly"/>
+                                  <input type="hidden" class="form-control" name="last_date" id="last_date" th:field="*{last_date}"  readonly="readonly"/>
                                 <td>
                                     <span>Fondo</span>
                                 </td>
@@ -235,20 +238,7 @@ del tipo documental"
                                 </td>
                             </tr>
                             
-                            <tr>
-                                <td>
-                                     <span>Fecha mas Antigua</span>
-                                </td>
-                                      <td>
-                                        <div class='input-group date'>
-                                            <input type='text' class="form-control" th:field="*{first_date}" th:value="${#dates.format(date, 'dd/MM/yyyy')}"readonly="readonly"/>
-                                             <span class="input-group-addon ">
-                                                    <img class="icon-img" th:src="@{/images/calendar.svg}">
-                                             </span>
-                                        </div>
-                                    </td>
-                            
-                              </tr>
+                           
                                <tr>
                                 <td>
                                      <span>Fecha mas Reciente</span>
@@ -275,18 +265,7 @@ del tipo documental"
                                     </div>
                                 </td>
                             </tr>
-                             <tr>
-                                <td>
-                                    <span>Fechas extremas</span>
-                                </td>
-                                <td>
-                                    <div class='input-group'>
-                                        <input placeholder="Fechas extremas" class="form-control"  name="extremedates" id="extremedates" th:field="*{extremedates}"  />
-                                        <span class="input-group-addon ">
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
+                             
                            
                               
                             

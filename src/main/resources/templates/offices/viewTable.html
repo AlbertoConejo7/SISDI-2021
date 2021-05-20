@@ -38,7 +38,7 @@
                         <table class="table"> 
                             <tr class="m-0">
                                 <th>
-                                    <p>Fondo</p>
+                                    <p>Fondo :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.fondo}"></p>
@@ -46,7 +46,7 @@
                             </tr>
                             <tr class="m-0">
                                 <th>
-                                    <p>Subfondo</p>
+                                    <p>Subfondo :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.subfondo}"></p>
@@ -54,7 +54,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <p>Sección:</p>
+                                    <p>Sección :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.section}"></p>
@@ -63,7 +63,7 @@
                             
                             <tr>
                                 <th>
-                                    <p>Autor</p>
+                                    <p>Autor :</p>
                                 </th>
                                 <td colspan="2">
 
@@ -72,7 +72,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <p>Serie documental</p>
+                                    <p>Serie documental :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.seriedocumental}"></p>
@@ -80,7 +80,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <p>Es Original O Copia :</p>
+                                    <p>Es Original o copia :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.isoriginal}"></p>
@@ -88,7 +88,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <p>Cantidad de Copias</p>
+                                    <p>Cantidad de copias :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.cantcopies}"></p>
@@ -96,7 +96,7 @@
                             </tr>
                            <tr>
                                 <th>
-                                    <p>Contenido</p>
+                                    <p>Contenido :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.contents}"></p>
@@ -104,7 +104,7 @@
                             </tr>
                              <tr>
                                 <th>
-                                    <p>Soporte</p>
+                                    <p>Soporte :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.support}"></p>
@@ -112,7 +112,7 @@
                             </tr>
                                 <tr>
                                 <th>
-                                    <p>Vigencia</p>
+                                    <p>Vigencia :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.validity}"></p>
@@ -121,20 +121,31 @@
                             
                                <tr>
                                 <th>
-                                    <p>Cantidad en metros</p>
+                                    <p>Cantidad en metros :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.cantmeters}"></p>
+                                    
                                 </td>
                             </tr>
                             
                             
                                <tr>
                                 <th>
-                                    <p>Fechas extremas</p>
+                                    <p>Fechas mas antigua :</p>
                                 </th>
                                 <td colspan="2">
-                                    <p th:text="${tableActual.extremedates}"></p>
+                                    <p th:text="${#dates.format(tableActual.first_date, 'dd/MM/yyyy')}"></p>
+                                    
+                                </td>
+                            </tr>
+                             <tr>
+                                <th>
+                                    <p>Fechas mas reciente :</p>
+                                </th>
+                                <td colspan="2">
+                                    <p th:text="${#dates.format(tableActual.last_date, 'dd/MM/yyyy')}"></p>
+                                    
                                 </td>
                             </tr>
                        
@@ -143,7 +154,16 @@
                             
                             <tr>
                                 <th>
-                                    <p>Observaciones</p>
+                                    <p>Observaciones :</p>
+                                </th>
+                                <td colspan="2">
+                                    <p th:text="${tableActual.observations}"></p>
+                                </td>
+                            </tr>
+                            <tr >
+                                <tr>
+                                <th>
+                                    <p>Plazo de conservacion del documento :</p>
                                 </th>
                                 <td colspan="2">
                                     <p th:text="${tableActual.observations}"></p>

@@ -54,6 +54,42 @@ public class ConservationTableData {
                          return o;
                     
 }
+    public ConservationTable getTableEdit(TableSimple table) throws ParseException{
+        ConservationTable o=new ConservationTable();
+         Usuario autor=userData.getUserByName(table.getAutor());
+          Date first_date=new SimpleDateFormat("dd/MM/yyyy").parse(table.getFirst_date());
+              o.setFirst_date(first_date);
+              
+             
+               
+                Date date_create=new SimpleDateFormat("dd/MM/yyyy").parse(table.getDate_create());
+               o.setDate_create(date_create);
+               
+       
+         o.setIndx(table.getIndx());
+         o.setFondo(table.getFondo());
+         o.setSubfondo(table.getSubfondo());
+          o.setSection(table.getSection());
+           o.setAutor(table.getAutor());
+            o.setSeriedocumental(table.getSeriedocumental());
+             o.setIsoriginal(table.getIsoriginal());
+              o.setCantcopies(table.getCantcopies());
+               o.setContents(table.getContents());
+                o.setSupport(table.getSupport());
+                 o.setValidity(table.getValidity());
+                  o.setCantmeters(table.getCantmeters());
+                   o.setExtremedates(table.getExtremedates());
+                    o.setObservations(table.getObservations());
+                     o.setDepartment_request(table.getDepartment_request());
+                      o.setFondo(table.getFondo());
+                       o.setLast_date(fecha);
+                        o.setFinaltime(table.getFinaltime());
+                        
+                          
+                         return o;
+                    
+}
+    
     
     public TableSimple getTableSimple(ConservationTable table){
        TableSimple o = new TableSimple();

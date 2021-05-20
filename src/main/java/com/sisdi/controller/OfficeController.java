@@ -817,11 +817,9 @@ public class OfficeController {
      @PostMapping("/saveEditTable")
     public String saveEditTable(Model model, @ModelAttribute("tableActual") TableSimple table, RedirectAttributes redirectAttrs, HttpSession session) throws ParseException {
         try {
-             String fechaS = new SimpleDateFormat("dd/MM/yyyy").format(this.fecha);    
-            log.info(table.toString());
-            table.setDate_create(fechaS); 
-            table.setLast_date(fechaS);    
-            ConservationTable ts =conservationTableData.getTable(table);
+             
+               
+            ConservationTable ts =conservationTableData.getTableEdit(table);
             conservationServiceImpl.addConservationTable(ts);
  
             redirectAttrs
