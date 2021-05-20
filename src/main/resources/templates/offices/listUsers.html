@@ -75,15 +75,18 @@
 
                                         <td th:if="${usuario.isBoss}" style="text-align:center;">
                                             <img th:src="@{/images/signature-dark.png}" width=40>
-                                            <a th:href="@{/offices/signUserDisabled/{userEmail} (userEmail=${usuario.tempUser.email})}" class="btn btn-danger mt-2">Deshabilitar</a>
+                                            <a th:href="@{/offices/signUserDisabled/{userEmail} (userEmail=${usuario.tempUser.email})}" class="btn btn-danger mt-2" data-confirm="¿Desea deshabilitarle la firma al usuario?">Deshabilitar</a>
                                         </td>
                                         <td th:if="${!usuario.isBoss}" style="text-align:center;" >
-                                            <a th:href="@{/offices/signUserEnable/{userEmail} (userEmail=${usuario.tempUser.email})}" class="btn btn-primary mt-2">Habilitar</a>
+                                            <a th:href="@{/offices/signUserEnable/{userEmail} (userEmail=${usuario.tempUser.email})}" class="btn btn-primary mt-2" data-confirm="¿Desea habilitarle la firma al usuario?">Habilitar</a>
                                         </td>
 
                                         <td>
+
                                             <a  th:href="@{/offices/editUser/{userEmail} (userEmail=${usuario.tempUser.email})}" class="edit" title="Edit" data-toggle="tooltip"><img th:src="@{/images/edit.svg}" width=20></a>
-                                            <a  th:href="@{/offices/deleteUser/{userEmail} (userEmail=${usuario.tempUser.email})}" class="delete" title="Delete" data-toggle="tooltip"><img th:src="@{/images/del.png}" width=20></a>
+                                            <a th:href="@{/offices/deleteUser/{userEmail} (userEmail=${usuario.tempUser.email})}"  class="delete" title="Delete" data-toggle="tooltip" id="deleteUser" data-confirm="¿Desea eliminar el usuario?">
+                                                <img th:src="@{/images/del.png}" width=20>
+                                            </a>
                                         </td>
 
                                     </tr>                                   
@@ -104,6 +107,41 @@
                     });
                 });
             });
+        </script>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">
+                            No
+                        </button>
+                        <a class="btn btn-primary" id="dataConfirmOK">Si</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+            $(document).ready(function () {
+                $('a[data-confirm]').click(function (ev) {
+                    var href = $(this).attr('href');
+                    $('#exampleModal').find('.modal-body').text($(this).attr('data-confirm'));
+                    $('#dataConfirmOK').attr('href', href);
+                    $('#exampleModal').modal({show: true});
+                    return false;
+                });
+            });
+
         </script>
     </body>
 </html>
