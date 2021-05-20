@@ -247,7 +247,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="text-lg-right">
-                                    <button type="submit" class="btn btn-primary mt-2" >
+                                    <button type="submit" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
                                         Agregar Oficio
                                     </button><!-- data-toggle="modal" data-target="#exampleModal"-->
                                     <a th:href="@{/}" class="btn btn-primary mt-2">Regresar</a>
@@ -256,7 +256,7 @@
                         </table>
                     </form>
                     <!-- Modal -->
-                    <!--<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" 
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -298,7 +298,7 @@
 
                     </script>
                 </div>
-            </div>-->
+            </div>
 
             <div class="modal fade" id="responseTime" tabindex="-1" role="dialog" aria-labelledby="responseTimeTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
