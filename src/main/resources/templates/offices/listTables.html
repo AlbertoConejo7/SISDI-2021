@@ -40,7 +40,7 @@
         </div>
         <div class="container mb-3">
             <div id="titulo">
-                <h3 class='font-italic text-center' id='titleh3' >Tablas de Plazo de Conservacion</h3>
+                <h3 class='font-italic text-center' id='titleh3' >Tablas de Plazo de Conservación</h3>
             </div>
             <div class="input-group mb-3 w-50">
                 <div class="input-group-prepend">
@@ -61,8 +61,8 @@
                                     <th style="text-align: center">Serie Documental</th> 
                                     <th style="text-align: center">Subfondo</th>                
                                     <th style="text-align: center">Soporte</th>
-                                    <th style="text-align: center">Mas Antigua</th>
-                                    <th style="text-align: center">Mas Reciente</th>
+                                    <th style="text-align: center">Más Antigua</th>
+                                    <th style="text-align: center">Más Reciente</th>
                                     <th style="text-align: center">Acciones </th>
 
 
@@ -73,7 +73,7 @@
                             <tbody id="tableAcc">
 
                                 <tr th:if="${tables == null or tables.empty}">
-                                    <td colspan="6" style="text-align: center;">No hay Tablas de plazo de conservacion</td>
+                                    <td colspan="6" style="text-align: center;">No hay Tablas de plazo de conservación</td>
                                 </tr>
 
                                 <tr th:each="table : ${tables}" th:if="${tables != null and !tables.empty}">
